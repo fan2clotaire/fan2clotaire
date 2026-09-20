@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion TikTok</title>
+</head>
+
+<body>
+
+    <h1>Connexion TikTok</h1>
+
+    <p id="message">Connexion en cours...</p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("code")) {
+            document.getElementById("message").textContent =
+                "Connexion TikTok réussie !";
+        } else if (params.get("error")) {
+            document.getElementById("message").textContent =
+                "La connexion TikTok a été refusée.";
+        }
+    </script>
+
+</body>
+
+</html>
