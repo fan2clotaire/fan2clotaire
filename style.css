@@ -117,3 +117,80 @@ p {
     background-color: #5865f2 !important;
     color: white !important;
 }
+
+.stats {
+    width: 90%;
+    max-width: 1000px;
+    margin: 80px auto 40px;
+    text-align: center;
+}
+
+.stats h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 25px 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    transition: transform 0.2s ease;
+}
+
+.stat:hover {
+    transform: translateY(-5px);
+}
+
+.stat i {
+    font-size: 30px;
+}
+
+.stat-number {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.youtube-stat i {
+    color: #ff0000;
+}
+
+.tiktok-stat i {
+    color: #000000;
+}
+
+.instagram-stat i {
+    color: #e1306c;
+}
+
+.twitch-stat i {
+    color: #9146ff;
+}
+
+.discord-stat i {
+    color: #5865f2;
+}
+
+@media (max-width: 800px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

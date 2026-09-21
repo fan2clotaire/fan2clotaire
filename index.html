@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mes réseaux</title>
+    <title>Page d'Accueil</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -28,6 +28,51 @@
             </p>
 
         </div>
+
+        <section class="stats">
+    <h2>Mes statistiques</h2>
+
+    <div class="stats-container">
+
+        <div class="stat youtube-stat">
+    <i class="fa-brands fa-youtube"></i>
+    <span id="youtube-subs" class="stat-number">---</span>
+    <span class="stat-label">Abonnés YouTube</span>
+         </div>
+
+        <div class="stat tiktok-stat">
+            <i class="fa-brands fa-tiktok"></i>
+            <span class="stat-number">DEV</span>
+<span class="stat-label">Followers TikTok</span>
+        </div>
+
+        <div class="stat instagram-stat">
+            <i class="fa-brands fa-instagram"></i>
+            <span class="stat-number">DEV</span>
+            <span class="stat-label">Followers Instagram</span>
+        </div>
+
+        <div class="stat twitch-stat">
+    <i class="fa-brands fa-twitch"></i>
+    <span id="twitch-followers" class="stat-number">---</span>
+    <span class="stat-label">Followers Twitch</span>
+</div>
+
+        <div class="stat discord-stat">
+    <i class="fa-brands fa-discord"></i>
+    <span id="discord-members" class="stat-number">---</span>
+    <span class="stat-label">Membres Discord</span>
+</div>
+
+<div class="stat visits-stat">
+    <i class="fa-solid fa-eye"></i>
+    <span id="site-visits" class="stat-number">---</span>
+    <span class="stat-label">Visites du site</span>
+</div>
+        
+
+    </div>
+</section>
 
         <div class="links">
 
@@ -59,6 +104,104 @@
 </div>
 
     </div>
+
+<script>
+async function updateTwitchFollowers() {
+    try {
+        const response = await fetch(
+            "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=twitch"
+        );
+
+        const data = await response.json();
+
+        document.getElementById("twitch-followers").textContent =
+            data.followers;
+    } catch (error) {
+        console.error("Erreur compteur Twitch :", error);
+    }
+}
+
+updateTwitchFollowers();
+setInterval(updateTwitchFollowers, 5 * 60 * 1000);
+</script>
+
+<script>
+async function updateYouTubeSubscribers() {
+    try {
+        const response = await fetch(
+            "https://fan2clotaire-stats.g-dubois89210.workers.dev/"
+        );
+
+        const data = await response.json();
+
+        document.getElementById("youtube-subs").textContent =
+            data.subscribers;
+    } catch (error) {
+        console.error("Erreur compteur YouTube :", error);
+    }
+}
+
+updateYouTubeSubscribers();
+
+setInterval(updateYouTubeSubscribers, 5 * 60 * 1000);
+</script>
+
+<script>
+async function updateDiscordMembers() {
+    try {
+        const response = await fetch(
+            "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=discord"
+        );
+
+        const data = await response.json();
+
+        document.getElementById("discord-members").textContent =
+            data.members;
+    } catch (error) {
+        console.error("Erreur compteur Discord :", error);
+    }
+}
+
+updateDiscordMembers();
+
+setInterval(updateDiscordMembers, 5 * 60 * 1000);
+</script>
+
+<audio id="musique" loop>
+    <source src="QMIIR ~ TIKI TIKI [slowed].mp3" type="audio/mpeg">
+<script>
+document.addEventListener("click", function() {
+    const musique = document.getElementById("musique");
+    musique.play();
+}, { once: true });
+</script>
+
+</audio>
+
+<script
+    data-goatcounter="https://fan2clotaire.goatcounter.com/count"
+    async
+    src="//gc.zgo.at/count.js">
+</script>
+
+<script>
+async function updateSiteVisits() {
+    try {
+        const response = await fetch(
+            "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=visits"
+        );
+
+        const data = await response.json();
+
+        document.getElementById("site-visits").textContent =
+            data.visits;
+    } catch (error) {
+        console.error("Erreur compteur de visites :", error);
+    }
+}
+
+updateSiteVisits();
+</script>
 
 </body>
 
