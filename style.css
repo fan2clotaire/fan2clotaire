@@ -1,15 +1,45 @@
 body {
     font-family: Arial, sans-serif;
+
     background: linear-gradient(
         135deg,
-        #111827,
-        #1e1b4b,
-        #312e81
+        #001eff,
+        #5b00ff,
+        #c000ff,
+        #ff0080,
+        #5b00ff,
+        #001eff
     );
+
+    background-size: 400% 400%;
+    animation: backgroundAnimation 18s ease infinite;
+
     color: white;
     text-align: center;
     padding: 40px 20px;
     margin: 0;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 50% 100%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    75% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 
@@ -193,4 +223,64 @@ p {
     .stats-container {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+
+    padding: 12px 18px;
+    border: none;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.music-toggle:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.music-toggle:active {
+    transform: scale(0.95);
+}
+
+.biographie {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.biographie h2 {
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.biographie p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
 }
