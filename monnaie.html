@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Boutique Clocoins</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+
+            background:
+                radial-gradient(circle at top, #4c1d95 0%, transparent 40%),
+                linear-gradient(135deg, #111827, #1e1b4b, #312e81);
+
+            padding: 25px 15px 50px;
+        }
+
+        .container {
+            width: min(100%, 1000px);
+            margin: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(32px, 7vw, 52px);
+        }
+
+        header p {
+            color: #d1d5db;
+            font-size: 17px;
+        }
+
+        .compte {
+            text-align: center;
+            color: #c4b5fd;
+            margin-bottom: 15px;
+        }
+
+        .solde {
+            width: fit-content;
+            margin: 0 auto 25px;
+            padding: 14px 25px;
+
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .clocoin {
+            color: #facc15;
+        }
+
+        /* =========================
+           RÉCOMPENSE QUOTIDIENNE
+        ========================= */
+
+        .recompense {
+            width: min(100%, 600px);
+            margin: 0 auto 35px;
+            padding: 22px;
+
+            text-align: center;
+
+            background: rgba(15, 15, 30, 0.9);
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            border-radius: 22px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .recompense h2 {
+            margin: 0 0 8px;
+            font-size: 24px;
+        }
+
+        .recompense p {
+            margin: 8px 0;
+            color: #d1d5db;
+        }
+
+        .gain {
+            margin: 15px 0;
+            color: #facc15;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        #recompense-button {
+            width: 100%;
+            max-width: 400px;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #f59e0b,
+                #eab308
+            );
+
+            color: #171717;
+            font-size: 17px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: transform 0.15s ease,
+                        opacity 0.15s ease;
+        }
+
+        #recompense-button:hover {
+            transform: scale(1.03);
+        }
+
+        #recompense-button:active {
+            transform: scale(0.97);
+        }
+
+        #recompense-button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #compte-rebours {
+            margin-top: 12px;
+            color: #a78bfa;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           BOUTIQUE
+        ========================= */
+
+        .boutique {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(230px, 1fr)
+            );
+
+            gap: 20px;
+        }
+
+        .article {
+            padding: 25px;
+            text-align: center;
+
+            background: rgba(15, 15, 30, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 22px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+        .article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .article-image {
+            width: 110px;
+            height: 110px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                135deg,
+                #312e81,
+                #6d28d9
+            );
+
+            font-size: 55px;
+        }
+
+        .article h2 {
+            margin: 10px 0;
+            font-size: 23px;
+        }
+
+        .prix {
+            margin: 12px 0 18px;
+
+            color: #facc15;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .acheter {
+            width: 100%;
+            padding: 13px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #7c3aed,
+                #4f46e5
+            );
+
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: transform 0.15s ease,
+                        opacity 0.15s ease;
+        }
+
+        .acheter:hover {
+            transform: scale(1.03);
+        }
+
+        .acheter:active {
+            transform: scale(0.97);
+        }
+
+        .acheter:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .possede {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            cursor: default;
+            opacity: 1;
+        }
+
+        .possede:hover {
+            transform: none;
+        }
+
+        /* =========================
+           CHARGEMENT
+        ========================= */
+
+        #chargement {
+            text-align: center;
+            color: #c4b5fd;
+            margin: 20px 0;
+        }
+
+        /* =========================
+           RETOUR
+        ========================= */
+
+        .retour {
+            display: block;
+            width: fit-content;
+
+            margin: 35px auto 0;
+
+            padding: 12px 20px;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.1);
+
+            color: white;
+            text-decoration: none;
+
+            transition: background 0.2s ease;
+        }
+
+        .retour:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        #message {
+            position: fixed;
+            left: 50%;
+            bottom: 25px;
+
+            transform:
+                translateX(-50%)
+                translateY(100px);
+
+            padding: 14px 22px;
+
+            border-radius: 14px;
+
+            background: rgba(10, 10, 20, 0.95);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            font-weight: bold;
+
+            opacity: 0;
+
+            transition: 0.3s ease;
+
+            z-index: 100;
+
+            text-align: center;
+        }
+
+        #message.visible {
+            transform:
+                translateX(-50%)
+                translateY(0);
+
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding-top: 18px;
+            }
+
+            .article {
+                padding: 20px;
+            }
+
+            .solde {
+                font-size: 18px;
+            }
+
+            .recompense {
+                padding: 18px;
+            }
+        }
+    
+        .bouton-inventaire {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 8px 0 20px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .bouton-inventaire:hover {
+            transform: translateY(-2px);
+            opacity: 0.92;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>🪙 Boutique Clocoins</h1>
+
+        <p>
+            Dépense tes Clocoins pour obtenir des articles exclusifs !
+        </p>
+
+    </header>
+
+
+    <div class="compte" id="compte">
+        Connexion en cours...
+    </div>
+
+
+    <div class="solde">
+
+        🪙 Solde :
+
+        <span id="solde">...</span>
+
+        <span class="clocoin">
+            Clocoins
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         RÉCOMPENSE QUOTIDIENNE
+    ========================= -->
+
+    <div class="recompense">
+
+        <h2>🎁 Récompense quotidienne</h2>
+
+        <p>
+            Reviens chaque jour pour récupérer ta récompense !
+        </p>
+
+        <div class="gain">
+            +50 🪙 Clocoins
+        </div>
+
+        <button
+            id="recompense-button"
+            onclick="recupererRecompense()"
+            disabled
+        >
+            🎁 Récupérer mes Clocoins
+        </button>
+
+        <div id="compte-rebours"></div>
+
+    </div>
+
+
+    <div id="chargement">
+        Chargement de ta boutique...
+    </div>
+
+
+    <!-- =========================
+         BOUTIQUE
+    ========================= -->
+
+    <div class="boutique">
+
+        <div class="article">
+
+            <div class="article-image">
+                👣
+            </div>
+
+            <h2>
+                Pieds de Clotaire
+            </h2>
+
+            <div class="prix">
+                🪙 100 Clocoins
+            </div>
+
+            <button
+                id="acheter-pieds"
+                class="acheter"
+                onclick="acheterArticle(
+                    'pieds_clotaire',
+                    'Pieds de Clotaire',
+                    100
+                )"
+                disabled
+            >
+                🛒 Acheter
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="index.html"
+        class="retour"
+    >
+        ← Retour à l'accueil
+    </a>
+
+</div>
+
+
+<div id="message"></div>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+    /* =========================================
+       CONFIGURATION SUPABASE
+    ========================================= */
+
+    const SUPABASE_URL =
+        "https://snnclgjspwninjxnimza.supabase.co";
+
+    /*
+       Mets ici ta clé publishable/anon.
+
+       NE METS PAS ta SERVICE_ROLE_KEY.
+    */
+
+    const SUPABASE_KEY =
+        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* =========================================
+       VARIABLES
+    ========================================= */
+
+    let utilisateur = null;
+
+    let clocoins = 0;
+
+    let dernierGain = null;
+
+    let compteReboursInterval = null;
+
+    let inventaire = [];
+
+
+    const soldeElement =
+        document.getElementById("solde");
+
+    const compteElement =
+        document.getElementById("compte");
+
+    const chargementElement =
+        document.getElementById("chargement");
+
+    const boutonPieds =
+        document.getElementById("acheter-pieds");
+
+    const boutonRecompense =
+        document.getElementById("recompense-button");
+
+    const compteRebours =
+        document.getElementById("compte-rebours");
+
+
+    /* =========================================
+       INITIALISATION
+    ========================================= */
+
+    async function initialiser() {
+
+        const {
+            data: {
+                user
+            },
+            error
+        } = await supabaseClient.auth.getUser();
+
+
+        if (error || !user) {
+
+            compteElement.textContent =
+                "❌ Tu dois être connecté pour utiliser les Clocoins.";
+
+            soldeElement.textContent =
+                "—";
+
+            chargementElement.textContent =
+                "Connecte-toi à ton compte Fan2Clotaire.";
+
+            return;
+        }
+
+
+        utilisateur = user;
+
+
+        compteElement.textContent =
+            "👤 Connecté";
+
+
+        await chargerPortefeuille();
+
+    }
+
+
+    /* =========================================
+       CHARGER LE PORTEFEUILLE
+    ========================================= */
+
+    async function chargerPortefeuille() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("clocoins")
+            .select(
+                "solde, last_daily_reward"
+            )
+            .eq(
+                "user_id",
+                utilisateur.id
+            )
+            .maybeSingle();
+
+
+        if (error) {
+
+            console.error(error);
+
+            chargementElement.textContent =
+                "❌ Impossible de charger ton portefeuille.";
+
+            soldeElement.textContent =
+                "Erreur";
+
+            return;
+        }
+
+
+        /*
+           Création automatique du portefeuille
+           s'il n'existe pas encore.
+        */
+
+        if (!data) {
+
+            const {
+                data: nouveauPortefeuille,
+                error: creationError
+            } = await supabaseClient
+                .from("clocoins")
+                .insert({
+                    user_id: utilisateur.id,
+                    solde: 0
+                })
+                .select(
+                    "solde, last_daily_reward"
+                )
+                .single();
+
+
+            if (creationError) {
+
+                console.error(creationError);
+
+                chargementElement.textContent =
+                    "❌ Impossible de créer ton portefeuille.";
+
+                return;
+            }
+
+
+            clocoins =
+                nouveauPortefeuille.solde;
+
+            dernierGain =
+                nouveauPortefeuille.last_daily_reward;
+
+        } else {
+
+            clocoins =
+                data.solde;
+
+            dernierGain =
+                data.last_daily_reward;
+
+        }
+
+
+        afficherSolde();
+
+        mettreAJourRecompense();
+
+        await chargerInventaire();
+
+        chargementElement.style.display =
+            "none";
+
+    }
+
+
+    /* =========================================
+       AFFICHER LE SOLDE
+    ========================================= */
+
+    function afficherSolde() {
+
+        soldeElement.textContent =
+            clocoins;
+
+    }
+
+
+    /* =========================================
+       ÉTAT DE LA RÉCOMPENSE
+    ========================================= */
+
+    function mettreAJourRecompense() {
+
+        if (!dernierGain) {
+
+            boutonRecompense.disabled =
+                false;
+
+            boutonRecompense.textContent =
+                "🎁 Récupérer mes Clocoins";
+
+            compteRebours.textContent =
+                "";
+
+            return;
+        }
+
+
+        const prochainGain =
+            new Date(dernierGain).getTime()
+            +
+            24 * 60 * 60 * 1000;
+
+
+        const maintenant =
+            Date.now();
+
+
+        if (maintenant >= prochainGain) {
+
+            boutonRecompense.disabled =
+                false;
+
+            boutonRecompense.textContent =
+                "🎁 Récupérer mes Clocoins";
+
+            compteRebours.textContent =
+                "";
+
+            return;
+        }
+
+
+        boutonRecompense.disabled =
+            true;
+
+        boutonRecompense.textContent =
+            "⏳ Récompense déjà récupérée";
+
+
+        lancerCompteRebours(prochainGain);
+
+    }
+
+
+    /* =========================================
+       COMPTE À REBOURS
+    ========================================= */
+
+    function lancerCompteRebours(dateFin) {
+
+        clearInterval(
+            compteReboursInterval
+        );
+
+
+        function actualiser() {
+
+            const difference =
+                dateFin - Date.now();
+
+
+            if (difference <= 0) {
+
+                clearInterval(
+                    compteReboursInterval
+                );
+
+                boutonRecompense.disabled =
+                    false;
+
+                boutonRecompense.textContent =
+                    "🎁 Récupérer mes Clocoins";
+
+                compteRebours.textContent =
+                    "";
+
+                return;
+            }
+
+
+            const heures =
+                Math.floor(
+                    difference /
+                    (1000 * 60 * 60)
+                );
+
+
+            const minutes =
+                Math.floor(
+                    (difference %
+                    (1000 * 60 * 60))
+                    /
+                    (1000 * 60)
+                );
+
+
+            const secondes =
+                Math.floor(
+                    (difference %
+                    (1000 * 60))
+                    /
+                    1000
+                );
+
+
+            compteRebours.textContent =
+                "⏰ Disponible dans "
+                +
+                String(heures).padStart(2, "0")
+                +
+                "h "
+                +
+                String(minutes).padStart(2, "0")
+                +
+                "m "
+                +
+                String(secondes).padStart(2, "0")
+                +
+                "s";
+
+        }
+
+
+        actualiser();
+
+
+        compteReboursInterval =
+            setInterval(
+                actualiser,
+                1000
+            );
+
+    }
+
+
+    /* =========================================
+       RÉCUPÉRER LA RÉCOMPENSE
+    ========================================= */
+
+    async function recupererRecompense() {
+
+        if (!utilisateur) {
+
+            afficherMessage(
+                "❌ Connecte-toi à ton compte."
+            );
+
+            return;
+        }
+
+
+        boutonRecompense.disabled =
+            true;
+
+
+        boutonRecompense.textContent =
+            "⏳ Récupération...";
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "recompense_quotidienne"
+        );
+
+
+        if (error) {
+
+            console.error(error);
+
+
+            boutonRecompense.disabled =
+                false;
+
+
+            boutonRecompense.textContent =
+                "🎁 Récupérer mes Clocoins";
+
+
+            afficherMessage(
+                "❌ Récompense déjà récupérée ou erreur."
+            );
+
+
+            /*
+               On recharge quand même les données
+               au cas où la récompense aurait déjà
+               été enregistrée.
+            */
+
+            await chargerPortefeuille();
+
+            return;
+        }
+
+
+        /*
+           La fonction SQL nous renvoie
+           directement le nouveau solde.
+        */
+
+        clocoins =
+            data;
+
+
+        afficherSolde();
+
+
+        /*
+           On recharge le portefeuille afin
+           de récupérer la nouvelle date.
+        */
+
+        await chargerPortefeuille();
+
+
+        afficherMessage(
+            "🎉 +50 Clocoins !"
+        );
+
+    }
+
+
+    /* =========================================
+       INVENTAIRE
+    ========================================= */
+
+    async function chargerInventaire() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("inventaire")
+            .select("article_id, nom_article, date_achat")
+            .eq(
+                "user_id",
+                utilisateur.id
+            );
+
+        if (error) {
+
+            console.error(error);
+
+            afficherMessage(
+                "⚠️ Impossible de charger ton inventaire."
+            );
+
+            boutonPieds.disabled = false;
+
+            return;
+        }
+
+        inventaire = data || [];
+
+        mettreAJourArticlePieds();
+
+    }
+
+
+    function possedeArticle(articleId) {
+
+        return inventaire.some(
+            article => article.article_id === articleId
+        );
+
+    }
+
+
+    function mettreAJourArticlePieds() {
+
+        if (possedeArticle("pieds_clotaire")) {
+
+            boutonPieds.textContent =
+                "✅ Déjà possédé";
+
+            boutonPieds.classList.add("possede");
+
+            boutonPieds.disabled = true;
+
+        } else {
+
+            boutonPieds.textContent =
+                "🛒 Acheter";
+
+            boutonPieds.classList.remove("possede");
+
+            boutonPieds.disabled = false;
+
+        }
+
+    }
+
+
+    /* =========================================
+       ACHETER UN ARTICLE
+    ========================================= */
+
+    async function acheterArticle(
+        articleId,
+        nom,
+        prix
+    ) {
+
+        if (!utilisateur) {
+
+            afficherMessage(
+                "❌ Connecte-toi à ton compte."
+            );
+
+            return;
+        }
+
+
+        if (possedeArticle(articleId)) {
+
+            afficherMessage(
+                "ℹ️ Tu possèdes déjà cet article."
+            );
+
+            mettreAJourArticlePieds();
+
+            return;
+        }
+
+
+        if (clocoins < prix) {
+
+            afficherMessage(
+                "❌ Tu n'as pas assez de Clocoins !"
+            );
+
+            return;
+        }
+
+
+        boutonPieds.disabled = true;
+
+        boutonPieds.textContent =
+            "⏳ Achat...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.rpc(
+                "acheter_article",
+                {
+                    article_id_param: articleId,
+                    nom_article_param: nom,
+                    prix_param: prix
+                }
+            );
+
+
+            if (error) {
+
+                console.error(error);
+
+                if (
+                    error.message &&
+                    error.message.includes(
+                        "Article déjà possédé"
+                    )
+                ) {
+
+                    await chargerInventaire();
+
+                    afficherMessage(
+                        "ℹ️ Tu possèdes déjà cet article."
+                    );
+
+                } else if (
+                    error.message &&
+                    error.message.includes(
+                        "Clocoins insuffisants"
+                    )
+                ) {
+
+                    afficherMessage(
+                        "❌ Tu n'as pas assez de Clocoins !"
+                    );
+
+                } else {
+
+                    afficherMessage(
+                        "❌ L'achat n'a pas pu être effectué."
+                    );
+
+                }
+
+                return;
+            }
+
+
+            clocoins = data;
+
+            afficherSolde();
+
+            await chargerInventaire();
+
+            afficherMessage(
+                "✅ " +
+                nom +
+                " acheté !"
+            );
+
+
+        } finally {
+
+            mettreAJourArticlePieds();
+
+        }
+
+    }
+
+
+    /* =========================================
+       MESSAGES
+    ========================================= */
+
+    let messageTimeout;
+
+
+    function afficherMessage(texte) {
+
+        const message =
+            document.getElementById("message");
+
+
+        message.textContent =
+            texte;
+
+
+        message.classList.add(
+            "visible"
+        );
+
+
+        clearTimeout(
+            messageTimeout
+        );
+
+
+        messageTimeout =
+            setTimeout(() => {
+
+                message.classList.remove(
+                    "visible"
+                );
+
+            }, 2500);
+
+    }
+
+
+    /* =========================================
+       LANCEMENT
+    ========================================= */
+
+    initialiser();
+
+</script>
+
+</body>
+</html>

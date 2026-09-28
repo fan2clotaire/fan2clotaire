@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+  }
+
+body {
+margin: 0;
+min-height: 100vh;
+padding: 40px 20px;
+
+font-family: Arial, sans-serif;
+color: white;
+
+background: linear-gradient(
+    135deg,
+    #000000,
+    #202020,
+    #555555,
+    #aaaaaa
+);
+background-attachment: fixed;
+
+}
+
+h1 {
+text-align: center;
+margin-bottom: 35px;
+font-size: 2.5rem;
+}
+
+#forum {
+width: min(900px, 100%);
+margin: auto;
+}
+
+/* Cadres transparents */
+
+#forum > div,
+article {
+background: rgba(255, 255, 255, 0.12);
+border: 1px solid rgba(255, 255, 255, 0.25);
+border-radius: 20px;
+
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+}
+
+/* Zone de publication */
+
+#forum > div:first-child {
+padding: 20px;
+margin-bottom: 25px;
+}
+
+textarea {
+width: 100%;
+min-height: 110px;
+
+padding: 15px;
+
+resize: vertical;
+
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: 15px;
+
+background: rgba(0, 0, 0, 0.25);
+color: white;
+
+font-size: 1rem;
+outline: none;
+
+}
+
+textarea::placeholder {
+color: rgba(255, 255, 255, 0.7);
+}
+
+textarea:focus {
+border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Boutons */
+
+button {
+margin-top: 12px;
+padding: 10px 18px;
+
+border: none;
+border-radius: 10px;
+
+background: rgba(255, 255, 255, 0.2);
+color: white;
+
+font-weight: bold;
+cursor: pointer;
+
+transition: 0.2s ease;
+
+}
+
+button:hover {
+background: rgba(255, 255, 255, 0.35);
+transform: translateY(-2px);
+}
+
+/* Publications */
+
+article {
+padding: 20px;
+margin-bottom: 20px;
+}
+
+article h3 {
+margin-top: 0;
+}
+
+article p {
+line-height: 1.6;
+white-space: pre-wrap;
+}
+
+article small {
+opacity: 0.7;
+}
+
+hr {
+border: none;
+border-top: 1px solid rgba(255, 255, 255, 0.2);
+margin: 25px 0;
+}
+
+/* Message d'accès */
+
+#message-acces {
+text-align: center;
+margin: 50px auto;
+font-size: 1.2rem;
+}
+
+.publication-auteur {
+font-size: 1.05rem;
+font-weight: bold;
+}
+
+.publication-date {
+margin-top: 5px;
+font-size: 0.8rem;
+opacity: 0.6;
+}
+
+.publication-contenu {
+margin: 20px 0;
+font-size: 1.05rem;
+}
+
+.bouton-like {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+
+margin-top: 5px;
+padding: 8px 14px;
+
+background: rgba(255, 255, 255, 0.12);
+border: 1px solid rgba(255, 255, 255, 0.25);
+border-radius: 12px;
+
+color: white;
+
+}
+
+.bouton-like.liké {
+background: rgba(255, 80, 100, 0.25);
+border-color: rgba(255, 120, 140, 0.5);
+}
+
+.bouton-like:hover {
+transform: scale(1.05);
+}

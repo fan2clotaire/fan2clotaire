@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel</title>
+    <link rel="stylesheet" href="gabriel.css">
+</head>
+
+<body>
+
+<a href="index.html" class="bouton-accueil"> ← Retour à l'accueil </a>
+
+<div class="cadre">
+    <h1>Bienvenue sur la page de Gaby !</h1>
+    j'ai fiiiiiiiiiiiiiiiiiiiniiiiiiiiiiiiiiiii mon caaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaa !
+</div>
+
+<audio id="musique" loop>
+    <source src="Yo-kai Watch OST - Main Theme.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="toggleMusique()" id="bouton-musique">
+    🎵
+</button>
+
+<script>
+    const musique = document.getElementById("musique");
+    const bouton = document.getElementById("bouton-musique");
+
+    function toggleMusique() {
+        if (musique.paused) {
+            musique.play();
+            bouton.textContent = "🔊";
+        } else {
+            musique.pause();
+            bouton.textContent = "🔇";
+        }
+    }
+</script>
+
+</body>
+</html>

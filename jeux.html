@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jeux - Fan2Clotaire</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+      rel="stylesheet">
+
+<style>
+    /* =========================
+       PAGE JEUX
+    ========================= */
+
+    .jeux-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .jeux-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .jeux-header h1 {
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    .jeux-header p {
+        font-size: 17px;
+        opacity: 0.85;
+    }
+
+    /* =========================
+       GRILLE DES JEUX
+    ========================= */
+
+    .jeux-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .jeu-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 190px;
+        padding: 25px;
+
+        box-sizing: border-box;
+
+        text-decoration: none;
+        color: white;
+
+        border-radius: 22px;
+
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+
+        transition: transform 0.25s ease,
+                    background 0.25s ease,
+                    box-shadow 0.25s ease;
+    }
+
+    .jeu-card:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .jeu-icone {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .jeu-card h2 {
+        margin: 0 0 8px;
+        font-size: 22px;
+    }
+
+    .jeu-card p {
+        margin: 0;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.75;
+    }
+
+    /* =========================
+       BADGE
+    ========================= */
+
+    .jeu-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+
+        padding: 5px 9px;
+
+        border-radius: 20px;
+
+        font-size: 11px;
+        font-weight: bold;
+
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* =========================
+       RETOUR
+    ========================= */
+
+    .retour-jeux {
+        display: block;
+        width: fit-content;
+
+        margin: 35px auto 10px;
+        padding: 12px 20px;
+
+        border-radius: 14px;
+
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        color: white;
+        text-decoration: none;
+
+        transition: 0.2s ease;
+    }
+
+    .retour-jeux:hover {
+        background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* =========================
+       SMARTPHONE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+        .jeux-page {
+            padding: 15px;
+        }
+
+        .jeux-header h1 {
+            font-size: 34px;
+        }
+
+        .jeux-header p {
+            font-size: 15px;
+        }
+
+        .jeux-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .jeu-card {
+            min-height: 150px;
+            padding: 20px;
+        }
+
+        .jeu-icone {
+            font-size: 45px;
+        }
+
+        .jeu-card h2 {
+            font-size: 20px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+     CONTENU
+========================= -->
+
+<main class="jeux-page">
+
+    <header class="jeux-header">
+        <h1> Jeux disponibles</h1>
+
+        <p>
+            Choisissez un jeu !
+        </p>
+    </header>
+
+
+    <!-- =========================
+         JEUX
+    ========================= -->
+
+    <section class="jeux-grid">
+
+        <a href="clotaire-adventure.html" class="jeu-card">
+
+            <span class="jeu-badge">
+                BIENTÔT
+            </span>
+
+            <div class="jeu-icone">
+                🎯
+            </div>
+
+            <h2>Jeu 1</h2>
+
+            <p>
+                Un nouveau jeu arrive bientôt...
+            </p>
+
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         RETOUR
+    ========================= -->
+
+    <a href="index.html" class="retour-jeux">
+        🏠 Retour à l'accueil
+    </a>
+
+</main>
+
+</body> </html>

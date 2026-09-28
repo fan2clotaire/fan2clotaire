@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Page d'Accueil</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- DÉCORATIONS HALLOWEEN -->
+<!-- ========================= -->
+
+<div class="toiles-halloween" aria-hidden="true">
+
+    <div class="toile toile-gauche">🕸️</div>
+    <div class="toile toile-droite">🕸️</div>
+
+</div>
+
+<div class="lune-halloween" aria-hidden="true">
+    🌙
+</div>
+
+<div class="chauves-souris" aria-hidden="true">
+
+    <span>🦇</span>
+    <span>🦇</span>
+    <span>🦇</span>
+
+</div>
+
+<!-- ========================= -->
+<!-- SUPABASE -->
+<!-- ========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://snnclgjspwninjxnimza.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+async function verifierCompte() {
+
+    const { data: { user } } =
+        await supabaseClient.auth.getUser();
+
+    if (user) {
+
+        document.getElementById(
+            "compte-bouton"
+        ).href = "compte.html";
+
+    }
+
+}
+
+verifierCompte();
+
+</script>
+
+<!-- ========================= -->
+<!-- INTRO HALLOWEEN -->
+<!-- ========================= -->
+
+<div id="halloween-intro">
+
+    <div class="intro-pumpkin">
+        🎃
+    </div>
+
+    <div class="intro-text">
+        Bienvenue...
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- CARTE PRINCIPALE -->
+<!-- ========================= -->
+
+<div class="card">
+
+    <!-- PROFIL -->
+
+    <div class="profile">
+
+        <img src="image.jpg"
+            alt="Photo de profil">
+
+        <h1>Fan2Clotaire</h1>
+
+        <p class="username">
+            @fan2clotaire
+        </p>
+
+        <p class="description">
+            Retrouve-moi sur mes différents réseaux 👇
+        </p>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- STATISTIQUES -->
+    <!-- ========================= -->
+
+    <section class="stats">
+
+        <h2>
+            Mes statistiques
+        </h2>
+
+        <div class="stats-container">
+
+            <div class="stat visits-stat">
+
+                <i class="fa-solid fa-eye"></i>
+
+                <span id="site-visits"
+                    class="stat-number">
+                    ---
+                </span>
+
+                <span class="stat-label">
+                    Visites du site
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CITROUILLES -->
+
+    <div class="citrouilles-halloween"
+        aria-hidden="true">
+
+        <span>🎃</span>
+        <span>🎃</span>
+        <span>🎃</span>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- RÉSEAUX -->
+    <!-- ========================= -->
+
+    <div class="links">
+
+        <a class="instagram"
+            href="https://www.instagram.com/fan2clotaire/"
+            target="_blank">
+
+            <i class="fa-brands fa-instagram"></i>
+            Instagram
+
+        </a>
+
+        <a class="tiktok"
+            href="https://www.tiktok.com/@fan2clotaire"
+            target="_blank">
+
+            <i class="fa-brands fa-tiktok"></i>
+            TikTok
+
+        </a>
+
+        <a class="youtube"
+            href="https://www.youtube.com/@fan2clotaire"
+            target="_blank">
+
+            <i class="fa-brands fa-youtube"></i>
+            YouTube
+
+        </a>
+
+        <a class="twitch"
+            href="https://www.twitch.tv/fan2clotaire"
+            target="_blank">
+
+            <i class="fa-brands fa-twitch"></i>
+            Twitch
+
+        </a>
+
+        <a class="discord"
+            href="https://discord.gg/8y5YcgWTj4"
+            target="_blank">
+
+            <i class="fa-brands fa-discord"></i>
+            Discord
+
+        </a>
+
+        <a href="exclusif.html"
+            class="exclusive-button">
+
+            🎃 OnlyFans
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- MENU RAPIDE -->
+<!-- ========================= -->
+
+<div class="menu-rapide">
+
+    <button id="menu-rapide-toggle"
+        class="menu-rapide-toggle">
+
+        ☰
+
+    </button>
+
+    <div class="menu-rapide-options">
+
+        <!-- MUSIQUE -->
+
+        <button id="music-toggle"
+            class="music-toggle">
+
+            🎵 Musique : ON
+
+        </button>
+
+        <!-- COMPTE -->
+
+        <a href="connexion.html"
+            class="compte-bouton"
+            id="compte-bouton">
+
+            👤 Mon compte
+
+        </a>
+
+        <!-- FORUM -->
+
+        <a href="forum.html"
+            class="forum-bouton">
+
+            💬 Forum
+
+        </a>
+
+        <!-- JEUX -->
+
+        <a href="jeux.html"
+            class="jeux-bouton">
+
+            🎮 Jeux
+
+        </a>
+
+        <!-- MONNAIE -->
+
+        <a href="monnaie.html"
+            class="monnaie-bouton">
+
+            🪙 Monnaie
+
+        </a>
+
+        <!-- ASSISTANCE -->
+
+        <button class="assistance-bouton">
+
+            🆘 Assistance
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- GOATCOUNTER -->
+<!-- ========================= -->
+
+<script
+    data-goatcounter="https://fan2clotaire.goatcounter.com/count"
+    async
+    src="//gc.zgo.at/count.js">
+</script>
+
+<!-- ========================= -->
+<!-- COMPTEUR DE VISITES -->
+<!-- ========================= -->
+
+<script>
+
+async function updateSiteVisits() {
+
+    try {
+
+        const alreadyCounted =
+            sessionStorage.getItem(
+                "fan2clotaire_visit"
+            );
+
+        const url =
+            "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=visits" +
+            (
+                alreadyCounted
+                    ? "&count=false"
+                    : "&count=true"
+            );
+
+        const response =
+            await fetch(url);
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erreur HTTP " +
+                response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        document.getElementById(
+            "site-visits"
+        ).textContent = data.visits;
+
+        sessionStorage.setItem(
+            "fan2clotaire_visit",
+            "1"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erreur compteur de visites :",
+            error
+        );
+
+        document.getElementById(
+            "site-visits"
+        ).textContent = "Erreur";
+
+    }
+
+}
+
+updateSiteVisits();
+
+</script>
+
+<!-- ========================= -->
+<!-- MUSIQUE -->
+<!-- ========================= -->
+
+<script>
+
+const musiques = [
+
+    "Ghostbusters.mp4",
+    "Ghostbusters.mp4",
+    "Ghostbusters.mp4",
+    "Ghostbusters.mp4"
+
+];
+
+const musiqueAleatoire =
+    musiques[
+        Math.floor(
+            Math.random() *
+            musiques.length
+        )
+    ];
+
+const audioAleatoire =
+    new Audio(musiqueAleatoire);
+
+audioAleatoire.loop = true;
+
+const boutonMusique =
+    document.getElementById(
+        "music-toggle"
+    );
+
+audioAleatoire.play().catch(() => {
+
+    console.log(
+        "Lecture automatique bloquée par le navigateur."
+    );
+
+});
+
+boutonMusique.addEventListener(
+    "click",
+    async () => {
+
+        if (audioAleatoire.paused) {
+
+            try {
+
+                await audioAleatoire.play();
+
+                boutonMusique.textContent =
+                    "🎵 Musique : ON";
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Erreur lecture musique :",
+                    error
+                );
+
+            }
+
+        }
+
+        else {
+
+            audioAleatoire.pause();
+
+            boutonMusique.textContent =
+                "🔇 Musique : OFF";
+
+        }
+
+    }
+);
+
+</script>
+
+<!-- ========================= -->
+<!-- MENU RAPIDE -->
+<!-- ========================= -->
+
+<script>
+
+const menuRapide =
+    document.querySelector(
+        ".menu-rapide"
+    );
+
+const boutonMenu =
+    document.getElementById(
+        "menu-rapide-toggle"
+    );
+
+boutonMenu.addEventListener(
+    "click",
+    () => {
+
+        menuRapide.classList.toggle(
+            "ouvert"
+        );
+
+    }
+);
+
+</script>
+
+<!-- ========================= -->
+<!-- BIOGRAPHIE -->
+<!-- ========================= -->
+
+<section class="biographie">
+
+    <h2>
+        Biographie
+    </h2>
+
+    <p>
+
+        Clotaire LAROCHE (Clotûre pour les intimes)
+        est principalement devenu connu localement
+        le 17 Septembre 2026 à 17h03 en gagnant sa
+        toute première battle d'aura contre Lenny
+        devant une bonne partie du lycée Chevalier
+        d'Eon à Tonnerre, dans l'Yonne, en
+        Bourgogne-Franche-Comté, en France, en Europe,
+        sur Terre.
+
+        Il ensuite commencé à devenir très populaire
+        sur les réseaux sociaux suite au lancement
+        d'un compte fan : Fan2Clotaire
+        (sur tous les réseaux sociaux).
+
+        C'est un jeune homme très beau, charismatique
+        et aimé de tous.
+
+        Il est aussi en classe de 2nde4 au lycée
+        Chevalier d'Eon de Tonnerre.
+
+    </p>
+
+</section>
+
+<!-- ========================= -->
+<!-- PERSONNES -->
+<!-- ========================= -->
+
+<section class="liens-personnes">
+
+    <h2>
+        Les personnes
+    </h2>
+
+    <div class="personnes-container">
+
+        <a href="clotaire.html"
+            class="personne-bouton">
+
+            <img src="clotaire.jpg"
+                alt="Clotaire">
+
+            <span>
+                EN DEV
+            </span>
+
+        </a>
+
+        <a href="lenny.html"
+            class="personne-bouton">
+
+            <img src="lenny.jpg"
+                alt="Lenny">
+
+            <span>
+                EN DEV
+            </span>
+
+        </a>
+
+        <a href="gabriel.html"
+            class="personne-bouton">
+
+            <img src="gaby.jpg"
+                alt="Gabriel">
+
+            <span>
+                Page de Gaby
+            </span>
+
+        </a>
+
+    </div>
+
+</section>
+
+</body>
+</html>

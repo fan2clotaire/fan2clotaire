@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+  }
+
+body {
+margin: 0;
+min-height: 100vh;
+
+
+background-image: url("gabriel-bg.gif");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+
+}
+
+* {
+  box-sizing: border-box;
+  }
+
+body {
+margin: 0;
+min-height: 100vh;
+
+background-image: url("gabriel-bg.gif");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+
+font-family: Arial, sans-serif;
+
+}
+
+/* Cadre principal */
+.cadre {
+width: 80%;
+max-width: 900px;
+margin: 100px auto;
+padding: 40px;
+
+background: rgba(255, 255, 255, 0.15);
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: 25px;
+
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+
+box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+
+color: white;
+text-align: center;
+
+}
+
+.bouton-accueil {
+display: block;
+width: fit-content;
+margin: 40px auto -60px;
+padding: 12px 22px;
+
+background: rgba(255, 255, 255, 0.18);
+border: 1px solid rgba(255, 255, 255, 0.4);
+border-radius: 12px;
+
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+
+color: white;
+text-decoration: none;
+font-weight: bold;
+
+transition: 0.2s ease;
+
+}
+
+.bouton-accueil {
+background: rgba(255, 255, 255, 0.3);
+transform: translateY(-3px);
+}
+
+#bouton-musique {
+position: fixed;
+bottom: 25px;
+right: 25px;
+
+width: 60px;
+height: 60px;
+
+border-radius: 50%;
+border: none;
+
+background: rgba(0, 0, 0, 0.75);
+color: white;
+
+font-size: 24px;
+cursor: pointer;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+transition: transform 0.2s ease, background 0.2s ease;
+
+}
+
+#bouton-musique:hover {
+transform: scale(1.1);
+background: rgba(0, 0, 0, 0.9);
+}

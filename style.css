@@ -1,155 +1,851 @@
 body {
-    background-color: #111827;
-    color: white;
     font-family: Arial, sans-serif;
+
+    background-image: url("https://www.tables-auberges.com/storage/uploads/2013/10/scary-halloween-pumpkins-stairs-arrangement-min-1024x683.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+    color: white;
     text-align: center;
+    padding: 40px 20px;
+    margin: 0;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 50% 100%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    75% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 h1 {
-    color: #a855f7;
-    font-size: 40px;
+    font-size: 32px;
 }
 
 p {
+    color: #d1d5db;
+}
+.links {
+    width: 90%;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+.links a {
+    display: block;
+    background-color: white;
+    color: #111827;
+    text-decoration: none;
+    padding: 16px;
+    margin: 12px 0;
+    border-radius: 12px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.links a:hover {
+    transform: scale(1.03);
+    filter: brightness(1.15);
+}
+
+.profile {
+    margin-bottom: 30px;
+}
+
+.profile img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid white;
+}
+
+.profile h1 {
+    margin: 15px 0 5px;
+}
+
+.username {
+    color: #9ca3af;
+    margin: 0;
+}
+
+.description {
+    color: #d1d5db;
+    margin-top: 15px;
+}
+.links i {
+    width: 30px;
     font-size: 20px;
 }
-/* =========================
-   STYLE GÉNÉRAL
-========================= */
-
-* {
-    box-sizing: border-box;
+.instagram {
+    background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7) !important;
+    color: white !important;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    font-family: Arial, sans-serif;
-    color: white;
-
-    /* Fond dégradé */
-    background:
-        radial-gradient(circle at 20% 20%, #7c3aed 0%, transparent 35%),
-        radial-gradient(circle at 80% 80%, #2563eb 0%, transparent 35%),
-        linear-gradient(135deg, #09090f, #111827, #1e1b4b);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
+.tiktok {
+    background-color: #000000 !important;
+    color: white !important;
 }
 
-
-/* =========================
-   ENCADRÉ EN VERRE
-========================= */
-
-.container {
-    width: 100%;
-    max-width: 700px;
-
-    padding: 35px;
-
-    background: rgba(255, 255, 255, 0.10);
-
-    border: 1px solid rgba(255, 255, 255, 0.20);
-
-    border-radius: 25px;
-
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.35),
-        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+.youtube {
+    background-color: #ff0000 !important;
+    color: white !important;
 }
 
-
-/* =========================
-   TITRE
-========================= */
-
-h1 {
-    margin-top: 0;
-
-    font-size: 42px;
-
-    background: linear-gradient(
-        90deg,
-        #c084fc,
-        #60a5fa
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.linkedin {
+    background-color: #0a66c2 !important;
+    color: white !important;
 }
-
-
-/* =========================
-   PETITS ENCADRÉS
-========================= */
-
 .card {
-    margin-top: 20px;
-    padding: 20px;
+    width: 90%;
+    max-width: 550px;
+    margin: 0 auto;
+    padding: 40px 25px;
+    box-sizing: border-box;
 
     background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
 
     border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.twitch {
+    background-color: #9146ff !important;
+    color: white !important;
+}
+
+.discord {
+    background-color: #5865f2 !important;
+    color: white !important;
+}
+
+.stats {
+    width: 90%;
+    max-width: 1000px;
+    margin: 80px auto 40px;
+    text-align: center;
+}
+
+.stats h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 18px;
+    padding: 25px 10px;
 
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 
-    transition: 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
-
-/* Animation au survol */
-
-.card:hover {
+.stat:hover {
     transform: translateY(-5px);
-
-    background: rgba(255, 255, 255, 0.13);
-
-    border-color: rgba(255, 255, 255, 0.30);
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
+.stat i {
+    font-size: 30px;
+}
 
-/* =========================
-   BOUTONS
-========================= */
+.stat-number {
+    font-size: 25px;
+    font-weight: bold;
+}
 
-button {
-    padding: 12px 22px;
+.stat-label {
+    font-size: 13px;
+    opacity: 0.8;
+}
 
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 14px;
+.youtube-stat i {
+    color: #ff0000;
+}
 
-    background: rgba(255, 255, 255, 0.10);
+.tiktok-stat i {
+    color: #000000;
+}
 
+.instagram-stat i {
+    color: #e1306c;
+}
+
+.twitch-stat i {
+    color: #9146ff;
+}
+
+.discord-stat i {
+    color: #5865f2;
+}
+
+@media (max-width: 800px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+
+    padding: 12px 18px;
+    border: none;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.15);
     color: white;
 
-    font-size: 16px;
-    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    transition: 0.25s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: 0.25s;
 }
 
-button:hover {
-    background: rgba(255, 255, 255, 0.20);
+.music-toggle:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.music-toggle:active {
+    transform: scale(0.95);
+}
+
+.biographie {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.biographie h2 {
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.biographie p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+h1,
+h2 {
+    font-family: "Creepster", cursive;
+}
+
+button,
+a {
+    transition: all 0.3s ease;
+}
+
+button:hover,
+a:hover {
+    box-shadow:
+        0 0 10px rgba(255, 102, 0, 0.5),
+        0 0 25px rgba(140, 0, 255, 0.35);
 
     transform: translateY(-2px);
+}
+
+.stat,
+.biographie {
+    transition: all 0.4s ease;
+}
+
+.stat:hover,
+.biographie:hover {
+    transform: translateY(-4px);
 
     box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.25);
+        0 0 15px rgba(255, 102, 0, 0.35),
+        0 0 30px rgba(140, 0, 255, 0.25);
+}
+
+.chauves-souris {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.chauves-souris span {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.7;
+    animation: volBat 18s linear infinite;
+}
+
+.chauves-souris span:nth-child(1) {
+    top: 15%;
+    left: -50px;
+    animation-delay: 0s;
+}
+
+.chauves-souris span:nth-child(2) {
+    top: 35%;
+    left: -50px;
+    font-size: 18px;
+    animation-delay: 6s;
+}
+
+.chauves-souris span:nth-child(3) {
+    top: 65%;
+    left: -50px;
+    font-size: 28px;
+    animation-delay: 12s;
+}
+
+@keyframes volBat {
+    0% {
+        transform: translateX(-60px) translateY(0);
+    }
+
+    50% {
+        transform: translateX(50vw) translateY(-25px);
+    }
+
+    100% {
+        transform: translateX(110vw) translateY(10px);
+    }
+}
+
+h1 {
+    text-shadow:
+        0 0 8px rgba(255, 102, 0, 0.8),
+        0 0 20px rgba(255, 69, 0, 0.5);
+}
+
+.stat i {
+    transition: all 0.3s ease;
+}
+
+.youtube-stat:hover i {
+    color: #ff6600;
+    text-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
+}
+
+.tiktok-stat:hover i {
+    color: #b000ff;
+    text-shadow: 0 0 15px rgba(176, 0, 255, 0.8);
+}
+
+.instagram-stat:hover i {
+    color: #ff4d88;
+    text-shadow: 0 0 15px rgba(255, 77, 136, 0.8);
+}
+
+.twitch-stat:hover i {
+    color: #8c00ff;
+    text-shadow: 0 0 15px rgba(140, 0, 255, 0.8);
+}
+
+.discord-stat:hover i {
+    color: #ff6600;
+    text-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
+}
+
+.visits-stat:hover i {
+    color: #ff9900;
+    text-shadow: 0 0 15px rgba(255, 153, 0, 0.8);
+}
+
+.toiles-halloween {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.toile {
+    position: absolute;
+    font-size: 70px;
+    opacity: 0.45;
+}
+
+.toile-gauche {
+    top: 10px;
+    left: 10px;
+}
+
+.toile-droite {
+    top: 10px;
+    right: 10px;
+}
+
+.lune-halloween {
+    position: fixed;
+    top: 35px;
+    right: 40px;
+
+    font-size: 55px;
+    opacity: 0.75;
+
+    filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.8));
+
+    pointer-events: none;
+    z-index: 1;
+
+    animation: luneHalloween 4s ease-in-out infinite;
+}
+
+@keyframes luneHalloween {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.citrouilles-halloween {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 15px 0 30px;
+    pointer-events: none;
+}
+
+.citrouilles-halloween span {
+    font-size: 30px;
+    display: inline-block;
+    animation: citrouilleHalloween 3s ease-in-out infinite;
+}
+
+.citrouilles-halloween span:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.citrouilles-halloween span:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes citrouilleHalloween {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-5px) rotate(4deg);
+    }
+}
+
+#halloween-intro {
+    position: fixed;
+    inset: 0;
+
+    background: #080008;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+
+    animation: disparitionHalloween 2.5s ease forwards;
+}
+
+.intro-pumpkin {
+    font-size: 80px;
+
+    animation: apparitionCitrouille 1s ease;
+}
+
+.intro-text {
+    margin-top: 15px;
+
+    font-family: "Creepster", cursive;
+    font-size: 32px;
+    color: #ff6600;
+
+    text-shadow:
+        0 0 10px rgba(255, 102, 0, 0.8),
+        0 0 25px rgba(255, 69, 0, 0.5);
+
+    animation: apparitionTexte 1.2s ease;
+}
+
+@keyframes disparitionHalloween {
+    0%, 60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+@keyframes apparitionCitrouille {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes apparitionTexte {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.exclusive-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 24px;
+
+    color: white;
+    text-decoration: none;
+
+    background: rgba(255, 102, 0, 0.25);
+    border: 1px solid rgba(255, 102, 0, 0.6);
+    border-radius: 25px;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    transition: all 0.3s ease;
+}
+
+.exclusive-button:hover {
+    background: rgba(255, 102, 0, 0.45);
+
+    box-shadow:
+        0 0 12px rgba(255, 102, 0, 0.7),
+        0 0 25px rgba(140, 0, 255, 0.4);
+
+    transform: translateY(-2px);
+}
+
+.video-centree {
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    margin: 50px auto;
+    border-radius: 15px;
+}
+
+.video-centree {
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    margin: 50px auto;
+
+    border-radius: 15px;
+
+    border: 3px solid rgba(255, 102, 0, 0.8);
+
+    box-shadow:
+        0 0 15px rgba(255, 102, 0, 0.8),
+        0 0 35px rgba(140, 0, 255, 0.5);
+
+    transition: all 0.3s ease;
+}
+
+.video-centree:hover {
+    transform: scale(1.01);
+
+    box-shadow:
+        0 0 20px rgba(255, 102, 0, 1),
+        0 0 45px rgba(140, 0, 255, 0.8);
+}
+
+.liens-personnes {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+
+    transition: all 0.4s ease;
+}
+
+.liens-personnes h2 {
+    margin-bottom: 20px;
+}
+
+.personnes-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.personne-bouton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 150px;
+    padding: 15px;
+
+    color: white;
+    text-decoration: none;
+
+    background: rgba(255, 102, 0, 0.20);
+    border: 1px solid rgba(255, 102, 0, 0.6);
+    border-radius: 20px;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    transition: all 0.3s ease;
+}
+
+.personne-bouton img {
+    width: 90px;
+    height: 90px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(255, 102, 0, 0.8);
+
+    box-shadow:
+        0 0 10px rgba(255, 102, 0, 0.6),
+        0 0 20px rgba(140, 0, 255, 0.3);
+
+    margin-bottom: 10px;
+}
+
+.personne-bouton span {
+    font-family: "Creepster", cursive;
+    font-size: 22px;
+}
+
+.personne-bouton:hover {
+    background: rgba(255, 102, 0, 0.40);
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 0 15px rgba(255, 102, 0, 0.8),
+        0 0 30px rgba(140, 0, 255, 0.5);
+}
+
+.personne-bouton:hover img {
+    box-shadow:
+        0 0 15px rgba(255, 102, 0, 0.9),
+        0 0 25px rgba(140, 0, 255, 0.6);
+}
+
+/* =========================
+   MENU RAPIDE
+   ========================= */
+
+.menu-rapide {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+
+    z-index: 9999;
+}
+
+
+/* =========================
+   BOUTON PRINCIPAL
+   ========================= */
+
+.menu-rapide-toggle {
+    width: 65px;
+    height: 65px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #6366f1;
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.3s,
+        background 0.3s;
+}
+
+
+.menu-rapide-toggle:hover {
+    background: #818cf8;
+}
+
+
+/* =========================
+   BOUTONS DU MENU
+   ========================= */
+
+.menu-rapide-options {
+    position: absolute;
+
+    right: 0;
+    bottom: 75px;
+
+    display: flex;
+    flex-direction: column-reverse;
+
+    gap: 10px;
+
+    opacity: 0;
+    transform: translateY(15px);
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.3s,
+        transform 0.3s;
+}
+
+
+/* Menu ouvert */
+
+.menu-rapide.ouvert .menu-rapide-options {
+    opacity: 1;
+
+    transform: translateY(0);
+
+    pointer-events: auto;
+}
+
+
+/* Rotation du bouton */
+
+.menu-rapide.ouvert .menu-rapide-toggle {
+    transform: rotate(90deg);
+}
+
+
+/* =========================
+   TOUS LES BOUTONS
+   ========================= */
+
+.menu-rapide-options button,
+.menu-rapide-options a,
+.menu-rapide-options .compte-bouton {
+    position: static !important;
+
+    display: flex !important;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+
+    height: 50px !important;
+
+    margin: 0 !important;
+    padding: 0 15px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid #334155 !important;
+    border-radius: 12px;
+
+    background: #1e293b !important;
+    color: white !important;
+
+    text-decoration: none;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.2s,
+        background 0.2s;
+}
+
+
+/* Effet au survol */
+
+.menu-rapide-options button:hover,
+.menu-rapide-options a:hover {
+    background: #334155;
+
+    transform: translateX(-4px);
 }

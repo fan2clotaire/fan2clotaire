@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clotaire Adventure</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #000;
+        }
+
+        #game-container {
+            position: fixed;
+            inset: 0;
+            background: #000;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================
+           CRÉATION DU PERSONNAGE
+        ========================= */
+
+        #creation-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                radial-gradient(circle at center, #30206b 0%, #120b2d 55%, #05030b 100%);
+            color: white;
+        }
+
+        .creation-box {
+            width: min(92%, 460px);
+            padding: 30px 24px;
+            border-radius: 24px;
+            text-align: center;
+            background: rgba(15, 15, 30, 0.94);
+            border: 2px solid rgba(255,255,255,0.12);
+            box-shadow: 0 0 40px rgba(100, 70, 255, 0.35);
+        }
+
+        .creation-box h1 {
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        .creation-box p {
+            color: #cfcfcf;
+        }
+
+        #pseudo {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            margin: 12px 0 20px;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        .gender-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .gender-button {
+            flex: 1;
+            padding: 14px 10px;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            background: #27243d;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .gender-button.selected {
+            border-color: #8b5cf6;
+            background: #3b2868;
+            box-shadow: 0 0 15px rgba(139,92,246,0.35);
+        }
+
+        #character-preview {
+            min-height: 80px;
+            margin: 20px 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 65px;
+        }
+
+        #continue-button {
+            display: none;
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* =========================
+           CONFIRMATION
+        ========================= */
+
+        #confirmation-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.78);
+            color: white;
+        }
+
+        .confirmation-box {
+            width: min(90%, 400px);
+            padding: 28px;
+            border-radius: 22px;
+            text-align: center;
+            background: #141322;
+            box-shadow: 0 0 35px rgba(0,0,0,0.8);
+        }
+
+        .confirmation-character {
+            font-size: 70px;
+            margin: 15px 0;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .confirmation-buttons button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        #modify-button {
+            background: #343247;
+            color: white;
+        }
+
+        #confirm-button {
+            background: #7c3aed;
+            color: white;
+        }
+
+        /* =========================
+           INTERFACE JEU
+        ========================= */
+
+        #game-ui {
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            color: white;
+        }
+
+        #objective-box {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 250px;
+            max-width: 90%;
+            padding: 12px 18px;
+            border-radius: 14px;
+            background: rgba(0,0,0,0.65);
+            border: 1px solid rgba(255,255,255,0.15);
+            text-align: center;
+            font-size: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.55);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* =========================
+           DIALOGUE
+        ========================= */
+
+        #dialogue-box {
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+            width: min(92%, 700px);
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(8,8,15,0.93);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 0 30px rgba(0,0,0,0.55);
+            display: none;
+            pointer-events: auto;
+        }
+
+        #dialogue-speaker {
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+
+        #dialogue-text {
+            font-size: 17px;
+            line-height: 1.5;
+            min-height: 50px;
+        }
+
+        #dialogue-help {
+            margin-top: 12px;
+            color: #999;
+            font-size: 12px;
+            text-align: right;
+        }
+
+        /* =========================
+           FADE
+        ========================= */
+
+        #fade {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s ease;
+        }
+
+        /* =========================
+           CHAPITRE
+        ========================= */
+
+        #chapter-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: #000;
+            color: white;
+            text-align: center;
+        }
+
+        #chapter-screen h1 {
+            margin: 0;
+            font-size: clamp(38px, 10vw, 80px);
+            letter-spacing: 5px;
+        }
+
+        #chapter-screen h2 {
+            margin-top: 18px;
+            font-size: clamp(20px, 5vw, 40px);
+            font-weight: normal;
+            color: #cfcfcf;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+            #objective-box {
+                top: 10px;
+                font-size: 13px;
+                padding: 10px 14px;
+            }
+
+            #controls {
+                font-size: 11px;
+                bottom: 10px;
+            }
+
+            #dialogue-box {
+                bottom: 12px;
+                padding: 16px;
+            }
+
+            #dialogue-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="game-container"></div>
+
+<!-- =========================
+     CRÉATION DU PERSONNAGE
+========================= -->
+
+<div id="creation-screen">
+    <div class="creation-box">
+
+        <h1>🌟 Clotaire Adventure</h1>
+
+        <p>Crée ton personnage pour commencer l'aventure.</p>
+
+        <input
+            type="text"
+            id="pseudo"
+            maxlength="20"
+            placeholder="Ton pseudo..."
+        >
+
+        <div class="gender-buttons">
+            <button class="gender-button" id="boy-button">
+                👦 Garçon
+            </button>
+
+            <button class="gender-button" id="girl-button">
+                👧 Fille
+            </button>
+        </div>
+
+        <div id="character-preview"></div>
+
+        <button id="continue-button">
+            ▶️ Continuer
+        </button>
+
+    </div>
+</div>
+
+<!-- =========================
+     CONFIRMATION
+========================= -->
+
+<div id="confirmation-screen">
+    <div class="confirmation-box">
+
+        <h2>Es-tu sûr de ton choix ?</h2>
+
+        <div class="confirmation-character" id="confirmation-character">
+            👦
+        </div>
+
+        <p id="confirmation-pseudo"></p>
+
+        <div class="confirmation-buttons">
+            <button id="modify-button">
+                ↩️ Modifier
+            </button>
+
+            <button id="confirm-button">
+                ✅ Confirmer
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- =========================
+     UI
+========================= -->
+
+<div id="game-ui">
+
+    <div id="objective-box">
+        Aucun objectif
+    </div>
+
+    <div id="controls">
+        ZQSD / Flèches : se déplacer • A : interagir
+    </div>
+
+    <div id="dialogue-box">
+
+        <div id="dialogue-speaker">
+            Gaby
+        </div>
+
+        <div id="dialogue-text"></div>
+
+        <div id="dialogue-help">
+            Appuie sur ESPACE ou A pour continuer
+        </div>
+
+    </div>
+
+</div>
+
+<div id="fade"></div>
+
+<!-- =========================
+     CHAPITRE
+========================= -->
+
+<div id="chapter-screen">
+
+    <h1>CHAPITRE 1</h1>
+
+    <h2>La Disparition de M. LAROCHE</h2>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let pseudoJoueur = "";
+let genreJoueur = "";
+
+let scene;
+let camera;
+let renderer;
+
+let gaby;
+let laroche;
+
+let maisonClotaire;
+let maisonGaby;
+
+let modeJeu = "creation";
+
+let dialogueActif = false;
+let dialogueType = "";
+let dialogueIndex = 0;
+
+let objectifActuel = "";
+
+let plageRechercheTerminee = false;
+let cinematiqueActive = false;
+
+const keys = {};
+
+/* =========================================================
+   ÉLÉMENTS HTML
+========================================================= */
+
+const creationScreen =
+    document.getElementById("creation-screen");
+
+const confirmationScreen =
+    document.getElementById("confirmation-screen");
+
+const pseudoInput =
+    document.getElementById("pseudo");
+
+const boyButton =
+    document.getElementById("boy-button");
+
+const girlButton =
+    document.getElementById("girl-button");
+
+const characterPreview =
+    document.getElementById("character-preview");
+
+const continueButton =
+    document.getElementById("continue-button");
+
+const confirmationCharacter =
+    document.getElementById("confirmation-character");
+
+const confirmationPseudo =
+    document.getElementById("confirmation-pseudo");
+
+const modifyButton =
+    document.getElementById("modify-button");
+
+const confirmButton =
+    document.getElementById("confirm-button");
+
+const objectiveBox =
+    document.getElementById("objective-box");
+
+const dialogueBox =
+    document.getElementById("dialogue-box");
+
+const dialogueSpeaker =
+    document.getElementById("dialogue-speaker");
+
+const dialogueText =
+    document.getElementById("dialogue-text");
+
+const fade =
+    document.getElementById("fade");
+
+const chapterScreen =
+    document.getElementById("chapter-screen");
+
+/* =========================================================
+   CRÉATION DU PERSONNAGE
+========================================================= */
+
+function mettreAJourCreation() {
+
+    if (
+        pseudoInput.value.trim() !== "" &&
+        genreJoueur !== ""
+    ) {
+        continueButton.style.display = "block";
+    } else {
+        continueButton.style.display = "none";
+    }
+
+    if (genreJoueur === "garçon") {
+        characterPreview.textContent = "👦";
+    }
+
+    if (genreJoueur === "fille") {
+        characterPreview.textContent = "👧";
+    }
+}
+
+boyButton.addEventListener("click", () => {
+
+    genreJoueur = "garçon";
+
+    boyButton.classList.add("selected");
+    girlButton.classList.remove("selected");
+
+    mettreAJourCreation();
+});
+
+girlButton.addEventListener("click", () => {
+
+    genreJoueur = "fille";
+
+    girlButton.classList.add("selected");
+    boyButton.classList.remove("selected");
+
+    mettreAJourCreation();
+});
+
+pseudoInput.addEventListener("input", mettreAJourCreation);
+
+/* =========================================================
+   CONFIRMATION
+========================================================= */
+
+continueButton.addEventListener("click", () => {
+
+    pseudoJoueur = pseudoInput.value.trim();
+
+    if (!pseudoJoueur || !genreJoueur) {
+        return;
+    }
+
+    confirmationPseudo.textContent =
+        "Pseudo : " + pseudoJoueur;
+
+    confirmationCharacter.textContent =
+        genreJoueur === "garçon"
+            ? "👦"
+            : "👧";
+
+    confirmationScreen.style.display = "flex";
+});
+
+modifyButton.addEventListener("click", () => {
+
+    confirmationScreen.style.display = "none";
+
+});
+
+confirmButton.addEventListener("click", () => {
+
+    confirmationScreen.style.display = "none";
+    creationScreen.style.display = "none";
+
+    demarrerJeu();
+
+});
+
+/* =========================================================
+   INITIALISATION THREE.JS
+========================================================= */
+
+function initialiserThree() {
+
+    scene = new THREE.Scene();
+
+    scene.background =
+        new THREE.Color(0x87ceeb);
+
+    camera =
+        new THREE.PerspectiveCamera(
+            55,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+
+    camera.position.set(0, 5, 18);
+
+    renderer =
+        new THREE.WebGLRenderer({
+            antialias: true
+        });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, 2)
+    );
+
+    document
+        .getElementById("game-container")
+        .appendChild(renderer.domElement);
+
+    const ambientLight =
+        new THREE.AmbientLight(
+            0xffffff,
+            1.2
+        );
+
+    scene.add(ambientLight);
+
+    const sun =
+        new THREE.DirectionalLight(
+            0xffffff,
+            1.5
+        );
+
+    sun.position.set(10, 20, 10);
+
+    scene.add(sun);
+
+    /* =========================
+       TERRAIN
+    ========================= */
+
+    const sol =
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 50),
+            new THREE.MeshStandardMaterial({
+                color: 0x65a35a
+            })
+        );
+
+    sol.rotation.x = -Math.PI / 2;
+    sol.position.z = 5;
+
+    scene.add(sol);
+
+    /* =========================
+       PLAGE
+    ========================= */
+
+    const plage =
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 14),
+            new THREE.MeshStandardMaterial({
+                color: 0xe4c27a
+            })
+        );
+
+    plage.rotation.x = -Math.PI / 2;
+    plage.position.y = 0.01;
+    plage.position.z = -5;
+
+    scene.add(plage);
+
+    /* =========================
+       MER
+    ========================= */
+
+    const mer =
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 30),
+            new THREE.MeshStandardMaterial({
+                color: 0x1976a8,
+                transparent: true,
+                opacity: 0.9
+            })
+        );
+
+    mer.rotation.x = -Math.PI / 2;
+    mer.position.y = -0.03;
+    mer.position.z = -18;
+
+    scene.add(mer);
+
+    creerMaisonClotaire();
+
+    creerMaisonGaby();
+
+    creerGaby();
+
+    creerLaroche();
+}
+
+/* =========================================================
+   CRÉATION D'UNE MAISON
+========================================================= */
+
+function creerMaison(positionX, positionZ, couleurMur, couleurToit) {
+
+    const maison = new THREE.Group();
+
+    const corps =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(7, 4, 6),
+            new THREE.MeshStandardMaterial({
+                color: couleurMur
+            })
+        );
+
+    corps.position.y = 2;
+
+    maison.add(corps);
+
+    const toit =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(5.2, 2.8, 4),
+            new THREE.MeshStandardMaterial({
+                color: couleurToit
+            })
+        );
+
+    toit.rotation.y = Math.PI / 4;
+    toit.position.y = 5.4;
+
+    maison.add(toit);
+
+    const porte =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(1.4, 2.5, 0.3),
+            new THREE.MeshStandardMaterial({
+                color: 0x4d2d20
+            })
+        );
+
+    porte.position.set(0, 1.25, 3.08);
+
+    maison.add(porte);
+
+    const fenetreGeometry =
+        new THREE.BoxGeometry(1.5, 1.2, 0.2);
+
+    const fenetreMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x7ed6df
+        });
+
+    const fenetreGauche =
+        new THREE.Mesh(
+            fenetreGeometry,
+            fenetreMaterial
+        );
+
+    fenetreGauche.position.set(
+        -2.1,
+        2.4,
+        3.08
+    );
+
+    maison.add(fenetreGauche);
+
+    const fenetreDroite =
+        fenetreGauche.clone();
+
+    fenetreDroite.position.x = 2.1;
+
+    maison.add(fenetreDroite);
+
+    maison.position.set(
+        positionX,
+        0,
+        positionZ
+    );
+
+    scene.add(maison);
+
+    return maison;
+}
+
+/* =========================================================
+   MAISON DE CLOTAIRE
+========================================================= */
+
+function creerMaisonClotaire() {
+
+    maisonClotaire =
+        creerMaison(
+            0,
+            5,
+            0xf1dfc0,
+            0x8d3d3d
+        );
+}
+
+/* =========================================================
+   DEUXIÈME MAISON
+========================================================= */
+
+function creerMaisonGaby() {
+
+    /*
+       Cette maison est volontairement différente
+       de la Maison de Clotaire.
+    */
+
+    maisonGaby =
+        creerMaison(
+            11,
+            5,
+            0xd6e8f5,
+            0x4b5563
+        );
+
+}
+
+/* =========================================================
+   GABY
+========================================================= */
+
+function creerGaby() {
+
+    gaby = new THREE.Group();
+
+    const couleur =
+        genreJoueur === "garçon"
+            ? 0x3b82f6
+            : 0xec4899;
+
+    const corps =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(0.9, 1.5, 0.55),
+            new THREE.MeshStandardMaterial({
+                color: couleur
+            })
+        );
+
+    corps.position.y = 1.1;
+
+    gaby.add(corps);
+
+    const tete =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 20, 20),
+            new THREE.MeshStandardMaterial({
+                color: 0xffd1a9
+            })
+        );
+
+    tete.position.y = 2.25;
+
+    gaby.add(tete);
+
+    const jambeGeometry =
+        new THREE.BoxGeometry(0.25, 0.9, 0.25);
+
+    const jambeMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x202020
+        });
+
+    const jambe1 =
+        new THREE.Mesh(
+            jambeGeometry,
+            jambeMaterial
+        );
+
+    jambe1.position.set(-0.23, 0.35, 0);
+
+    gaby.add(jambe1);
+
+    const jambe2 =
+        jambe1.clone();
+
+    jambe2.position.x = 0.23;
+
+    gaby.add(jambe2);
+
+    gaby.position.set(
+        0,
+        0,
+        10
+    );
+
+    scene.add(gaby);
+}
+
+/* =========================================================
+   M. LAROCHE
+========================================================= */
+
+function creerLaroche() {
+
+    laroche = new THREE.Group();
+
+    const corps =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(0.95, 1.6, 0.6),
+            new THREE.MeshStandardMaterial({
+                color: 0x8b2e2e
+            })
+        );
+
+    corps.position.y = 1.1;
+
+    laroche.add(corps);
+
+    const tete =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(0.52, 20, 20),
+            new THREE.MeshStandardMaterial({
+                color: 0xffd1a9
+            })
+        );
+
+    tete.position.y = 2.3;
+
+    laroche.add(tete);
+
+    const cheveux =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(0.54, 20, 20),
+            new THREE.MeshStandardMaterial({
+                color: 0xb91c1c
+            })
+        );
+
+    cheveux.position.y = 2.6;
+    cheveux.scale.y = 0.5;
+
+    laroche.add(cheveux);
+
+    laroche.position.set(
+        0,
+        0,
+        8.7
+    );
+
+    scene.add(laroche);
+}
+
+/* =========================================================
+   DÉMARRAGE
+========================================================= */
+
+function demarrerJeu() {
+
+    initialiserThree();
+
+    modeJeu = "cinematique";
+
+    objectifActuel =
+        "Rejoindre la Maison de Clotaire";
+
+    mettreAJourObjectif();
+
+    commencerCinematiqueMaison();
+
+    boucleJeu();
+}
+
+/* =========================================================
+   OBJECTIF
+========================================================= */
+
+function mettreAJourObjectif() {
+
+    objectiveBox.textContent =
+        objectifActuel || "";
+}
+
+/* =========================================================
+   CINÉMATIQUE VERS LA MAISON DE CLOTAIRE
+========================================================= */
+
+function commencerCinematiqueMaison() {
+
+    cinematiqueActive = true;
+
+    gaby.position.set(
+        0,
+        0,
+        10
+    );
+
+    camera.position.set(
+        0,
+        5,
+        17
+    );
+
+    const interval =
+        setInterval(() => {
+
+            if (gaby.position.z > 8.15) {
+
+                gaby.position.z -= 0.06;
+
+            } else {
+
+                clearInterval(interval);
+
+                cinematiqueActive = false;
+
+                lancerPremierDialogue();
+            }
+
+            regarderVers(gaby, camera);
+
+        }, 30);
+}
+
+/* =========================================================
+   PREMIER DIALOGUE
+========================================================= */
+
+const dialogue1 = [
+
+    {
+        speaker: "Gaby",
+        text: "Bonjour, Mr LAROCHE ! Comment allez-vous ?"
+    },
+
+    {
+        speaker: "M. Laroche",
+        text: "Oh très bien et toi ?"
+    },
+
+    {
+        speaker: "Gaby",
+        text: "Je vais très bien merci !"
+    },
+
+    {
+        speaker: "Gaby",
+        text: "Vous avez vu ce ciel magnifique aujourd'hui ?"
+    },
+
+    {
+        speaker: "M. Laroche",
+        text: "Oh oui, et j'en ai rarement vu des comme ça !"
+    },
+
+    {
+        speaker: "Gaby",
+        text: "Est-ce que ça vous dirait d'aller vous baignez à la plage ?"
+    },
+
+    {
+        speaker: "M. Laroche",
+        text: "Oui si tu le souhaites, allons-y !"
+    }
+
+];
+
+/* =========================================================
+   DEUXIÈME DIALOGUE
+========================================================= */
+
+const dialogue2 = [
+
+    {
+        speaker: "M. Laroche",
+        text: "Oh, te voilà enfin !"
+    },
+
+    {
+        speaker: "Gaby",
+        text: "Eh oui m'sieur, quand il s'agit d'aller nager..."
+    },
+
+    {
+        speaker: "Gaby",
+        text: "JE SUIS TOUJOURS RAPIDE !!"
+    }
+
+];
+
+/* =========================================================
+   DIALOGUE 1
+========================================================= */
+
+function lancerPremierDialogue() {
+
+    dialogueActif = true;
+    dialogueType = "premier";
+    dialogueIndex = 0;
+    modeJeu = "dialogue";
+
+    afficherDialogue();
+}
+
+/* =========================================================
+   DIALOGUE 2
+========================================================= */
+
+function commencerDeuxiemeDialogue() {
+
+    dialogueActif = true;
+    dialogueType = "deuxieme";
+    dialogueIndex = 0;
+    modeJeu = "dialogue";
+
+    afficherDialogue();
+}
+
+/* =========================================================
+   AFFICHAGE DIALOGUE
+========================================================= */
+
+function afficherDialogue() {
+
+    const liste =
+        dialogueType === "premier"
+            ? dialogue1
+            : dialogue2;
+
+    const dialogue =
+        liste[dialogueIndex];
+
+    if (!dialogue) {
+        return;
+    }
+
+    dialogueSpeaker.textContent =
+        dialogue.speaker;
+
+    dialogueText.textContent =
+        dialogue.text;
+
+    dialogueBox.style.display =
+        "block";
+}
+
+/* =========================================================
+   AVANCER DIALOGUE
+========================================================= */
+
+function avancerDialogue() {
+
+    if (!dialogueActif) {
+        return;
+    }
+
+    const liste =
+        dialogueType === "premier"
+            ? dialogue1
+            : dialogue2;
+
+    dialogueIndex++;
+
+    if (dialogueIndex >= liste.length) {
+
+        dialogueActif = false;
+
+        dialogueBox.style.display = "none";
+
+        if (dialogueType === "premier") {
+
+            commencerObjectifPlage();
+
+        } else {
+
+            commencerCinematiquePlage();
+
+        }
+
+        return;
+    }
+
+    afficherDialogue();
+}
+
+/* =========================================================
+   CONTRÔLE DIALOGUE
+========================================================= */
+
+document.addEventListener("keydown", (event) => {
+
+    if (
+        dialogueActif &&
+        (
+            event.code === "Space" ||
+            event.key.toLowerCase() === "a"
+        )
+    ) {
+
+        event.preventDefault();
+
+        avancerDialogue();
+    }
+
+});
+
+/* =========================================================
+   OBJECTIF PLAGE
+========================================================= */
+
+function commencerObjectifPlage() {
+
+    modeJeu = "exploration";
+
+    objectifActuel =
+        "Rejoindre M. Laroche sur la plage";
+
+    mettreAJourObjectif();
+
+    laroche.visible = true;
+
+    laroche.position.set(
+        0,
+        0,
+        -5
+    );
+
+    camera.position.set(
+        0,
+        5,
+        7
+    );
+}
+
+/* =========================================================
+   CINÉMATIQUE : ALLER DANS L'EAU
+========================================================= */
+
+function commencerCinematiquePlage() {
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    objectifActuel =
+        "Aller vous baigner avec M. Laroche";
+
+    mettreAJourObjectif();
+
+    const animation =
+        setInterval(() => {
+
+            gaby.position.z -= 0.08;
+            laroche.position.z -= 0.08;
+
+            camera.position.z =
+                gaby.position.z + 8;
+
+            camera.position.x =
+                gaby.position.x;
+
+            camera.position.y = 5;
+
+            regarderVers(gaby, camera);
+
+            if (gaby.position.z <= -7) {
+
+                clearInterval(animation);
+
+                lancerCinematiqueDisparition();
+            }
+
+        }, 30);
+}
+
+/* =========================================================
+   DISPARITION DE M. LAROCHE
+========================================================= */
+
+function lancerCinematiqueDisparition() {
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    objectifActuel =
+        "M. Laroche a disparu...";
+
+    mettreAJourObjectif();
+
+    setTimeout(() => {
+
+        laroche.visible = false;
+
+        /*
+           Gaby revient sur la plage.
+        */
+
+        gaby.position.set(
+            0,
+            0,
+            -1
+        );
+
+        camera.position.set(
+            0,
+            5,
+            7
+        );
+
+        regarderVers(gaby, camera);
+
+        objectifActuel =
+            "Parcourir la plage et retrouver M. Laroche";
+
+        mettreAJourObjectif();
+
+        plageRechercheTerminee = false;
+
+        cinematiqueActive = false;
+
+        modeJeu = "exploration";
+
+    }, 1400);
+}
+
+/* =========================================================
+   DÉTECTION DE L'EAU
+========================================================= */
+
+function verifierEntreeDansLEau() {
+
+    if (
+        objectifActuel ===
+        "Parcourir la plage et retrouver M. Laroche" &&
+        !plageRechercheTerminee &&
+        gaby.position.z <= -3.5
+    ) {
+
+        entrerDansLEau();
+    }
+}
+
+/* =========================================================
+   FIN DE LA RECHERCHE
+========================================================= */
+
+function entrerDansLEau() {
+
+    if (plageRechercheTerminee) {
+        return;
+    }
+
+    plageRechercheTerminee = true;
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    /*
+       Plus aucun objectif de sommeil :
+       le retour à la maison est entièrement cinématique.
+    */
+
+    objectifActuel = "";
+
+    mettreAJourObjectif();
+
+    setTimeout(() => {
+
+        commencerRetourMaison();
+
+    }, 1800);
+}
+
+/* =========================================================
+   RETOUR AUTOMATIQUE À LA MAISON
+========================================================= */
+
+function commencerRetourMaison() {
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    /*
+       Écran noir pour masquer la téléportation.
+    */
+
+    fade.style.opacity = "1";
+
+    setTimeout(() => {
+
+        /*
+           Téléportation devant la deuxième maison.
+        */
+
+        gaby.position.set(
+            11,
+            0,
+            9
+        );
+
+        camera.position.set(
+            11,
+            5,
+            17
+        );
+
+        /*
+           Passage à la cinématique
+           d'entrée dans la maison.
+        */
+
+        setTimeout(() => {
+
+            fade.style.opacity = "0";
+
+            setTimeout(() => {
+
+                commencerCinematiqueRetourMaison();
+
+            }, 700);
+
+        }, 500);
+
+    }, 1200);
+}
+
+/* =========================================================
+   CINÉMATIQUE : GABY RENTRE CHEZ LUI
+========================================================= */
+
+function commencerCinematiqueRetourMaison() {
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    objectifActuel = "";
+
+    mettreAJourObjectif();
+
+    /*
+       Gaby avance vers la porte
+       de la deuxième maison.
+    */
+
+    const animation =
+        setInterval(() => {
+
+            gaby.position.z -= 0.055;
+
+            camera.position.x +=
+                (
+                    gaby.position.x -
+                    camera.position.x
+                ) * 0.08;
+
+            camera.position.z +=
+                (
+                    gaby.position.z + 7 -
+                    camera.position.z
+                ) * 0.08;
+
+            camera.position.y +=
+                (
+                    4.5 -
+                    camera.position.y
+                ) * 0.08;
+
+            regarderVers(gaby, camera);
+
+            /*
+               Porte de la deuxième maison.
+            */
+
+            if (gaby.position.z <= 8.15) {
+
+                clearInterval(animation);
+
+                /*
+                   Gaby est entré dans sa maison.
+                */
+
+                lancerFinCinematiqueMaison();
+
+            }
+
+        }, 30);
+}
+
+/* =========================================================
+   FIN DE LA CINÉMATIQUE
+========================================================= */
+
+function lancerFinCinematiqueMaison() {
+
+    modeJeu = "cinematique";
+    cinematiqueActive = true;
+
+    objectifActuel = "";
+
+    mettreAJourObjectif();
+
+    /*
+       Petit temps avant le fondu.
+    */
+
+    setTimeout(() => {
+
+        fade.style.opacity = "1";
+
+        setTimeout(() => {
+
+            afficherChapitre1();
+
+        }, 1500);
+
+    }, 700);
+}
+
+/* =========================================================
+   CHAPITRE 1
+========================================================= */
+
+function afficherChapitre1() {
+
+    chapterScreen.style.display =
+        "flex";
+
+    modeJeu = "chapitre";
+
+    cinematiqueActive = false;
+
+    objectiveBox.style.display =
+        "none";
+
+    document.getElementById("controls").style.display =
+        "none";
+
+    /*
+       Le texte du chapitre apparaît
+       après le fondu au noir.
+    */
+
+    setTimeout(() => {
+
+        fade.style.opacity = "0";
+
+    }, 500);
+}
+
+/* =========================================================
+   DÉPLACEMENT
+========================================================= */
+
+function mettreAJourJoueur() {
+
+    if (
+        modeJeu !== "exploration"
+    ) {
+        return;
+    }
+
+    const vitesse = 0.08;
+
+    if (
+        keys["z"] ||
+        keys["arrowup"]
+    ) {
+
+        gaby.position.z -= vitesse;
+    }
+
+    if (
+        keys["s"] ||
+        keys["arrowdown"]
+    ) {
+
+        gaby.position.z += vitesse;
+    }
+
+    if (
+        keys["q"] ||
+        keys["arrowleft"]
+    ) {
+
+        gaby.position.x -= vitesse;
+    }
+
+    if (
+        keys["d"] ||
+        keys["arrowright"]
+    ) {
+
+        gaby.position.x += vitesse;
+    }
+
+    gaby.position.x =
+        Math.max(
+            -17,
+            Math.min(
+                17,
+                gaby.position.x
+            )
+        );
+
+    verifierEntreeDansLEau();
+}
+
+/* =========================================================
+   TOUCHES
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        keys[
+            event.key.toLowerCase()
+        ] = true;
+
+        if (
+            event.key === "ArrowUp" ||
+            event.key === "ArrowDown" ||
+            event.key === "ArrowLeft" ||
+            event.key === "ArrowRight"
+        ) {
+
+            event.preventDefault();
+        }
+
+        if (
+            event.key.toLowerCase() === "a"
+        ) {
+
+            interagir();
+        }
+
+    }
+);
+
+document.addEventListener(
+    "keyup",
+    (event) => {
+
+        keys[
+            event.key.toLowerCase()
+        ] = false;
+
+    }
+);
+
+/* =========================================================
+   INTERACTION
+========================================================= */
+
+function interagir() {
+
+    if (
+        modeJeu !== "exploration"
+    ) {
+        return;
+    }
+
+    if (!laroche.visible) {
+        return;
+    }
+
+    const distance =
+        gaby.position.distanceTo(
+            laroche.position
+        );
+
+    if (
+        distance < 2.5 &&
+        objectifActuel ===
+        "Rejoindre M. Laroche sur la plage"
+    ) {
+
+        commencerDeuxiemeDialogue();
+    }
+}
+
+/* =========================================================
+   CAMÉRA
+========================================================= */
+
+function regarderVers(
+    objet,
+    cam
+) {
+
+    const cible =
+        objet.position.clone();
+
+    cible.y += 1.5;
+
+    cam.lookAt(cible);
+}
+
+/* =========================================================
+   BOUCLE
+========================================================= */
+
+function boucleJeu() {
+
+    requestAnimationFrame(
+        boucleJeu
+    );
+
+    mettreAJourJoueur();
+
+    if (
+        modeJeu === "exploration"
+    ) {
+
+        const cameraCibleZ =
+            gaby.position.z + 7;
+
+        camera.position.x +=
+            (
+                gaby.position.x -
+                camera.position.x
+            ) * 0.08;
+
+        camera.position.z +=
+            (
+                cameraCibleZ -
+                camera.position.z
+            ) * 0.08;
+
+        camera.position.y +=
+            (
+                5 -
+                camera.position.y
+            ) * 0.08;
+
+        regarderVers(
+            gaby,
+            camera
+        );
+    }
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+/* =========================================================
+   REDIMENSIONNEMENT
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (!camera || !renderer) {
+            return;
+        }
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Connexion - Fan2Clotaire</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+
+        font-family: Arial, sans-serif;
+        color: #111827;
+
+        background: linear-gradient(
+            135deg,
+            #000000 0%,
+            #171717 25%,
+            #444444 50%,
+            #9ca3af 75%,
+            #ffffff 100%
+        );
+
+        background-attachment: fixed;
+    }
+
+    .connexion-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 35px;
+
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 24px;
+
+        box-shadow:
+            0 25px 60px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    h1 {
+        margin: 0 0 30px;
+        text-align: center;
+        font-size: 32px;
+        color: #111827;
+    }
+
+    #connexion-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px 16px;
+
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+
+        background: #f9fafb;
+        color: #111827;
+
+        font-size: 16px;
+        outline: none;
+
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+    }
+
+    input:focus {
+        background: white;
+        border-color: #4b5563;
+
+        box-shadow:
+            0 0 0 3px rgba(75, 85, 99, 0.15);
+    }
+
+    input::placeholder {
+        color: #6b7280;
+    }
+
+    button {
+        margin-top: 5px;
+        padding: 14px;
+
+        border: none;
+        border-radius: 12px;
+
+        background: linear-gradient(
+            135deg,
+            #111111,
+            #4b5563
+        );
+
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.25);
+
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s,
+            filter 0.2s;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            0 12px 25px rgba(0, 0, 0, 0.3);
+        filter: brightness(1.15);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    #message {
+        min-height: 22px;
+        margin: 18px 0 0;
+
+        text-align: center;
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .inscription {
+        margin-top: 20px;
+
+        text-align: center;
+        font-size: 14px;
+        color: #4b5563;
+    }
+
+    .inscription a {
+        color: #111827;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .inscription a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+        .connexion-container {
+            padding: 28px 22px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="connexion-container">
+
+    <h1>Connexion</h1>
+
+    <form id="connexion-form">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Adresse e-mail"
+            required
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Mot de passe"
+            required
+        >
+
+        <button type="submit">
+            Se connecter
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <p class="inscription">
+        Pas encore de compte ?
+        <a href="inscription.html">Créer un compte</a>
+    </p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL =
+        "https://snnclgjspwninjxnimza.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const formulaire =
+        document.getElementById("connexion-form");
+
+    const message =
+        document.getElementById("message");
+
+    formulaire.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            message.textContent =
+                "Connexion...";
+
+            const { error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            if (error) {
+
+                message.textContent =
+                    "Erreur : " + error.message;
+
+                return;
+            }
+
+            message.textContent =
+                "Connexion réussie !";
+        }
+    );
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon compte - Fan2Clotaire</title>
+</head>
+
+<body>
+
+    <h1>Mon compte</h1>
+
+    <p id="email"></p>
+
+    <p id="username"></p>
+
+    <p id="role"></p>
+
+    <div>
+    <input
+        type="text"
+        id="nouveau-username"
+        placeholder="Nouveau pseudo"
+    >
+
+    <button id="modifier-username">
+        Modifier le pseudo
+    </button>
+</div>
+
+    <button id="deconnexion">
+        Se déconnecter
+    </button>
+
+    <button
+    id="admin-bouton"
+    type="button"
+    style="display: block; position: relative; z-index: 9999;"
+>
+    👑 Administration
+</button>
+
+    <p id="message"></p>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        async function verifierConnexion() {
+
+            const {
+                data: { user },
+                error: userError
+            } = await supabaseClient.auth.getUser();
+
+
+            if (userError) {
+
+                console.error(
+                    "Erreur utilisateur :",
+                    userError
+                );
+
+                return;
+            }
+
+
+            if (!user) {
+
+                window.location.href =
+                    "connexion.html";
+
+                return;
+            }
+
+
+            document.getElementById("email").textContent =
+                "Connecté avec : " + user.email;
+
+
+            const username =
+                user.user_metadata?.username ||
+                user.email.split("@")[0];
+
+
+            document.getElementById("message").textContent =
+                "Chargement du profil...";
+
+
+            const {
+                data: profil,
+                error: profilError
+            } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+
+            if (profilError) {
+
+                console.error(
+                    "Erreur lors de la recherche du profil :",
+                    profilError
+                );
+
+                document.getElementById("message").textContent =
+                    "Erreur lors de la recherche du profil.";
+
+                return;
+            }
+
+
+            if (!profil) {
+
+                const {
+                    data: nouveauProfil,
+                    error: creationError
+                } = await supabaseClient
+                    .from("profiles")
+                    .insert({
+                        id: user.id,
+                        user_id: user.id,
+                        username: username
+                    })
+                    .select()
+                    .single();
+
+
+                if (creationError) {
+
+                    console.error(
+                        "Erreur création profil :",
+                        creationError
+                    );
+
+                    document.getElementById("message").textContent =
+                        "Erreur lors de la création du profil.";
+
+                    return;
+                }
+
+
+                document.getElementById("username").textContent =
+                    "Pseudo : " + nouveauProfil.username;
+
+                document.getElementById("message").textContent =
+                    "Profil créé avec succès !";
+
+            } else {
+
+                document.getElementById("username").textContent =
+                    "Pseudo : " + profil.username;
+
+                 document.getElementById("message").textContent =
+                    "Profil chargé !";
+            
+                    document.getElementById("role").textContent =
+    "Rôle : " + profil.role;
+
+    if (profil.role === "admin") {
+    document.getElementById("admin-bouton").style.display =
+        "inline-block";
+}
+}
+        }
+
+document
+    .getElementById("modifier-username")
+    .addEventListener("click", async () => {
+
+        const nouveauUsername =
+            document.getElementById("nouveau-username").value.trim();
+
+        if (!nouveauUsername) {
+            document.getElementById("message").textContent =
+                "Entre un nouveau pseudo.";
+            return;
+        }
+
+        const {
+            data: { user }
+        } = await supabaseClient.auth.getUser();
+
+        if (!user) {
+            window.location.href = "connexion.html";
+            return;
+        }
+
+        const { error } = await supabaseClient
+            .from("profiles")
+            .update({
+                username: nouveauUsername
+            })
+            .eq("user_id", user.id);
+
+        if (error) {
+            console.error(error);
+
+            document.getElementById("message").textContent =
+                "Erreur lors de la modification.";
+            return;
+        }
+
+        document.getElementById("username").textContent =
+            "Pseudo : " + nouveauUsername;
+
+        document.getElementById("nouveau-username").value = "";
+
+        document.getElementById("message").textContent =
+            "Pseudo modifié avec succès !";
+    });
+
+        verifierConnexion();
+
+console.log(
+    "Bouton admin :",
+    document.getElementById("admin-bouton")
+);
+
+
+        document
+    .getElementById("deconnexion")
+    .addEventListener("click", async () => {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "connexion.html";
+
+    });
+
+
+document
+    .getElementById("admin-bouton")
+    .addEventListener("click", () => {
+
+        window.location.href = "admin.html";
+
+    });
+
+    </script>
+
+</body>
+
+</html>

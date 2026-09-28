@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Forum - Fan2Clotaire</title>
+
+<link rel="stylesheet" href="forum.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<h1>Forum de discussion</h1>
+
+<div id="message-acces"></div>
+
+<section id="forum" style="display: none;">
+
+    <div class="zone-publication">
+
+        <textarea
+            id="contenu-publication"
+            placeholder="Écris quelque chose..."
+            maxlength="1000"
+        ></textarea>
+
+        <button id="bouton-publier">
+            Publier
+        </button>
+
+    </div>
+
+    <div id="publications">
+        Chargement des publications...
+    </div>
+
+</section>
+
+<script>
+
+    const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+    const forum = document.getElementById("forum");
+    const messageAcces = document.getElementById("message-acces");
+    const contenu = document.getElementById("contenu-publication");
+    const boutonPublier = document.getElementById("bouton-publier");
+    const publicationsContainer = document.getElementById("publications");
+
+
+    let utilisateurActuel = null;
+
+
+    async function verifierAcces() {
+
+        const {
+            data: { user }
+        } = await supabaseClient.auth.getUser();
+
+        if (!user) {
+            messageAcces.textContent =
+                "Tu dois être connecté pour accéder au forum.";
+            return;
+        }
+
+        utilisateurActuel = user;
+
+        const { data: profil, error } = await supabaseClient
+            .from("profiles")
+            .select("username, role")
+            .eq("user_id", user.id)
+            .single();
+
+        if (error || !profil) {
+            messageAcces.textContent =
+                "Impossible de récupérer ton profil.";
+            return;
+        }
+
+        if (profil.role === "suspended") {
+            messageAcces.textContent =
+                "🚫 Ton compte est suspendu.";
+            return;
+        }
+
+        forum.style.display = "block";
+
+        chargerPublications();
+    }
+
+
+    async function chargerPublications() {
+
+        const { data: publications, error } = await supabaseClient
+            .from("publications")
+            .select(`
+                id,
+                user_id,
+                contenu,
+                created_at
+            `)
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (error) {
+            console.error(error);
+
+            publicationsContainer.textContent =
+                "Erreur lors du chargement des publications.";
+
+            return;
+        }
+
+
+        const { data: profils } = await supabaseClient
+            .from("profiles")
+            .select("user_id, username");
+
+
+        const { data: likes } = await supabaseClient
+            .from("likes")
+            .select("publication_id, user_id");
+
+
+        publicationsContainer.innerHTML = "";
+
+
+        if (!publications || publications.length === 0) {
+
+            publicationsContainer.textContent =
+                "Aucune publication pour le moment.";
+
+            return;
+        }
+
+
+        for (const publication of publications) {
+
+            const profilAuteur = profils?.find(
+                profil => profil.user_id === publication.user_id
+            );
+
+
+            const username =
+                profilAuteur?.username || "Utilisateur";
+
+
+            const likesPublication =
+                likes?.filter(
+                    like => like.publication_id === publication.id
+                ) || [];
+
+
+            const nombreLikes =
+                likesPublication.length;
+
+
+            const dejaLike =
+                likesPublication.some(
+                    like => like.user_id === utilisateurActuel.id
+                );
+
+
+            const article =
+                document.createElement("article");
+
+
+            article.innerHTML = `
+
+                <div class="publication-auteur">
+                    👤 ${echapperHTML(username)}
+                </div>
+
+                <div class="publication-date">
+                    ${new Date(
+                        publication.created_at
+                    ).toLocaleString("fr-FR")}
+                </div>
+
+                <p class="publication-contenu">
+                    ${echapperHTML(publication.contenu)}
+                </p>
+
+                <button
+                    class="bouton-like ${dejaLike ? "liké" : ""}"
+                    onclick="likerPublication(${publication.id})"
+                >
+                    ${dejaLike ? "❤️" : "🤍"}
+                    <span>${nombreLikes}</span>
+                </button>
+
+            `;
+
+
+            publicationsContainer.appendChild(article);
+        }
+    }
+
+
+    async function publier() {
+
+        const texte =
+            contenu.value.trim();
+
+
+        if (!texte) {
+
+            alert(
+                "Écris quelque chose avant de publier."
+            );
+
+            return;
+        }
+
+
+        if (!utilisateurActuel) {
+
+            alert(
+                "Tu dois être connecté."
+            );
+
+            return;
+        }
+
+
+        const { error } =
+            await supabaseClient
+                .from("publications")
+                .insert({
+                    user_id:
+                        utilisateurActuel.id,
+
+                    contenu:
+                        texte
+                });
+
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "Impossible de publier."
+            );
+
+            return;
+        }
+
+
+        contenu.value = "";
+
+        chargerPublications();
+    }
+
+
+    async function likerPublication(
+        publicationId
+    ) {
+
+        if (!utilisateurActuel) {
+
+            alert(
+                "Tu dois être connecté."
+            );
+
+            return;
+        }
+
+
+        const { data: dejaLike } =
+            await supabaseClient
+                .from("likes")
+                .select("id")
+                .eq(
+                    "publication_id",
+                    publicationId
+                )
+                .eq(
+                    "user_id",
+                    utilisateurActuel.id
+                )
+                .maybeSingle();
+
+
+        if (dejaLike) {
+
+            await supabaseClient
+                .from("likes")
+                .delete()
+                .eq(
+                    "id",
+                    dejaLike.id
+                );
+
+        } else {
+
+            await supabaseClient
+                .from("likes")
+                .insert({
+                    publication_id:
+                        publicationId,
+
+                    user_id:
+                        utilisateurActuel.id
+                });
+        }
+
+
+        chargerPublications();
+    }
+
+
+    function echapperHTML(texte) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = texte;
+
+        return div.innerHTML;
+    }
+
+
+    boutonPublier.addEventListener(
+        "click",
+        publier
+    );
+
+
+    verifierAcces();
+
+</script>
+
+</body> </html>
