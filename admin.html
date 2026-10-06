@@ -1,686 +1,1683 @@
 <!DOCTYPE html>
-
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Administration - Fan2Clotaire</title>
+    <title>Administration - Fan2Clotaire</title>
 
-<style>
+    <style>
 
-    .bouton-accueil {
-    display: block;
-    width: fit-content;
-    margin: 0 auto 25px;
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.2s, transform 0.2s;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.bouton-accueil:hover {
-    background: #334155;
-    transform: translateY(-2px);
-}
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        padding: 40px 20px;
-        font-family: Arial, sans-serif;
-        background: #0f172a;
-        color: white;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 10px;
-        font-size: 32px;
-    }
-
-    #message {
-        text-align: center;
-        color: #94a3b8;
-        margin-bottom: 30px;
-    }
-
-    #recherche-utilisateur {
-        display: block;
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto 30px;
-        padding: 14px 18px;
-        border: 1px solid #334155;
-        border-radius: 12px;
-        background: #1e293b;
-        color: white;
-        font-size: 16px;
-        outline: none;
-    }
-
-    #recherche-utilisateur:focus {
-        border-color: #6366f1;
-    }
-
-    #recherche-utilisateur::placeholder {
-        color: #94a3b8;
-    }
-
-    .stats-admin {
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto 30px;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-    }
-
-    .stat-admin {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 14px;
-        padding: 20px;
-        text-align: center;
-        transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .stat-admin:hover {
-        transform: translateY(-3px);
-        border-color: #6366f1;
-    }
-
-    .stat-admin span {
-        display: block;
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-
-    .stat-admin strong {
-        display: block;
-        font-size: 28px;
-        margin-bottom: 5px;
-    }
-
-    .stat-admin small {
-        color: #94a3b8;
-        font-size: 14px;
-    }
-
-    #liste-utilisateurs {
-        width: 100%;
-        max-width: 900px;
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    #liste-utilisateurs > div {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 14px;
-        padding: 18px 20px;
-        transition: transform 0.2s, border-color 0.2s;
-    }
-
-    #liste-utilisateurs > div:hover {
-        transform: translateY(-2px);
-        border-color: #6366f1;
-    }
-
-    #liste-utilisateurs p {
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .choix-role {
-        margin-left: auto;
-        padding: 9px 12px;
-        border-radius: 8px;
-        border: 1px solid #475569;
-        background: #0f172a;
-        color: white;
-        cursor: pointer;
-    }
-
-    .bouton-role {
-        padding: 9px 14px;
-        border: none;
-        border-radius: 8px;
-        background: #6366f1;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.2s;
-    }
-
-    .bouton-role:hover {
-        background: #818cf8;
-        transform: scale(1.03);
-    }
-
-    .statut-live {
-        display: block;
-        text-align: center;
-        margin-top: -20px;
-        margin-bottom: 25px;
-        color: #22c55e;
-        font-size: 13px;
-    }
-
-    @media (max-width: 700px) {
         body {
-            padding: 25px 12px;
+            margin: 0;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        .bouton-accueil {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 25px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .bouton-accueil:hover {
+            background: #334155;
+            transform: translateY(-2px);
         }
 
         h1 {
-            font-size: 26px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        #message {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .statut-live {
+            display: block;
+            text-align: center;
+            margin-top: -20px;
+            margin-bottom: 25px;
+            color: #22c55e;
+            font-size: 13px;
+        }
+
+        #recherche-utilisateur {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            padding: 14px 18px;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #recherche-utilisateur:focus {
+            border-color: #6366f1;
+        }
+
+        #recherche-utilisateur::placeholder {
+            color: #94a3b8;
         }
 
         .stats-admin {
-            grid-template-columns: repeat(2, 1fr);
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat-admin {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat-admin:hover {
+            transform: translateY(-3px);
+            border-color: #6366f1;
+        }
+
+        .stat-admin span {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .stat-admin strong {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .stat-admin small {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        #liste-utilisateurs {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #liste-utilisateurs > div {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 18px 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        #liste-utilisateurs > div:hover {
+            transform: translateY(-2px);
+            border-color: #6366f1;
         }
 
         #liste-utilisateurs p {
-            flex-direction: column;
-            align-items: flex-start;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .choix-role {
-            margin-left: 0;
-            width: 100%;
+            margin-left: auto;
+            padding: 9px 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            cursor: pointer;
         }
 
         .bouton-role {
-            width: 100%;
+            padding: 9px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
         }
-    }
 
-    @media (max-width: 400px) {
-        .stats-admin {
-            grid-template-columns: 1fr;
+        .bouton-role:hover {
+            background: #818cf8;
+            transform: scale(1.03);
         }
-    }
-</style>
+
+        /* ========================= */
+        /* GESTION DES CODES */
+        /* ========================= */
+
+        .codes-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 45px auto 0;
+        }
+
+        .codes-container h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+
+        .codes-description {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .creation-code {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .creation-code h3 {
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        .form-codes {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr auto;
+            gap: 10px;
+        }
+
+        .input-code {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 9px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        .input-code:focus {
+            border-color: #6366f1;
+        }
+
+        .input-code::placeholder {
+            color: #64748b;
+        }
+
+        .bouton-creer {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 9px;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bouton-creer:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        #liste-codes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .code-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .code-nom {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .code-statut {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .code-actif {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .code-inactif {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .code-infos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .code-info {
+            padding: 12px;
+            border-radius: 10px;
+            background: #0f172a;
+            text-align: center;
+        }
+
+        .code-info strong {
+            display: block;
+            font-size: 19px;
+            margin-bottom: 4px;
+        }
+
+        .code-info small {
+            color: #94a3b8;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .bouton-code {
+            padding: 9px 13px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bouton-code:hover {
+            transform: translateY(-2px);
+        }
+
+        .bouton-activer {
+            background: #16a34a;
+        }
+
+        .bouton-desactiver {
+            background: #ca8a04;
+        }
+
+        .bouton-modifier {
+            background: #4f46e5;
+        }
+
+        .bouton-supprimer {
+            background: #dc2626;
+        }
+
+        .aucun-code {
+            padding: 30px;
+            text-align: center;
+            color: #94a3b8;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 15px;
+        }
+
+        .chargement {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 25px 12px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .stats-admin {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #liste-utilisateurs p {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .choix-role {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .bouton-role {
+                width: 100%;
+            }
+
+            .form-codes {
+                grid-template-columns: 1fr;
+            }
+
+            .code-infos {
+                grid-template-columns: 1fr;
+            }
+
+            .code-actions {
+                flex-direction: column;
+            }
+
+            .bouton-code {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .stats-admin {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 
 </head>
 
 <body>
 
     <a href="index.html" class="bouton-accueil">
-    🏠 Retour à l'accueil
-</a>
+        🏠 Retour à l'accueil
+    </a>
 
-<h1>
-    Administration 👑
-</h1>
+    <h1>
+        Administration 👑
+    </h1>
 
-<p id="message">
-    Vérification des permissions...
-</p>
+    <p id="message">
+        Vérification des permissions...
+    </p>
 
-<span class="statut-live">
-    🟢 Synchronisation en direct
-</span>
+    <span class="statut-live">
+        🟢 Synchronisation en direct
+    </span>
 
-<input
-    type="text"
-    id="recherche-utilisateur"
-    placeholder="🔎 Rechercher un utilisateur"
->
+    <!-- RECHERCHE UTILISATEUR -->
 
-<div class="stats-admin">
+    <input
+        type="text"
+        id="recherche-utilisateur"
+        placeholder="🔎 Rechercher un utilisateur"
+    >
 
-    <div class="stat-admin">
-        <span>👥</span>
-        <strong id="total-utilisateurs">0</strong>
-        <small>Utilisateurs</small>
+    <!-- STATISTIQUES -->
+
+    <div class="stats-admin">
+
+        <div class="stat-admin">
+            <span>👥</span>
+            <strong id="total-utilisateurs">0</strong>
+            <small>Utilisateurs</small>
+        </div>
+
+        <div class="stat-admin">
+            <span>👑</span>
+            <strong id="total-admins">0</strong>
+            <small>Administrateurs</small>
+        </div>
+
+        <div class="stat-admin">
+            <span>🛡️</span>
+            <strong id="total-moderateurs">0</strong>
+            <small>Modérateurs</small>
+        </div>
+
+        <div class="stat-admin">
+            <span>🚫</span>
+            <strong id="total-suspendus">0</strong>
+            <small>Suspendus</small>
+        </div>
+
     </div>
 
-    <div class="stat-admin">
-        <span>👑</span>
-        <strong id="total-admins">0</strong>
-        <small>Administrateurs</small>
-    </div>
+    <!-- UTILISATEURS -->
 
-    <div class="stat-admin">
-        <span>🛡️</span>
-        <strong id="total-moderateurs">0</strong>
-        <small>Modérateurs</small>
-    </div>
+    <div id="liste-utilisateurs"></div>
 
-    <div class="stat-admin">
-        <span>🚫</span>
-        <strong id="total-suspendus">0</strong>
-        <small>Suspendus</small>
-    </div>
+    <!-- GESTION DES CODES -->
 
-</div>
+    <section class="codes-container">
 
-<div id="liste-utilisateurs"></div>
+        <h2>🎟️ Gestion des codes</h2>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <p class="codes-description">
+            Crée et gère les codes permettant de gagner des Clocoins.
+        </p>
 
-<script>
-    const SUPABASE_URL =
-        "https://snnclgjspwninjxnimza.supabase.co";
+        <div class="creation-code">
 
-    const SUPABASE_KEY =
-        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+            <h3>➕ Créer un nouveau code</h3>
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+            <div class="form-codes">
 
-    let utilisateursActuels = [];
+                <input
+                    type="text"
+                    id="nouveau-code"
+                    class="input-code"
+                    placeholder="Code"
+                    maxlength="50"
+                >
 
-    async function verifierAdmin() {
+                <input
+                    type="number"
+                    id="nouvelle-recompense"
+                    class="input-code"
+                    placeholder="Clocoins"
+                    min="1"
+                >
 
-        const {
-            data: { user }
-        } = await supabaseClient.auth.getUser();
+                <input
+                    type="number"
+                    id="nouvelle-limite"
+                    class="input-code"
+                    placeholder="Utilisations max"
+                    min="1"
+                >
 
-        if (!user) {
-            window.location.href = "connexion.html";
-            return;
-        }
+                <button
+                    type="button"
+                    class="bouton-creer"
+                    onclick="creerNouveauCode()"
+                >
+                    Créer
+                </button>
 
-        const {
-            data: profil,
-            error
-        } = await supabaseClient
-            .from("profiles")
-            .select("role")
-            .eq("user_id", user.id)
-            .maybeSingle();
+            </div>
 
-        if (
-            error ||
-            !profil ||
-            profil.role !== "admin"
-        ) {
-            document.getElementById("message").textContent =
-                "Accès refusé.";
-            return;
-        }
+        </div>
 
-        document.getElementById("message").textContent =
-            "Bienvenue dans l'administration 👑";
+        <div id="liste-codes">
 
-        await chargerUtilisateurs();
-        activerSynchronisation();
-    }
+            <div class="chargement">
+                Chargement des codes...
+            </div>
 
-    async function chargerEmails() {
+        </div>
 
-        const {
-            data: { session }
-        } = await supabaseClient.auth.getSession();
+    </section>
 
-        if (!session) {
-            return [];
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        try {
+    <script>
 
-            const response = await fetch(
-                "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=admin-users",
-                {
-                    headers: {
-                        "Authorization":
-                            "Bearer " + session.access_token
-                    }
-                }
+        const SUPABASE_URL =
+            "https://snnclgjspwninjxnimza.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
             );
 
-            const data = await response.json();
+        let utilisateursActuels = [];
 
-            if (!data.users) {
+        let codesActuels = [];
+
+
+        /* =====================================================
+           VERIFICATION ADMIN
+        ===================================================== */
+
+        async function verifierAdmin() {
+
+            const {
+                data: {
+                    user
+                }
+            } = await supabaseClient.auth.getUser();
+
+            if (!user) {
+
+                window.location.href =
+                    "connexion.html";
+
+                return;
+            }
+
+            const {
+                data: profil,
+                error
+            } = await supabaseClient
+                .from("profiles")
+                .select("role")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+            if (
+                error ||
+                !profil ||
+                profil.role !== "admin"
+            ) {
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Accès refusé.";
+
+                return;
+            }
+
+            document.getElementById(
+                "message"
+            ).textContent =
+                "Bienvenue dans l'administration 👑";
+
+            await chargerUtilisateurs();
+
+            await chargerCodes();
+
+            activerSynchronisation();
+        }
+
+
+        /* =====================================================
+           EMAILS
+        ===================================================== */
+
+        async function chargerEmails() {
+
+            const {
+                data: {
+                    session
+                }
+            } = await supabaseClient.auth.getSession();
+
+            if (!session) {
                 return [];
             }
 
-            return data.users;
+            try {
 
-        } catch (error) {
+                const response =
+                    await fetch(
+                        "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=admin-users",
+                        {
+                            headers: {
+                                "Authorization":
+                                    "Bearer " +
+                                    session.access_token
+                            }
+                        }
+                    );
 
-            console.error(
-                "Erreur récupération e-mails :",
-                error
-            );
+                const data =
+                    await response.json();
 
-            return [];
-        }
-    }
-
-    function mettreAJourStatistiques(utilisateurs) {
-
-        document.getElementById("total-utilisateurs").textContent =
-            utilisateurs.length;
-
-        document.getElementById("total-admins").textContent =
-            utilisateurs.filter(
-                utilisateur =>
-                    utilisateur.role === "admin"
-            ).length;
-
-        document.getElementById("total-moderateurs").textContent =
-            utilisateurs.filter(
-                utilisateur =>
-                    utilisateur.role === "moderator"
-            ).length;
-
-        document.getElementById("total-suspendus").textContent =
-            utilisateurs.filter(
-                utilisateur =>
-                    utilisateur.role === "suspended"
-            ).length;
-    }
-
-    async function chargerUtilisateurs() {
-
-        const utilisateursAuth =
-            await chargerEmails();
-
-        const {
-            data: utilisateurs,
-            error
-        } = await supabaseClient
-            .from("profiles")
-            .select(
-                "user_id, username, role, created_at"
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
+                if (!data.users) {
+                    return [];
                 }
-            );
 
-        if (error) {
+                return data.users;
 
-            console.error(
-                "Erreur utilisateurs :",
-                error
-            );
+            } catch (error) {
 
-            document.getElementById("message").textContent =
-                "Erreur lors du chargement des utilisateurs.";
+                console.error(
+                    "Erreur récupération e-mails :",
+                    error
+                );
 
-            return;
+                return [];
+            }
         }
 
-        utilisateursActuels =
-            utilisateurs || [];
 
-        mettreAJourStatistiques(
-            utilisateursActuels
-        );
+        /* =====================================================
+           STATISTIQUES
+        ===================================================== */
 
-        const zone =
+        function mettreAJourStatistiques(
+            utilisateurs
+        ) {
+
             document.getElementById(
-                "liste-utilisateurs"
-            );
+                "total-utilisateurs"
+            ).textContent =
+                utilisateurs.length;
 
-        zone.innerHTML = "";
+            document.getElementById(
+                "total-admins"
+            ).textContent =
+                utilisateurs.filter(
+                    function(utilisateur) {
+                        return utilisateur.role === "admin";
+                    }
+                ).length;
 
-        utilisateursActuels.forEach(
-            utilisateur => {
+            document.getElementById(
+                "total-moderateurs"
+            ).textContent =
+                utilisateurs.filter(
+                    function(utilisateur) {
+                        return utilisateur.role === "moderator";
+                    }
+                ).length;
 
-                const utilisateurAuth =
-                    utilisateursAuth.find(
-                        user =>
-                            user.id ===
-                            utilisateur.user_id
-                    );
+            document.getElementById(
+                "total-suspendus"
+            ).textContent =
+                utilisateurs.filter(
+                    function(utilisateur) {
+                        return utilisateur.role === "suspended";
+                    }
+                ).length;
+        }
 
-                const email =
-                    utilisateurAuth?.email ||
-                    "E-mail inconnu";
 
-                const bloc =
-                    document.createElement("div");
+        /* =====================================================
+           UTILISATEURS
+        ===================================================== */
 
-                bloc.innerHTML = `
-                    <p>
-                        👤
+        async function chargerUtilisateurs() {
 
-                        <strong>
-                            ${utilisateur.username || "Sans pseudo"}
-                        </strong>
+            const utilisateursAuth =
+                await chargerEmails();
 
-                        — 📧
-                        ${email}
-
-                        — 🛡️
-                        ${utilisateur.role}
-
-                        <select class="choix-role">
-
-                            <option value="user">
-                                Utilisateur
-                            </option>
-
-                            <option value="moderator">
-                                Modérateur
-                            </option>
-
-                            <option value="admin">
-                                Administrateur
-                            </option>
-
-                            <option value="suspended">
-                                Suspendu
-                            </option>
-
-                        </select>
-
-                        <button
-                            type="button"
-                            class="bouton-role"
-                        >
-                            Modifier le rôle
-                        </button>
-
-                    </p>
-                `;
-
-                zone.appendChild(bloc);
-
-                const choixRole =
-                    bloc.querySelector(
-                        ".choix-role"
-                    );
-
-                const boutonRole =
-                    bloc.querySelector(
-                        ".bouton-role"
-                    );
-
-                choixRole.value =
-                    utilisateur.role;
-
-                boutonRole.addEventListener(
-                    "click",
-                    async () => {
-
-                        const {
-                            data: {
-                                session
-                            }
-                        } =
-                            await supabaseClient
-                                .auth
-                                .getSession();
-
-                        if (!session) {
-
-                            alert(
-                                "Session expirée."
-                            );
-
-                            return;
-                        }
-
-                        boutonRole.disabled = true;
-
-                        boutonRole.textContent =
-                            "Modification...";
-
-                        try {
-
-                            const response =
-                                await fetch(
-                                    "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=admin-role",
-                                    {
-                                        method: "POST",
-
-                                        headers: {
-                                            "Authorization":
-                                                "Bearer " +
-                                                session.access_token,
-
-                                            "Content-Type":
-                                                "application/json"
-                                        },
-
-                                        body:
-                                            JSON.stringify({
-                                                user_id:
-                                                    utilisateur.user_id,
-
-                                                role:
-                                                    choixRole.value
-                                            })
-                                    }
-                                );
-
-                            const data =
-                                await response.json();
-
-                            console.log(
-                                "Réponse du Worker :",
-                                data
-                            );
-
-                            if (!data.success) {
-
-                                alert(
-                                    data.error ||
-                                    "Impossible de modifier le rôle."
-                                );
-                            }
-
-                        } catch (error) {
-
-                            console.error(
-                                "Erreur modification rôle :",
-                                error
-                            );
-
-                            alert(
-                                "Erreur lors de la modification."
-                            );
-
-                        } finally {
-
-                            boutonRole.disabled = false;
-
-                            boutonRole.textContent =
-                                "Modifier le rôle";
-                        }
+            const {
+                data: utilisateurs,
+                error
+            } = await supabaseClient
+                .from("profiles")
+                .select(
+                    "user_id, username, role, created_at"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
                     }
                 );
+
+            if (error) {
+
+                console.error(
+                    "Erreur utilisateurs :",
+                    error
+                );
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Erreur lors du chargement des utilisateurs.";
+
+                return;
             }
-        );
 
-        appliquerRecherche();
-    }
+            utilisateursActuels =
+                utilisateurs || [];
 
-    function appliquerRecherche() {
+            mettreAJourStatistiques(
+                utilisateursActuels
+            );
 
-        const recherche =
-            document
-                .getElementById(
-                    "recherche-utilisateur"
+            const zone =
+                document.getElementById(
+                    "liste-utilisateurs"
+                );
+
+            zone.innerHTML = "";
+
+            utilisateursActuels.forEach(
+                function(utilisateur) {
+
+                    const utilisateurAuth =
+                        utilisateursAuth.find(
+                            function(user) {
+                                return user.id ===
+                                    utilisateur.user_id;
+                            }
+                        );
+
+                    const email =
+                        utilisateurAuth &&
+                        utilisateurAuth.email
+                            ? utilisateurAuth.email
+                            : "E-mail inconnu";
+
+                    const bloc =
+                        document.createElement(
+                            "div"
+                        );
+
+                    const paragraphe =
+                        document.createElement(
+                            "p"
+                        );
+
+                    paragraphe.innerHTML =
+                        "👤 <strong>" +
+                        escapeHTML(
+                            utilisateur.username ||
+                            "Sans pseudo"
+                        ) +
+                        "</strong> — 📧 " +
+                        escapeHTML(email) +
+                        " — 🛡️ " +
+                        escapeHTML(utilisateur.role);
+
+                    const choixRole =
+                        document.createElement(
+                            "select"
+                        );
+
+                    choixRole.className =
+                        "choix-role";
+
+                    choixRole.innerHTML =
+                        "<option value=\"user\">Utilisateur</option>" +
+                        "<option value=\"moderator\">Modérateur</option>" +
+                        "<option value=\"admin\">Administrateur</option>" +
+                        "<option value=\"suspended\">Suspendu</option>";
+
+                    choixRole.value =
+                        utilisateur.role;
+
+                    const boutonRole =
+                        document.createElement(
+                            "button"
+                        );
+
+                    boutonRole.type =
+                        "button";
+
+                    boutonRole.className =
+                        "bouton-role";
+
+                    boutonRole.textContent =
+                        "Modifier le rôle";
+
+                    paragraphe.appendChild(
+                        choixRole
+                    );
+
+                    paragraphe.appendChild(
+                        boutonRole
+                    );
+
+                    bloc.appendChild(
+                        paragraphe
+                    );
+
+                    zone.appendChild(
+                        bloc
+                    );
+
+                    boutonRole.addEventListener(
+                        "click",
+                        async function() {
+
+                            const {
+                                data: {
+                                    session
+                                }
+                            } =
+                                await supabaseClient
+                                    .auth
+                                    .getSession();
+
+                            if (!session) {
+
+                                alert(
+                                    "Session expirée."
+                                );
+
+                                return;
+                            }
+
+                            boutonRole.disabled =
+                                true;
+
+                            boutonRole.textContent =
+                                "Modification...";
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=admin-role",
+                                        {
+                                            method: "POST",
+
+                                            headers: {
+                                                "Authorization":
+                                                    "Bearer " +
+                                                    session.access_token,
+
+                                                "Content-Type":
+                                                    "application/json"
+                                            },
+
+                                            body:
+                                                JSON.stringify({
+                                                    user_id:
+                                                        utilisateur.user_id,
+
+                                                    role:
+                                                        choixRole.value
+                                                })
+                                        }
+                                    );
+
+                                const data =
+                                    await response.json();
+
+                                if (!data.success) {
+
+                                    alert(
+                                        data.error ||
+                                        "Impossible de modifier le rôle."
+                                    );
+
+                                } else {
+
+                                    await chargerUtilisateurs();
+                                }
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Erreur modification rôle :",
+                                    error
+                                );
+
+                                alert(
+                                    "Erreur lors de la modification."
+                                );
+
+                            } finally {
+
+                                boutonRole.disabled =
+                                    false;
+
+                                boutonRole.textContent =
+                                    "Modifier le rôle";
+                            }
+                        }
+                    );
+                }
+            );
+
+            appliquerRecherche();
+        }
+
+
+        /* =====================================================
+           RECHERCHE
+        ===================================================== */
+
+        function appliquerRecherche() {
+
+            const recherche =
+                document
+                    .getElementById(
+                        "recherche-utilisateur"
+                    )
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            const utilisateurs =
+                document.querySelectorAll(
+                    "#liste-utilisateurs > div"
+                );
+
+            utilisateurs.forEach(
+                function(bloc) {
+
+                    const texte =
+                        bloc.textContent
+                            .toLowerCase();
+
+                    bloc.style.display =
+                        texte.includes(recherche)
+                            ? "block"
+                            : "none";
+                }
+            );
+        }
+
+
+        /* =====================================================
+           CODES
+        ===================================================== */
+
+        async function chargerCodes() {
+
+            const zone =
+                document.getElementById(
+                    "liste-codes"
+                );
+
+            zone.innerHTML =
+                '<div class="chargement">Chargement des codes...</div>';
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "lister_codes"
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                codesActuels =
+                    result.data || [];
+
+                afficherCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur chargement codes :",
+                    error
+                );
+
+                zone.innerHTML =
+                    '<div class="aucun-code">❌ Impossible de charger les codes.</div>';
+            }
+        }
+
+
+        function afficherCodes() {
+
+            const zone =
+                document.getElementById(
+                    "liste-codes"
+                );
+
+            zone.innerHTML = "";
+
+            if (!codesActuels.length) {
+
+                zone.innerHTML =
+                    '<div class="aucun-code">Aucun code créé pour le moment.</div>';
+
+                return;
+            }
+
+            codesActuels.forEach(
+                function(code) {
+
+                    const carte =
+                        document.createElement(
+                            "div"
+                        );
+
+                    carte.className =
+                        "code-card";
+
+                    const statutClasse =
+                        code.actif
+                            ? "code-actif"
+                            : "code-inactif";
+
+                    const statutTexte =
+                        code.actif
+                            ? "🟢 Actif"
+                            : "🔴 Désactivé";
+
+                    const limiteAtteinte =
+                        code.utilisations >=
+                        code.max_utilisations;
+
+                    const pourcentage =
+                        code.max_utilisations > 0
+                            ? Math.round(
+                                (
+                                    code.utilisations /
+                                    code.max_utilisations
+                                ) * 100
+                            )
+                            : 0;
+
+                    carte.innerHTML =
+
+                        '<div class="code-header">' +
+
+                            '<div class="code-nom">' +
+                                '🎟️ ' +
+                                escapeHTML(code.code) +
+                            '</div>' +
+
+                            '<div class="code-statut ' +
+                                statutClasse +
+                            '">' +
+                                statutTexte +
+                            '</div>' +
+
+                        '</div>' +
+
+                        '<div class="code-infos">' +
+
+                            '<div class="code-info">' +
+                                '<strong>' +
+                                    code.recompense +
+                                    ' 🪙' +
+                                '</strong>' +
+                                '<small>Récompense</small>' +
+                            '</div>' +
+
+                            '<div class="code-info">' +
+                                '<strong>' +
+                                    code.utilisations +
+                                    ' / ' +
+                                    code.max_utilisations +
+                                '</strong>' +
+                                '<small>Utilisations</small>' +
+                            '</div>' +
+
+                            '<div class="code-info">' +
+                                '<strong>' +
+                                    pourcentage +
+                                    '%</strong>' +
+                                '<small>Utilisé</small>' +
+                            '</div>' +
+
+                        '</div>' +
+
+                        '<div class="code-actions">' +
+
+                            '<button ' +
+                                'type="button" ' +
+                                'class="bouton-code ' +
+                                (
+                                    code.actif
+                                        ? "bouton-desactiver"
+                                        : "bouton-activer"
+                                ) +
+                                '" ' +
+                                'onclick="changerEtatCode(\'' +
+                                    escapeAttribute(code.code) +
+                                '\', ' +
+                                    (!code.actif) +
+                                ')">' +
+
+                                (
+                                    code.actif
+                                        ? "🔴 Désactiver"
+                                        : "🟢 Activer"
+                                ) +
+
+                            '</button>' +
+
+                            '<button ' +
+                                'type="button" ' +
+                                'class="bouton-code bouton-modifier" ' +
+                                'onclick="modifierRecompense(\'' +
+                                    escapeAttribute(code.code) +
+                                '\', ' +
+                                    code.recompense +
+                                ')">' +
+                                '🪙 Récompense' +
+                            '</button>' +
+
+                            '<button ' +
+                                'type="button" ' +
+                                'class="bouton-code bouton-modifier" ' +
+                                'onclick="modifierLimite(\'' +
+                                    escapeAttribute(code.code) +
+                                '\', ' +
+                                    code.max_utilisations +
+                                ')">' +
+                                '🔢 Limite' +
+                            '</button>' +
+
+                            '<button ' +
+                                'type="button" ' +
+                                'class="bouton-code bouton-supprimer" ' +
+                                'onclick="supprimerCode(\'' +
+                                    escapeAttribute(code.code) +
+                                '\')">' +
+                                '🗑️ Supprimer' +
+                            '</button>' +
+
+                        '</div>';
+
+                    zone.appendChild(
+                        carte
+                    );
+                }
+            );
+        }
+
+
+        async function creerNouveauCode() {
+
+            const inputCode =
+                document.getElementById(
+                    "nouveau-code"
+                );
+
+            const inputRecompense =
+                document.getElementById(
+                    "nouvelle-recompense"
+                );
+
+            const inputLimite =
+                document.getElementById(
+                    "nouvelle-limite"
+                );
+
+            const code =
+                inputCode.value.trim().toUpperCase();
+
+            const recompense =
+                parseInt(
+                    inputRecompense.value,
+                    10
+                );
+
+            const limite =
+                parseInt(
+                    inputLimite.value,
+                    10
+                );
+
+            if (!code) {
+
+                alert(
+                    "Entre un code."
+                );
+
+                return;
+            }
+
+            if (
+                !Number.isInteger(recompense) ||
+                recompense <= 0
+            ) {
+
+                alert(
+                    "La récompense doit être supérieure à 0."
+                );
+
+                return;
+            }
+
+            if (
+                !Number.isInteger(limite) ||
+                limite <= 0
+            ) {
+
+                alert(
+                    "La limite doit être supérieure à 0."
+                );
+
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "creer_code",
+                        {
+                            code_param:
+                                code,
+
+                            recompense_param:
+                                recompense,
+
+                            max_utilisations_param:
+                                limite
+                        }
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                inputCode.value = "";
+                inputRecompense.value = "";
+                inputLimite.value = "";
+
+                alert(
+                    "✅ Code " +
+                    code +
+                    " créé !"
+                );
+
+                await chargerCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur création code :",
+                    error
+                );
+
+                alert(
+                    "❌ " +
+                    getErreurCode(error)
+                );
+            }
+        }
+
+
+        async function changerEtatCode(
+            code,
+            nouvelEtat
+        ) {
+
+            const action =
+                nouvelEtat
+                    ? "activer"
+                    : "désactiver";
+
+            const confirmation =
+                confirm(
+                    "Voulez-vous vraiment " +
+                    action +
+                    " le code " +
+                    code +
+                    " ?"
+                );
+
+            if (!confirmation) {
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "modifier_code",
+                        {
+                            code_param:
+                                code,
+
+                            actif_param:
+                                nouvelEtat
+                        }
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                await chargerCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur modification code :",
+                    error
+                );
+
+                alert(
+                    "❌ " +
+                    getErreurCode(error)
+                );
+            }
+        }
+
+
+        async function modifierRecompense(
+            code,
+            ancienneValeur
+        ) {
+
+            const nouvelleValeur =
+                prompt(
+                    "Nouvelle récompense en Clocoins :",
+                    ancienneValeur
+                );
+
+            if (nouvelleValeur === null) {
+                return;
+            }
+
+            const recompense =
+                parseInt(
+                    nouvelleValeur,
+                    10
+                );
+
+            if (
+                !Number.isInteger(recompense) ||
+                recompense <= 0
+            ) {
+
+                alert(
+                    "Récompense invalide."
+                );
+
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "modifier_recompense_code",
+                        {
+                            code_param:
+                                code,
+
+                            nouvelle_recompense:
+                                recompense
+                        }
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                await chargerCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur modification récompense :",
+                    error
+                );
+
+                alert(
+                    "❌ " +
+                    getErreurCode(error)
+                );
+            }
+        }
+
+
+        async function modifierLimite(
+            code,
+            ancienneValeur
+        ) {
+
+            const nouvelleValeur =
+                prompt(
+                    "Nouvelle limite d'utilisations :",
+                    ancienneValeur
+                );
+
+            if (nouvelleValeur === null) {
+                return;
+            }
+
+            const limite =
+                parseInt(
+                    nouvelleValeur,
+                    10
+                );
+
+            if (
+                !Number.isInteger(limite) ||
+                limite <= 0
+            ) {
+
+                alert(
+                    "Limite invalide."
+                );
+
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "modifier_limite_code",
+                        {
+                            code_param:
+                                code,
+
+                            nouvelle_limite:
+                                limite
+                        }
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                await chargerCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur modification limite :",
+                    error
+                );
+
+                alert(
+                    "❌ " +
+                    getErreurCode(error)
+                );
+            }
+        }
+
+
+        async function supprimerCode(
+            code
+        ) {
+
+            const confirmation =
+                confirm(
+                    "⚠️ Voulez-vous vraiment supprimer le code " +
+                    code +
+                    " ?\n\nCette action est définitive."
+                );
+
+            if (!confirmation) {
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.rpc(
+                        "supprimer_code",
+                        {
+                            code_param:
+                                code
+                        }
+                    );
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                alert(
+                    "🗑️ Code supprimé."
+                );
+
+                await chargerCodes();
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur suppression code :",
+                    error
+                );
+
+                alert(
+                    "❌ " +
+                    getErreurCode(error)
+                );
+            }
+        }
+
+
+        function getErreurCode(error) {
+
+            if (!error) {
+                return "Erreur inconnue.";
+            }
+
+            const message =
+                error.message || "";
+
+            if (
+                message.includes(
+                    "Ce code existe déjà"
                 )
-                .value
-                .toLowerCase()
-                .trim();
-
-        const utilisateurs =
-            document.querySelectorAll(
-                "#liste-utilisateurs > div"
-            );
-
-        utilisateurs.forEach(
-            bloc => {
-
-                const texte =
-                    bloc.textContent.toLowerCase();
-
-                bloc.style.display =
-                    texte.includes(recherche)
-                        ? "block"
-                        : "none";
+            ) {
+                return "Ce code existe déjà.";
             }
-        );
-    }
 
-    function activerSynchronisation() {
+            if (
+                message.includes(
+                    "Accès refusé"
+                )
+            ) {
+                return "Accès refusé.";
+            }
 
-        supabaseClient
-            .channel("admin-profiles-live")
-            .on(
-                "postgres_changes",
-                {
-                    event: "*",
-                    schema: "public",
-                    table: "profiles"
-                },
-                payload => {
+            return message ||
+                "Une erreur est survenue.";
+        }
 
-                    console.log(
-                        "Modification détectée :",
-                        payload
-                    );
 
-                    chargerUtilisateurs();
-                }
+        /* =====================================================
+           SECURITE AFFICHAGE
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value === null ||
+                value === undefined
+                    ? ""
+                    : String(value);
+
+            return div.innerHTML;
+        }
+
+
+        function escapeAttribute(value) {
+
+            return String(value)
+                .replace(/\\/g, "\\\\")
+                .replace(/'/g, "\\'");
+        }
+
+
+        /* =====================================================
+           SYNCHRONISATION
+        ===================================================== */
+
+        function activerSynchronisation() {
+
+            supabaseClient
+                .channel("admin-profiles-live")
+
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "*",
+                        schema: "public",
+                        table: "profiles"
+                    },
+                    function(payload) {
+
+                        console.log(
+                            "Modification détectée :",
+                            payload
+                        );
+
+                        chargerUtilisateurs();
+                    }
+                )
+
+                .subscribe(
+                    function(status) {
+
+                        console.log(
+                            "Synchronisation :",
+                            status
+                        );
+                    }
+                );
+        }
+
+
+        /* =====================================================
+           RECHERCHE
+        ===================================================== */
+
+        document
+            .getElementById(
+                "recherche-utilisateur"
             )
-            .subscribe(
-                status => {
-
-                    console.log(
-                        "Synchronisation :",
-                        status
-                    );
-                }
+            .addEventListener(
+                "input",
+                appliquerRecherche
             );
-    }
 
-    document
-        .getElementById(
-            "recherche-utilisateur"
-        )
-        .addEventListener(
-            "input",
-            appliquerRecherche
-        );
 
-    verifierAdmin();
-</script>
+        /* =====================================================
+           LANCEMENT
+        ===================================================== */
+
+        verifierAdmin();
+
+    </script>
 
 </body>
+
 </html>

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Boutique Clocoins</title>
+    <title>Clocoins - Fan2Clotaire</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -16,369 +18,270 @@
             min-height: 100vh;
             font-family: Arial, sans-serif;
             color: white;
-
             background:
                 radial-gradient(circle at top, #4c1d95 0%, transparent 40%),
                 linear-gradient(135deg, #111827, #1e1b4b, #312e81);
-
             padding: 25px 15px 50px;
         }
 
         .container {
-            width: min(100%, 1000px);
+            width: 100%;
+            max-width: 850px;
             margin: auto;
         }
 
-        header {
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .top-button {
+            border: none;
+            border-radius: 14px;
+            padding: 12px 18px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .top-button:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .main-card {
+            padding: 30px;
+            border-radius: 25px;
+        }
+
+        h1 {
             text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 38px;
+        }
+
+        .subtitle {
+            text-align: center;
+            opacity: 0.75;
             margin-bottom: 30px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: clamp(32px, 7vw, 52px);
-        }
-
-        header p {
-            color: #d1d5db;
-            font-size: 17px;
-        }
-
-        .compte {
+        .balance-card {
             text-align: center;
-            color: #c4b5fd;
-            margin-bottom: 15px;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.18);
         }
 
-        .solde {
-            width: fit-content;
-            margin: 0 auto 25px;
-            padding: 14px 25px;
+        .balance-label {
+            opacity: 0.7;
+            font-size: 14px;
+        }
 
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
-
-            font-size: 20px;
+        .balance {
+            font-size: 42px;
             font-weight: bold;
-
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            margin-top: 8px;
         }
 
-        .clocoin {
-            color: #facc15;
-        }
-
-        /* =========================
-           RÉCOMPENSE QUOTIDIENNE
-        ========================= */
-
-        .recompense {
-            width: min(100%, 600px);
-            margin: 0 auto 35px;
-            padding: 22px;
-
-            text-align: center;
-
-            background: rgba(15, 15, 30, 0.9);
-            border: 1px solid rgba(250, 204, 21, 0.25);
-            border-radius: 22px;
-
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .recompense h2 {
-            margin: 0 0 8px;
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
             font-size: 24px;
         }
 
-        .recompense p {
-            margin: 8px 0;
-            color: #d1d5db;
-        }
-
-        .gain {
-            margin: 15px 0;
-            color: #facc15;
-            font-size: 25px;
-            font-weight: bold;
-        }
-
-        #recompense-button {
-            width: 100%;
-            max-width: 400px;
-
-            padding: 14px;
-
-            border: none;
-            border-radius: 13px;
-
-            background: linear-gradient(
-                135deg,
-                #f59e0b,
-                #eab308
-            );
-
-            color: #171717;
-            font-size: 17px;
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: transform 0.15s ease,
-                        opacity 0.15s ease;
-        }
-
-        #recompense-button:hover {
-            transform: scale(1.03);
-        }
-
-        #recompense-button:active {
-            transform: scale(0.97);
-        }
-
-        #recompense-button:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        #compte-rebours {
-            margin-top: 12px;
-            color: #a78bfa;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           BOUTIQUE
-        ========================= */
-
-        .boutique {
+        .shop-grid {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(230px, 1fr)
-            );
-
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 15px;
         }
 
-        .article {
-            padding: 25px;
-            text-align: center;
-
-            background: rgba(15, 15, 30, 0.88);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 22px;
-
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-            transition: transform 0.2s ease,
-                        box-shadow 0.2s ease;
-        }
-
-        .article:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .article-image {
-            width: 110px;
-            height: 110px;
-
-            margin: 0 auto 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
+        .item {
+            padding: 20px;
             border-radius: 20px;
-
-            background: linear-gradient(
-                135deg,
-                #312e81,
-                #6d28d9
-            );
-
-            font-size: 55px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: 0.2s;
         }
 
-        .article h2 {
-            margin: 10px 0;
-            font-size: 23px;
+        .item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .prix {
-            margin: 12px 0 18px;
+        .item-image {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
 
-            color: #facc15;
+        .item h3 {
+            margin: 5px 0;
+        }
+
+        .item p {
+            opacity: 0.75;
+            font-size: 14px;
+        }
+
+        .price {
             font-size: 20px;
             font-weight: bold;
+            margin: 15px 0;
         }
 
-        .acheter {
+        button.action {
             width: 100%;
-            padding: 13px;
-
             border: none;
             border-radius: 12px;
-
-            background: linear-gradient(
-                135deg,
-                #7c3aed,
-                #4f46e5
-            );
-
+            padding: 12px;
             color: white;
-            font-size: 16px;
-            font-weight: bold;
-
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
             cursor: pointer;
-
-            transition: transform 0.15s ease,
-                        opacity 0.15s ease;
-        }
-
-        .acheter:hover {
-            transform: scale(1.03);
-        }
-
-        .acheter:active {
-            transform: scale(0.97);
-        }
-
-        .acheter:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .possede {
-            background: linear-gradient(135deg, #16a34a, #15803d);
-            cursor: default;
-            opacity: 1;
-        }
-
-        .possede:hover {
-            transform: none;
-        }
-
-        /* =========================
-           CHARGEMENT
-        ========================= */
-
-        #chargement {
-            text-align: center;
-            color: #c4b5fd;
-            margin: 20px 0;
-        }
-
-        /* =========================
-           RETOUR
-        ========================= */
-
-        .retour {
-            display: block;
-            width: fit-content;
-
-            margin: 35px auto 0;
-
-            padding: 12px 20px;
-
-            border-radius: 12px;
-
-            background: rgba(255, 255, 255, 0.1);
-
-            color: white;
-            text-decoration: none;
-
-            transition: background 0.2s ease;
-        }
-
-        .retour:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-
-        /* =========================
-           MESSAGES
-        ========================= */
-
-        #message {
-            position: fixed;
-            left: 50%;
-            bottom: 25px;
-
-            transform:
-                translateX(-50%)
-                translateY(100px);
-
-            padding: 14px 22px;
-
-            border-radius: 14px;
-
-            background: rgba(10, 10, 20, 0.95);
-
-            border: 1px solid rgba(255, 255, 255, 0.15);
-
+            font-size: 15px;
             font-weight: bold;
+            transition: 0.2s;
+        }
 
-            opacity: 0;
+        button.action:hover:not(:disabled) {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
 
-            transition: 0.3s ease;
+        button.action:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
 
-            z-index: 100;
-
+        .daily {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             text-align: center;
         }
 
-        #message.visible {
-            transform:
-                translateX(-50%)
-                translateY(0);
+        .daily button {
+            max-width: 300px;
+            margin-top: 12px;
+        }
 
-            opacity: 1;
+        .countdown {
+            margin-top: 10px;
+            opacity: 0.75;
+            font-size: 14px;
+        }
+
+        .code-section {
+            margin-top: 40px;
+            padding: 22px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .code-section h2 {
+            margin-top: 0;
+        }
+
+        .code-description {
+            opacity: 0.7;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .code-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 13px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .code-input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .code-input:focus {
+            border-color: rgba(167, 139, 250, 0.8);
+        }
+
+        .code-button {
+            width: auto !important;
+            padding-left: 22px !important;
+            padding-right: 22px !important;
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .account {
+            text-align: center;
+            opacity: 0.65;
+            font-size: 13px;
+            margin-top: 25px;
         }
 
         @media (max-width: 600px) {
-
             body {
-                padding-top: 18px;
+                padding: 15px 10px 40px;
             }
 
-            .article {
+            .main-card {
                 padding: 20px;
             }
 
-            .solde {
-                font-size: 18px;
+            h1 {
+                font-size: 30px;
             }
 
-            .recompense {
-                padding: 18px;
+            .balance {
+                font-size: 34px;
+            }
+
+            .code-form {
+                flex-direction: column;
+            }
+
+            .code-button {
+                width: 100% !important;
             }
         }
-    
-        .bouton-inventaire {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 8px 0 20px;
-            padding: 10px 18px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #7c3aed, #4f46e5);
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-
-        .bouton-inventaire:hover {
-            transform: translateY(-2px);
-            opacity: 0.92;
-        }
-
     </style>
 </head>
 
@@ -386,815 +289,598 @@
 
 <div class="container">
 
-    <header>
-
-        <h1>🪙 Boutique Clocoins</h1>
-
-        <p>
-            Dépense tes Clocoins pour obtenir des articles exclusifs !
-        </p>
-
-    </header>
-
-
-    <div class="compte" id="compte">
-        Connexion en cours...
-    </div>
-
-
-    <div class="solde">
-
-        🪙 Solde :
-
-        <span id="solde">...</span>
-
-        <span class="clocoin">
-            Clocoins
-        </span>
-
-    </div>
-
-
-    <!-- =========================
-         RÉCOMPENSE QUOTIDIENNE
-    ========================= -->
-
-    <div class="recompense">
-
-        <h2>🎁 Récompense quotidienne</h2>
-
-        <p>
-            Reviens chaque jour pour récupérer ta récompense !
-        </p>
-
-        <div class="gain">
-            +50 🪙 Clocoins
-        </div>
-
-        <button
-            id="recompense-button"
-            onclick="recupererRecompense()"
-            disabled
-        >
-            🎁 Récupérer mes Clocoins
+    <div class="topbar">
+        <button class="top-button" onclick="window.location.href='inventaire.html'">
+            🎒 Inventaire
         </button>
 
-        <div id="compte-rebours"></div>
-
+        <button class="top-button" onclick="window.location.href='index.html'">
+            ← Accueil
+        </button>
     </div>
 
+    <div class="main-card glass">
 
-    <div id="chargement">
-        Chargement de ta boutique...
-    </div>
+        <h1>🪙 Clocoins</h1>
 
+        <div class="subtitle">
+            La boutique officielle de Fan2Clotaire
+        </div>
 
-    <!-- =========================
-         BOUTIQUE
-    ========================= -->
-
-    <div class="boutique">
-
-        <div class="article">
-
-            <div class="article-image">
-                👣
+        <div class="balance-card">
+            <div class="balance-label">Ton solde</div>
+            <div class="balance" id="balance">
+                ...
             </div>
+        </div>
 
-            <h2>
-                Pieds de Clotaire
-            </h2>
+        <h2 class="section-title">🛍️ Boutique</h2>
 
-            <div class="prix">
-                🪙 100 Clocoins
+        <div class="shop-grid">
+
+            <div class="item" id="pieds-item">
+
+                <div style="font-size: 70px; text-align: center;">
+                    🦶
+                </div>
+
+                <h3>Pieds de Clotaire</h3>
+
+                <p>
+                    Un objet exclusif à retrouver dans ton inventaire.
+                </p>
+
+                <div class="price">
+                    🪙 100 Clocoins
+                </div>
+
+                <button
+                    class="action"
+                    id="buy-pieds"
+                    onclick="buyItem('pieds-clotaire', 'Pieds de Clotaire', 100)"
+                    disabled
+                >
+                    Acheter
+                </button>
+
             </div>
-
-            <button
-                id="acheter-pieds"
-                class="acheter"
-                onclick="acheterArticle(
-                    'pieds_clotaire',
-                    'Pieds de Clotaire',
-                    100
-                )"
-                disabled
-            >
-                🛒 Acheter
-            </button>
 
         </div>
 
+        <div class="daily">
+
+            <h2>🎁 Récompense quotidienne</h2>
+
+            <p>
+                Reviens chaque jour pour récupérer gratuitement des Clocoins.
+            </p>
+
+            <button
+                class="action"
+                id="daily-button"
+                onclick="claimDaily()"
+                disabled
+            >
+                Récupérer +50 🪙
+            </button>
+
+            <div
+                class="countdown"
+                id="countdown"
+            ></div>
+
+        </div>
+
+        <!-- SYSTEME DE CODES -->
+
+        <div class="code-section">
+
+            <h2>🎟️ Saisir un code</h2>
+
+            <div class="code-description">
+                Entre un code promotionnel pour recevoir une récompense.
+            </div>
+
+            <div class="code-form">
+
+                <input
+                    type="text"
+                    id="code-input"
+                    class="code-input"
+                    placeholder="Saisir un code"
+                    maxlength="50"
+                    autocomplete="off"
+                >
+
+                <button
+                    class="action code-button"
+                    id="code-button"
+                    onclick="redeemCode()"
+                    disabled
+                >
+                    Utiliser
+                </button>
+
+            </div>
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+        </div>
+
+        <div class="account" id="account">
+            Connexion...
+        </div>
+
     </div>
-
-
-    <a
-        href="index.html"
-        class="retour"
-    >
-        ← Retour à l'accueil
-    </a>
 
 </div>
 
-
-<div id="message"></div>
-
-
-<!-- =========================
-     SUPABASE
-========================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-
-    /* =========================================
-       CONFIGURATION SUPABASE
-    ========================================= */
-
-    const SUPABASE_URL =
-        "https://snnclgjspwninjxnimza.supabase.co";
-
-    /*
-       Mets ici ta clé publishable/anon.
-
-       NE METS PAS ta SERVICE_ROLE_KEY.
-    */
-
-    const SUPABASE_KEY =
-        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
-
-
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
-
-
-    /* =========================================
-       VARIABLES
-    ========================================= */
-
-    let utilisateur = null;
-
-    let clocoins = 0;
-
-    let dernierGain = null;
-
-    let compteReboursInterval = null;
-
-    let inventaire = [];
-
-
-    const soldeElement =
-        document.getElementById("solde");
-
-    const compteElement =
-        document.getElementById("compte");
-
-    const chargementElement =
-        document.getElementById("chargement");
-
-    const boutonPieds =
-        document.getElementById("acheter-pieds");
-
-    const boutonRecompense =
-        document.getElementById("recompense-button");
-
-    const compteRebours =
-        document.getElementById("compte-rebours");
-
-
-    /* =========================================
-       INITIALISATION
-    ========================================= */
-
-    async function initialiser() {
-
-        const {
-            data: {
-                user
-            },
-            error
-        } = await supabaseClient.auth.getUser();
-
-
-        if (error || !user) {
-
-            compteElement.textContent =
-                "❌ Tu dois être connecté pour utiliser les Clocoins.";
-
-            soldeElement.textContent =
-                "—";
-
-            chargementElement.textContent =
-                "Connecte-toi à ton compte Fan2Clotaire.";
-
-            return;
-        }
-
-
-        utilisateur = user;
-
-
-        compteElement.textContent =
-            "👤 Connecté";
-
-
-        await chargerPortefeuille();
-
-    }
-
-
-    /* =========================================
-       CHARGER LE PORTEFEUILLE
-    ========================================= */
-
-    async function chargerPortefeuille() {
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("clocoins")
-            .select(
-                "solde, last_daily_reward"
-            )
-            .eq(
-                "user_id",
-                utilisateur.id
-            )
-            .maybeSingle();
-
-
-        if (error) {
-
-            console.error(error);
-
-            chargementElement.textContent =
-                "❌ Impossible de charger ton portefeuille.";
-
-            soldeElement.textContent =
-                "Erreur";
-
-            return;
-        }
-
-
-        /*
-           Création automatique du portefeuille
-           s'il n'existe pas encore.
-        */
-
-        if (!data) {
-
-            const {
-                data: nouveauPortefeuille,
-                error: creationError
-            } = await supabaseClient
-                .from("clocoins")
-                .insert({
-                    user_id: utilisateur.id,
-                    solde: 0
-                })
-                .select(
-                    "solde, last_daily_reward"
-                )
-                .single();
-
-
-            if (creationError) {
-
-                console.error(creationError);
-
-                chargementElement.textContent =
-                    "❌ Impossible de créer ton portefeuille.";
-
-                return;
-            }
-
-
-            clocoins =
-                nouveauPortefeuille.solde;
-
-            dernierGain =
-                nouveauPortefeuille.last_daily_reward;
-
-        } else {
-
-            clocoins =
-                data.solde;
-
-            dernierGain =
-                data.last_daily_reward;
-
-        }
-
-
-        afficherSolde();
-
-        mettreAJourRecompense();
-
-        await chargerInventaire();
-
-        chargementElement.style.display =
-            "none";
-
-    }
-
-
-    /* =========================================
-       AFFICHER LE SOLDE
-    ========================================= */
-
-    function afficherSolde() {
-
-        soldeElement.textContent =
-            clocoins;
-
-    }
-
-
-    /* =========================================
-       ÉTAT DE LA RÉCOMPENSE
-    ========================================= */
-
-    function mettreAJourRecompense() {
-
-        if (!dernierGain) {
-
-            boutonRecompense.disabled =
-                false;
-
-            boutonRecompense.textContent =
-                "🎁 Récupérer mes Clocoins";
-
-            compteRebours.textContent =
-                "";
-
-            return;
-        }
-
-
-        const prochainGain =
-            new Date(dernierGain).getTime()
-            +
-            24 * 60 * 60 * 1000;
-
-
-        const maintenant =
-            Date.now();
-
-
-        if (maintenant >= prochainGain) {
-
-            boutonRecompense.disabled =
-                false;
-
-            boutonRecompense.textContent =
-                "🎁 Récupérer mes Clocoins";
-
-            compteRebours.textContent =
-                "";
-
-            return;
-        }
-
-
-        boutonRecompense.disabled =
-            true;
-
-        boutonRecompense.textContent =
-            "⏳ Récompense déjà récupérée";
-
-
-        lancerCompteRebours(prochainGain);
-
-    }
-
-
-    /* =========================================
-       COMPTE À REBOURS
-    ========================================= */
-
-    function lancerCompteRebours(dateFin) {
-
-        clearInterval(
-            compteReboursInterval
-        );
-
-
-        function actualiser() {
-
-            const difference =
-                dateFin - Date.now();
-
-
-            if (difference <= 0) {
-
-                clearInterval(
-                    compteReboursInterval
-                );
-
-                boutonRecompense.disabled =
-                    false;
-
-                boutonRecompense.textContent =
-                    "🎁 Récupérer mes Clocoins";
-
-                compteRebours.textContent =
-                    "";
-
-                return;
-            }
-
-
-            const heures =
-                Math.floor(
-                    difference /
-                    (1000 * 60 * 60)
-                );
-
-
-            const minutes =
-                Math.floor(
-                    (difference %
-                    (1000 * 60 * 60))
-                    /
-                    (1000 * 60)
-                );
-
-
-            const secondes =
-                Math.floor(
-                    (difference %
-                    (1000 * 60))
-                    /
-                    1000
-                );
-
-
-            compteRebours.textContent =
-                "⏰ Disponible dans "
-                +
-                String(heures).padStart(2, "0")
-                +
-                "h "
-                +
-                String(minutes).padStart(2, "0")
-                +
-                "m "
-                +
-                String(secondes).padStart(2, "0")
-                +
-                "s";
-
-        }
-
-
-        actualiser();
-
-
-        compteReboursInterval =
-            setInterval(
-                actualiser,
-                1000
-            );
-
-    }
-
-
-    /* =========================================
-       RÉCUPÉRER LA RÉCOMPENSE
-    ========================================= */
-
-    async function recupererRecompense() {
-
-        if (!utilisateur) {
-
-            afficherMessage(
-                "❌ Connecte-toi à ton compte."
-            );
-
-            return;
-        }
-
-
-        boutonRecompense.disabled =
-            true;
-
-
-        boutonRecompense.textContent =
-            "⏳ Récupération...";
-
-
-        const {
-            data,
-            error
-        } = await supabaseClient.rpc(
-            "recompense_quotidienne"
-        );
-
-
-        if (error) {
-
-            console.error(error);
-
-
-            boutonRecompense.disabled =
-                false;
-
-
-            boutonRecompense.textContent =
-                "🎁 Récupérer mes Clocoins";
-
-
-            afficherMessage(
-                "❌ Récompense déjà récupérée ou erreur."
-            );
-
-
-            /*
-               On recharge quand même les données
-               au cas où la récompense aurait déjà
-               été enregistrée.
-            */
-
-            await chargerPortefeuille();
-
-            return;
-        }
-
-
-        /*
-           La fonction SQL nous renvoie
-           directement le nouveau solde.
-        */
-
-        clocoins =
-            data;
-
-
-        afficherSolde();
-
-
-        /*
-           On recharge le portefeuille afin
-           de récupérer la nouvelle date.
-        */
-
-        await chargerPortefeuille();
-
-
-        afficherMessage(
-            "🎉 +50 Clocoins !"
-        );
-
-    }
-
-
-    /* =========================================
-       INVENTAIRE
-    ========================================= */
-
-    async function chargerInventaire() {
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("inventaire")
-            .select("article_id, nom_article, date_achat")
-            .eq(
-                "user_id",
-                utilisateur.id
-            );
-
-        if (error) {
-
-            console.error(error);
-
-            afficherMessage(
-                "⚠️ Impossible de charger ton inventaire."
-            );
-
-            boutonPieds.disabled = false;
-
-            return;
-        }
-
-        inventaire = data || [];
-
-        mettreAJourArticlePieds();
-
-    }
-
-
-    function possedeArticle(articleId) {
-
-        return inventaire.some(
-            article => article.article_id === articleId
-        );
-
-    }
-
-
-    function mettreAJourArticlePieds() {
-
-        if (possedeArticle("pieds_clotaire")) {
-
-            boutonPieds.textContent =
-                "✅ Déjà possédé";
-
-            boutonPieds.classList.add("possede");
-
-            boutonPieds.disabled = true;
-
-        } else {
-
-            boutonPieds.textContent =
-                "🛒 Acheter";
-
-            boutonPieds.classList.remove("possede");
-
-            boutonPieds.disabled = false;
-
-        }
-
-    }
-
-
-    /* =========================================
-       ACHETER UN ARTICLE
-    ========================================= */
-
-    async function acheterArticle(
-        articleId,
-        nom,
-        prix
-    ) {
-
-        if (!utilisateur) {
-
-            afficherMessage(
-                "❌ Connecte-toi à ton compte."
-            );
-
-            return;
-        }
-
-
-        if (possedeArticle(articleId)) {
-
-            afficherMessage(
-                "ℹ️ Tu possèdes déjà cet article."
-            );
-
-            mettreAJourArticlePieds();
-
-            return;
-        }
-
-
-        if (clocoins < prix) {
-
-            afficherMessage(
-                "❌ Tu n'as pas assez de Clocoins !"
-            );
-
-            return;
-        }
-
-
-        boutonPieds.disabled = true;
-
-        boutonPieds.textContent =
-            "⏳ Achat...";
-
+    const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+    let currentUser = null;
+    let currentBalance = 0;
+    let inventory = [];
+    let countdownInterval = null;
+
+    async function init() {
 
         try {
 
-            const {
-                data,
-                error
-            } = await supabaseClient.rpc(
-                "acheter_article",
-                {
-                    article_id_param: articleId,
-                    nom_article_param: nom,
-                    prix_param: prix
-                }
-            );
+            const result = await supabaseClient.auth.getUser();
 
+            if (result.error) {
+                throw result.error;
+            }
 
-            if (error) {
+            currentUser = result.data.user;
 
-                console.error(error);
+            if (!currentUser) {
 
-                if (
-                    error.message &&
-                    error.message.includes(
-                        "Article déjà possédé"
-                    )
-                ) {
-
-                    await chargerInventaire();
-
-                    afficherMessage(
-                        "ℹ️ Tu possèdes déjà cet article."
-                    );
-
-                } else if (
-                    error.message &&
-                    error.message.includes(
-                        "Clocoins insuffisants"
-                    )
-                ) {
-
-                    afficherMessage(
-                        "❌ Tu n'as pas assez de Clocoins !"
-                    );
-
-                } else {
-
-                    afficherMessage(
-                        "❌ L'achat n'a pas pu être effectué."
-                    );
-
-                }
+                document.getElementById("account").textContent =
+                    "⚠️ Tu dois être connecté pour utiliser les Clocoins.";
 
                 return;
             }
 
+            document.getElementById("account").textContent =
+                "Connecté avec : " +
+                (currentUser.email || "compte utilisateur");
 
-            clocoins = data;
+            document.getElementById("code-button").disabled = false;
 
-            afficherSolde();
+            await loadWallet();
+            await loadInventory();
 
-            await chargerInventaire();
+            updateShop();
+            await updateDaily();
 
-            afficherMessage(
-                "✅ " +
-                nom +
-                " acheté !"
+        } catch (error) {
+
+            console.error("Erreur initialisation :", error);
+
+            document.getElementById("account").textContent =
+                "⚠️ Une erreur est survenue lors du chargement.";
+
+        }
+    }
+
+    async function loadWallet() {
+
+        const result = await supabaseClient
+            .from("clocoins")
+            .select("solde")
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        if (!result.data) {
+
+            const createResult = await supabaseClient
+                .from("clocoins")
+                .insert({
+                    user_id: currentUser.id,
+                    solde: 0
+                })
+                .select("solde")
+                .single();
+
+            if (createResult.error) {
+                throw createResult.error;
+            }
+
+            currentBalance = createResult.data.solde;
+
+        } else {
+
+            currentBalance = result.data.solde;
+        }
+
+        updateBalance();
+    }
+
+    function updateBalance() {
+
+        document.getElementById("balance").textContent =
+            currentBalance + " 🪙";
+    }
+
+    async function loadInventory() {
+
+        const result = await supabaseClient
+            .from("inventaire")
+            .select("article_id, active")
+            .eq("user_id", currentUser.id);
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        inventory = result.data || [];
+    }
+
+    function ownsItem(articleId) {
+
+        return inventory.some(function(item) {
+            return item.article_id === articleId;
+        });
+    }
+
+    function updateShop() {
+
+        const button = document.getElementById("buy-pieds");
+
+        if (ownsItem("pieds-clotaire")) {
+
+            button.textContent = "✅ Déjà acheté";
+            button.disabled = true;
+
+        } else {
+
+            button.textContent = "Acheter";
+            button.disabled = currentBalance < 100;
+        }
+    }
+
+    async function updateDaily() {
+
+        const button = document.getElementById("daily-button");
+
+        const result = await supabaseClient
+            .from("clocoins")
+            .select("derniere_recompense")
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (result.error) {
+
+            console.error(
+                "Erreur récompense quotidienne :",
+                result.error
             );
 
+            return;
+        }
+
+        if (!result.data || !result.data.derniere_recompense) {
+
+            button.disabled = false;
+            button.textContent = "Récupérer +50 🪙";
+
+            return;
+        }
+
+        const lastReward = new Date(
+            result.data.derniere_recompense
+        );
+
+        const nextReward = new Date(
+            lastReward.getTime() + 24 * 60 * 60 * 1000
+        );
+
+        if (Date.now() >= nextReward.getTime()) {
+
+            button.disabled = false;
+            button.textContent = "Récupérer +50 🪙";
+
+            document.getElementById("countdown").textContent = "";
+
+        } else {
+
+            button.disabled = true;
+
+            startCountdown(nextReward);
+        }
+    }
+
+    function startCountdown(endDate) {
+
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        function update() {
+
+            const remaining =
+                endDate.getTime() - Date.now();
+
+            if (remaining <= 0) {
+
+                clearInterval(countdownInterval);
+
+                document.getElementById("countdown").textContent =
+                    "";
+
+                const button =
+                    document.getElementById("daily-button");
+
+                button.disabled = false;
+                button.textContent = "Récupérer +50 🪙";
+
+                return;
+            }
+
+            const hours =
+                Math.floor(remaining / 3600000);
+
+            const minutes =
+                Math.floor((remaining % 3600000) / 60000);
+
+            const seconds =
+                Math.floor((remaining % 60000) / 1000);
+
+            document.getElementById("countdown").textContent =
+                "Prochaine récompense dans " +
+                hours +
+                "h " +
+                minutes +
+                "m " +
+                seconds +
+                "s";
+        }
+
+        update();
+
+        countdownInterval = setInterval(update, 1000);
+    }
+
+    async function claimDaily() {
+
+        const button =
+            document.getElementById("daily-button");
+
+        button.disabled = true;
+
+        try {
+
+            const result = await supabaseClient.rpc(
+                "recompense_quotidienne"
+            );
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            currentBalance = result.data;
+
+            updateBalance();
+            await updateDaily();
+
+            showMessage("🎁 +50 Clocoins récupérés !");
+
+        } catch (error) {
+
+            console.error("Erreur récompense :", error);
+
+            showMessage(
+                "❌ " + getErrorMessage(error)
+            );
+
+            button.disabled = false;
+        }
+    }
+
+    async function buyItem(id, name, price) {
+
+        if (ownsItem(id)) {
+            showMessage("❌ Tu possèdes déjà cet article.");
+            return;
+        }
+
+        if (currentBalance < price) {
+
+            showMessage(
+                "❌ Tu n'as pas assez de Clocoins."
+            );
+
+            return;
+        }
+
+        const button =
+            document.getElementById("buy-pieds");
+
+        button.disabled = true;
+
+        try {
+
+            const result = await supabaseClient.rpc(
+                "acheter_article",
+                {
+                    article_id_param: id,
+                    nom_article_param: name,
+                    prix_param: price
+                }
+            );
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            currentBalance = result.data;
+
+            updateBalance();
+
+            await loadInventory();
+            updateShop();
+
+            showMessage(
+                "✅ " + name + " acheté !"
+            );
+
+        } catch (error) {
+
+            console.error("Erreur achat :", error);
+
+            showMessage(
+                "❌ " + getErrorMessage(error)
+            );
+
+            updateShop();
+        }
+    }
+
+    async function redeemCode() {
+
+        const input =
+            document.getElementById("code-input");
+
+        const button =
+            document.getElementById("code-button");
+
+        const code =
+            input.value.trim();
+
+        if (!code) {
+
+            showMessage(
+                "❌ Saisis un code."
+            );
+
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+
+            const result = await supabaseClient.rpc(
+                "utiliser_code",
+                {
+                    code_param: code
+                }
+            );
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            currentBalance = result.data;
+
+            updateBalance();
+
+            input.value = "";
+
+            showMessage(
+                "🎉 Code accepté ! Ta récompense a été ajoutée."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Erreur utilisation code :",
+                error
+            );
+
+            showMessage(
+                "❌ " + getErrorMessage(error)
+            );
 
         } finally {
 
-            mettreAJourArticlePieds();
-
+            button.disabled = false;
         }
-
     }
 
+    function getErrorMessage(error) {
 
-    /* =========================================
-       MESSAGES
-    ========================================= */
+        if (!error) {
+            return "Erreur inconnue.";
+        }
 
-    let messageTimeout;
+        const message =
+            error.message || "";
 
+        if (
+            message.includes("Code invalide")
+        ) {
+            return "Code invalide.";
+        }
 
-    function afficherMessage(texte) {
+        if (
+            message.includes("Code épuisé")
+        ) {
+            return "Ce code a déjà atteint sa limite d'utilisation.";
+        }
+
+        if (
+            message.includes("Code déjà utilisé")
+        ) {
+            return "Tu as déjà utilisé ce code.";
+        }
+
+        if (
+            message.includes("Utilisateur non connecté")
+        ) {
+            return "Tu dois être connecté.";
+        }
+
+        return message || "Une erreur est survenue.";
+    }
+
+    function showMessage(text) {
 
         const message =
             document.getElementById("message");
 
+        message.textContent = text;
+        message.style.display = "block";
 
-        message.textContent =
-            texte;
+        clearTimeout(showMessage.timeout);
 
-
-        message.classList.add(
-            "visible"
+        showMessage.timeout = setTimeout(
+            function() {
+                message.style.display = "none";
+            },
+            4000
         );
-
-
-        clearTimeout(
-            messageTimeout
-        );
-
-
-        messageTimeout =
-            setTimeout(() => {
-
-                message.classList.remove(
-                    "visible"
-                );
-
-            }, 2500);
-
     }
 
+    document
+        .getElementById("code-input")
+        .addEventListener(
+            "keydown",
+            function(event) {
 
-    /* =========================================
-       LANCEMENT
-    ========================================= */
+                if (event.key === "Enter") {
+                    redeemCode();
+                }
 
-    initialiser();
+            }
+        );
 
+    init();
 </script>
 
 </body>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon Inventaire - Fan2Clotaire</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at top, #4c1d95 0%, transparent 35%),
+                linear-gradient(135deg, #111827, #1e1b4b, #312e81);
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .top-bar h1 {
+            font-size: 28px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 14px;
+            padding: 12px 18px;
+            color: white;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+
+        .balance {
+            margin-bottom: 25px;
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .balance-title {
+            opacity: 0.8;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .inventory {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .item {
+            padding: 20px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.16);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        }
+
+        .item h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .item-description {
+            opacity: 0.75;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .status.active {
+            background: rgba(34,197,94,0.2);
+            color: #86efac;
+        }
+
+        .status.inactive {
+            background: rgba(239,68,68,0.2);
+            color: #fca5a5;
+        }
+
+        .item-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin: 10px 0 15px;
+            display: none;
+            background: rgba(0,0,0,0.12);
+        }
+
+        .item-image.visible {
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .activate {
+            background: rgba(34,197,94,0.25);
+        }
+
+        .activate:hover {
+            background: rgba(34,197,94,0.4);
+        }
+
+        .deactivate {
+            background: rgba(239,68,68,0.20);
+        }
+
+        .deactivate:hover {
+            background: rgba(239,68,68,0.35);
+        }
+
+        .download {
+            background: rgba(139,92,246,0.3);
+        }
+
+        .download:hover {
+            background: rgba(139,92,246,0.45);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .empty h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            position: fixed;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+            padding: 13px 20px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.92);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            display: none;
+            z-index: 1000;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            opacity: 0.7;
+            padding: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .top-bar h1 {
+                text-align: center;
+            }
+
+            .top-bar .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h1>🎒 Mon Inventaire</h1>
+
+        <button class="btn" onclick="window.location.href='monnaie.html'">
+            🪙 Retour aux Clocoins
+        </button>
+    </div>
+
+    <div class="balance">
+        <div class="balance-title">Mon solde</div>
+        <div class="balance-value">
+            🪙 <span id="solde">0</span> Clocoins
+        </div>
+    </div>
+
+    <div id="inventory" class="inventory">
+        <div class="loading">
+            Chargement de ton inventaire...
+        </div>
+    </div>
+
+</div>
+
+<div id="message" class="message"></div>
+
+<script>
+    const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+    let currentUser = null;
+
+    const articles = {
+        "pieds-clotaire": {
+            name: "Pieds de Clotaire",
+            description: "Les célèbres Pieds de Clotaire.",
+            image: "pieds-clotaire.png",
+            downloadPrice: 200
+        }
+    };
+
+    function showMessage(text) {
+        const message = document.getElementById("message");
+
+        message.textContent = text;
+        message.classList.add("show");
+
+        setTimeout(function() {
+            message.classList.remove("show");
+        }, 3000);
+    }
+
+    function getArticleName(articleId) {
+        if (articles[articleId]) {
+            return articles[articleId].name;
+        }
+
+        return articleId;
+    }
+
+    function getArticleDescription(articleId) {
+        if (articles[articleId]) {
+            return articles[articleId].description;
+        }
+
+        return "Article acheté dans la boutique Fan2Clotaire.";
+    }
+
+    async function checkUser() {
+        const result = await supabaseClient.auth.getUser();
+
+        if (result.error || !result.data.user) {
+            window.location.href = "connexion.html";
+            return false;
+        }
+
+        currentUser = result.data.user;
+
+        return true;
+    }
+
+    async function loadWallet() {
+        const result = await supabaseClient
+            .from("clocoins")
+            .select("solde")
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (result.error) {
+            console.error(result.error);
+            return;
+        }
+
+        if (!result.data) {
+            const createResult = await supabaseClient
+                .from("clocoins")
+                .insert({
+                    user_id: currentUser.id,
+                    solde: 0
+                });
+
+            if (createResult.error) {
+                console.error(createResult.error);
+                return;
+            }
+
+            document.getElementById("solde").textContent = "0";
+            return;
+        }
+
+        document.getElementById("solde").textContent = result.data.solde;
+    }
+
+    async function loadInventory() {
+        const inventoryContainer = document.getElementById("inventory");
+
+        const result = await supabaseClient
+            .from("inventaire")
+            .select("article_id, active, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (result.error) {
+            console.error(result.error);
+
+            inventoryContainer.innerHTML = `
+                <div class="empty">
+                    <h2>❌ Erreur</h2>
+                    <p>Impossible de charger ton inventaire.</p>
+                </div>
+            `;
+
+            return;
+        }
+
+        const inventory = result.data || [];
+
+        if (inventory.length === 0) {
+            inventoryContainer.innerHTML = `
+                <div class="empty">
+                    <h2>🎒 Inventaire vide</h2>
+                    <p>Tu n'as encore acheté aucun article.</p>
+
+                    <button class="btn" onclick="window.location.href='monnaie.html'">
+                        🪙 Aller à la boutique
+                    </button>
+                </div>
+            `;
+
+            return;
+        }
+
+        inventoryContainer.innerHTML = "";
+
+        inventory.forEach(function(item) {
+            renderItem(item);
+        });
+    }
+
+    function renderItem(item) {
+        const inventoryContainer = document.getElementById("inventory");
+
+        const article = articles[item.article_id];
+
+        const card = document.createElement("div");
+        card.className = "item";
+
+        const title = document.createElement("h2");
+        title.textContent = getArticleName(item.article_id);
+
+        const description = document.createElement("p");
+        description.className = "item-description";
+        description.textContent = getArticleDescription(item.article_id);
+
+        const status = document.createElement("span");
+        status.className = "status " + (item.active ? "active" : "inactive");
+        status.textContent = item.active ? "✓ Activé" : "○ Désactivé";
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(status);
+
+        if (article && article.image) {
+            const image = document.createElement("img");
+
+            image.className = "item-image";
+
+            image.src = article.image;
+            image.alt = article.name;
+
+            if (item.active) {
+                image.classList.add("visible");
+            }
+
+            card.appendChild(image);
+        }
+
+        const buttons = document.createElement("div");
+        buttons.className = "buttons";
+
+        const activateButton = document.createElement("button");
+        activateButton.className = "btn " + (
+            item.active ? "deactivate" : "activate"
+        );
+
+        activateButton.textContent = item.active
+            ? "❌ Désactiver"
+            : "✅ Activer";
+
+        activateButton.onclick = function() {
+            toggleItem(item.article_id, !item.active);
+        };
+
+        buttons.appendChild(activateButton);
+
+        if (
+            article &&
+            article.downloadPrice &&
+            item.active &&
+            article.image
+        ) {
+            const downloadButton = document.createElement("button");
+
+            downloadButton.className = "btn download";
+
+            downloadButton.textContent =
+                "⬇️ Télécharger — " +
+                article.downloadPrice +
+                " Clocoins";
+
+            downloadButton.onclick = function() {
+                downloadPiedsClotaire();
+            };
+
+            buttons.appendChild(downloadButton);
+        }
+
+        card.appendChild(buttons);
+
+        inventoryContainer.appendChild(card);
+    }
+
+    async function toggleItem(articleId, newState) {
+        const result = await supabaseClient
+            .from("inventaire")
+            .update({
+                active: newState
+            })
+            .eq("user_id", currentUser.id)
+            .eq("article_id", articleId);
+
+        if (result.error) {
+            console.error(result.error);
+
+            showMessage(
+                "❌ Impossible de modifier l'état de l'article."
+            );
+
+            return;
+        }
+
+        showMessage(
+            newState
+                ? "✅ Article activé !"
+                : "❌ Article désactivé !"
+        );
+
+        await loadInventory();
+    }
+
+    async function downloadPiedsClotaire() {
+        if (!currentUser) {
+            showMessage("❌ Tu dois être connecté.");
+            return;
+        }
+
+        const confirmation = confirm(
+            "Télécharger les Pieds de Clotaire coûte 200 Clocoins.\\n\\n" +
+            "Continuer ?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        showMessage("⏳ Vérification du paiement...");
+
+        const result = await supabaseClient.rpc(
+            "telecharger_pieds_clotaire"
+        );
+
+        if (result.error) {
+            console.error(result.error);
+
+            showMessage(
+                "❌ " + formatError(result.error.message)
+            );
+
+            return;
+        }
+
+        const newBalance = result.data;
+
+        document.getElementById("solde").textContent = newBalance;
+
+        showMessage(
+            "✅ Paiement effectué ! Téléchargement..."
+        );
+
+        const link = document.createElement("a");
+
+        link.href = "pieds-clotaire.jpg";
+        link.download = "pieds-clotaire.jpg";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+    }
+
+    function formatError(error) {
+        if (!error) {
+            return "Une erreur est survenue.";
+        }
+
+        if (error.includes("Clocoins insuffisants")) {
+            return "Tu n'as pas assez de Clocoins.";
+        }
+
+        if (error.includes("Article non activé")) {
+            return "Tu dois activer l'article avant de le télécharger.";
+        }
+
+        if (error.includes("Utilisateur non connecté")) {
+            return "Tu dois être connecté.";
+        }
+
+        return error;
+    }
+
+    async function init() {
+        const loggedIn = await checkUser();
+
+        if (!loggedIn) {
+            return;
+        }
+
+        await loadWallet();
+        await loadInventory();
+    }
+
+    init();
+</script>
+
+</body>
+</html>
