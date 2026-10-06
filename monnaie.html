@@ -126,14 +126,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .item-image {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            border-radius: 15px;
-            margin-bottom: 10px;
-        }
-
         .item h3 {
             margin: 5px 0;
         }
@@ -147,6 +139,12 @@
             font-size: 20px;
             font-weight: bold;
             margin: 15px 0;
+        }
+
+        .item-icon {
+            font-size: 70px;
+            text-align: center;
+            margin-bottom: 10px;
         }
 
         button.action {
@@ -290,13 +288,21 @@
 <div class="container">
 
     <div class="topbar">
-        <button class="top-button" onclick="window.location.href='inventaire.html'">
+
+        <button
+            class="top-button"
+            onclick="window.location.href='inventaire.html'"
+        >
             🎒 Inventaire
         </button>
 
-        <button class="top-button" onclick="window.location.href='index.html'">
+        <button
+            class="top-button"
+            onclick="window.location.href='index.html'"
+        >
             ← Accueil
         </button>
+
     </div>
 
     <div class="main-card glass">
@@ -308,23 +314,40 @@
         </div>
 
         <div class="balance-card">
-            <div class="balance-label">Ton solde</div>
-            <div class="balance" id="balance">
+
+            <div class="balance-label">
+                Ton solde
+            </div>
+
+            <div
+                class="balance"
+                id="balance"
+            >
                 ...
             </div>
+
         </div>
 
-        <h2 class="section-title">🛍️ Boutique</h2>
+        <h2 class="section-title">
+            🛍️ Boutique
+        </h2>
 
         <div class="shop-grid">
 
-            <div class="item" id="pieds-item">
+            <!-- PIEDS DE CLOTAIRE -->
 
-                <div style="font-size: 70px; text-align: center;">
+            <div
+                class="item"
+                id="pieds-item"
+            >
+
+                <div class="item-icon">
                     🦶
                 </div>
 
-                <h3>Pieds de Clotaire</h3>
+                <h3>
+                    Pieds de Clotaire
+                </h3>
 
                 <p>
                     Un objet exclusif à retrouver dans ton inventaire.
@@ -337,7 +360,52 @@
                 <button
                     class="action"
                     id="buy-pieds"
-                    onclick="buyItem('pieds-clotaire', 'Pieds de Clotaire', 100)"
+                    onclick="buyItem(
+                        'pieds-clotaire',
+                        'Pieds de Clotaire',
+                        100,
+                        'buy-pieds'
+                    )"
+                    disabled
+                >
+                    Acheter
+                </button>
+
+            </div>
+
+
+            <!-- RÔLE SPÉCIAL DISCORD -->
+
+            <div
+                class="item"
+                id="role-special-item"
+            >
+
+                <div class="item-icon">
+                    🎖️
+                </div>
+
+                <h3>
+                    Rôle Spécial (Discord)
+                </h3>
+
+                <p>
+                    Obtiens une invitation spéciale pour rejoindre le serveur Discord et recevoir ton rôle spécial.
+                </p>
+
+                <div class="price">
+                    🪙 15 000 Clocoins
+                </div>
+
+                <button
+                    class="action"
+                    id="buy-role-special"
+                    onclick="buyItem(
+                        'role-special-discord',
+                        'Rôle Spécial (Discord)',
+                        15000,
+                        'buy-role-special'
+                    )"
                     disabled
                 >
                     Acheter
@@ -347,9 +415,14 @@
 
         </div>
 
+
+        <!-- RÉCOMPENSE QUOTIDIENNE -->
+
         <div class="daily">
 
-            <h2>🎁 Récompense quotidienne</h2>
+            <h2>
+                🎁 Récompense quotidienne
+            </h2>
 
             <p>
                 Reviens chaque jour pour récupérer gratuitement des Clocoins.
@@ -371,11 +444,14 @@
 
         </div>
 
+
         <!-- SYSTEME DE CODES -->
 
         <div class="code-section">
 
-            <h2>🎟️ Saisir un code</h2>
+            <h2>
+                🎟️ Saisir un code
+            </h2>
 
             <div class="code-description">
                 Entre un code promotionnel pour recevoir une récompense.
@@ -410,7 +486,10 @@
 
         </div>
 
-        <div class="account" id="account">
+        <div
+            class="account"
+            id="account"
+        >
             Connexion...
         </div>
 
@@ -418,31 +497,40 @@
 
 </div>
 
-<script>
-    const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
 
-    const supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+<script>
+
+    const SUPABASE_URL =
+        "https://snnclgjspwninjxnimza.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
     let currentUser = null;
     let currentBalance = 0;
     let inventory = [];
     let countdownInterval = null;
 
+
     async function init() {
 
         try {
 
-            const result = await supabaseClient.auth.getUser();
+            const result =
+                await supabaseClient.auth.getUser();
 
             if (result.error) {
                 throw result.error;
             }
 
-            currentUser = result.data.user;
+            currentUser =
+                result.data.user;
 
             if (!currentUser) {
 
@@ -466,21 +554,25 @@
 
         } catch (error) {
 
-            console.error("Erreur initialisation :", error);
+            console.error(
+                "Erreur initialisation :",
+                error
+            );
 
             document.getElementById("account").textContent =
                 "⚠️ Une erreur est survenue lors du chargement.";
-
         }
     }
 
+
     async function loadWallet() {
 
-        const result = await supabaseClient
-            .from("clocoins")
-            .select("solde")
-            .eq("user_id", currentUser.id)
-            .maybeSingle();
+        const result =
+            await supabaseClient
+                .from("clocoins")
+                .select("solde")
+                .eq("user_id", currentUser.id)
+                .maybeSingle();
 
         if (result.error) {
             throw result.error;
@@ -488,28 +580,32 @@
 
         if (!result.data) {
 
-            const createResult = await supabaseClient
-                .from("clocoins")
-                .insert({
-                    user_id: currentUser.id,
-                    solde: 0
-                })
-                .select("solde")
-                .single();
+            const createResult =
+                await supabaseClient
+                    .from("clocoins")
+                    .insert({
+                        user_id: currentUser.id,
+                        solde: 0
+                    })
+                    .select("solde")
+                    .single();
 
             if (createResult.error) {
                 throw createResult.error;
             }
 
-            currentBalance = createResult.data.solde;
+            currentBalance =
+                createResult.data.solde;
 
         } else {
 
-            currentBalance = result.data.solde;
+            currentBalance =
+                result.data.solde;
         }
 
         updateBalance();
     }
+
 
     function updateBalance() {
 
@@ -517,52 +613,97 @@
             currentBalance + " 🪙";
     }
 
+
     async function loadInventory() {
 
-        const result = await supabaseClient
-            .from("inventaire")
-            .select("article_id, active")
-            .eq("user_id", currentUser.id);
+        const result =
+            await supabaseClient
+                .from("inventaire")
+                .select("article_id, active")
+                .eq("user_id", currentUser.id);
 
         if (result.error) {
             throw result.error;
         }
 
-        inventory = result.data || [];
+        inventory =
+            result.data || [];
     }
+
 
     function ownsItem(articleId) {
 
-        return inventory.some(function(item) {
-            return item.article_id === articleId;
-        });
+        return inventory.some(
+            function(item) {
+
+                return item.article_id === articleId;
+
+            }
+        );
     }
+
 
     function updateShop() {
 
-        const button = document.getElementById("buy-pieds");
+        const piedsButton =
+            document.getElementById("buy-pieds");
+
+        const roleButton =
+            document.getElementById("buy-role-special");
+
+
+        /* PIEDS DE CLOTAIRE */
 
         if (ownsItem("pieds-clotaire")) {
 
-            button.textContent = "✅ Déjà acheté";
-            button.disabled = true;
+            piedsButton.textContent =
+                "✅ Déjà acheté";
+
+            piedsButton.disabled =
+                true;
 
         } else {
 
-            button.textContent = "Acheter";
-            button.disabled = currentBalance < 100;
+            piedsButton.textContent =
+                "Acheter";
+
+            piedsButton.disabled =
+                currentBalance < 100;
+        }
+
+
+        /* RÔLE SPÉCIAL */
+
+        if (ownsItem("role-special-discord")) {
+
+            roleButton.textContent =
+                "✅ Déjà acheté";
+
+            roleButton.disabled =
+                true;
+
+        } else {
+
+            roleButton.textContent =
+                "Acheter";
+
+            roleButton.disabled =
+                currentBalance < 15000;
         }
     }
 
+
     async function updateDaily() {
 
-        const button = document.getElementById("daily-button");
+        const button =
+            document.getElementById("daily-button");
 
-        const result = await supabaseClient
-            .from("clocoins")
-            .select("derniere_recompense")
-            .eq("user_id", currentUser.id)
-            .maybeSingle();
+        const result =
+            await supabaseClient
+                .from("clocoins")
+                .select("derniere_recompense")
+                .eq("user_id", currentUser.id)
+                .maybeSingle();
 
         if (result.error) {
 
@@ -574,36 +715,53 @@
             return;
         }
 
-        if (!result.data || !result.data.derniere_recompense) {
+        if (
+            !result.data ||
+            !result.data.derniere_recompense
+        ) {
 
             button.disabled = false;
-            button.textContent = "Récupérer +50 🪙";
+            button.textContent =
+                "Récupérer +50 🪙";
 
             return;
         }
 
-        const lastReward = new Date(
-            result.data.derniere_recompense
-        );
+        const lastReward =
+            new Date(
+                result.data.derniere_recompense
+            );
 
-        const nextReward = new Date(
-            lastReward.getTime() + 24 * 60 * 60 * 1000
-        );
+        const nextReward =
+            new Date(
+                lastReward.getTime() +
+                24 * 60 * 60 * 1000
+            );
 
-        if (Date.now() >= nextReward.getTime()) {
+        if (
+            Date.now() >=
+            nextReward.getTime()
+        ) {
 
             button.disabled = false;
-            button.textContent = "Récupérer +50 🪙";
 
-            document.getElementById("countdown").textContent = "";
+            button.textContent =
+                "Récupérer +50 🪙";
+
+            document.getElementById(
+                "countdown"
+            ).textContent = "";
 
         } else {
 
             button.disabled = true;
 
-            startCountdown(nextReward);
+            startCountdown(
+                nextReward
+            );
         }
     }
+
 
     function startCountdown(endDate) {
 
@@ -614,88 +772,129 @@
         function update() {
 
             const remaining =
-                endDate.getTime() - Date.now();
+                endDate.getTime() -
+                Date.now();
 
             if (remaining <= 0) {
 
-                clearInterval(countdownInterval);
+                clearInterval(
+                    countdownInterval
+                );
 
-                document.getElementById("countdown").textContent =
-                    "";
+                document.getElementById(
+                    "countdown"
+                ).textContent = "";
 
                 const button =
-                    document.getElementById("daily-button");
+                    document.getElementById(
+                        "daily-button"
+                    );
 
                 button.disabled = false;
-                button.textContent = "Récupérer +50 🪙";
+
+                button.textContent =
+                    "Récupérer +50 🪙";
 
                 return;
             }
 
             const hours =
-                Math.floor(remaining / 3600000);
+                Math.floor(
+                    remaining / 3600000
+                );
 
             const minutes =
-                Math.floor((remaining % 3600000) / 60000);
+                Math.floor(
+                    (remaining % 3600000) /
+                    60000
+                );
 
             const seconds =
-                Math.floor((remaining % 60000) / 1000);
+                Math.floor(
+                    (remaining % 60000) /
+                    1000
+                );
 
-            document.getElementById("countdown").textContent =
+            document.getElementById(
+                "countdown"
+            ).textContent =
                 "Prochaine récompense dans " +
-                hours +
-                "h " +
-                minutes +
-                "m " +
-                seconds +
-                "s";
+                hours + "h " +
+                minutes + "m " +
+                seconds + "s";
         }
 
         update();
 
-        countdownInterval = setInterval(update, 1000);
+        countdownInterval =
+            setInterval(
+                update,
+                1000
+            );
     }
+
 
     async function claimDaily() {
 
         const button =
-            document.getElementById("daily-button");
+            document.getElementById(
+                "daily-button"
+            );
 
         button.disabled = true;
 
         try {
 
-            const result = await supabaseClient.rpc(
-                "recompense_quotidienne"
-            );
+            const result =
+                await supabaseClient.rpc(
+                    "recompense_quotidienne"
+                );
 
             if (result.error) {
                 throw result.error;
             }
 
-            currentBalance = result.data;
+            currentBalance =
+                result.data;
 
             updateBalance();
+
             await updateDaily();
 
-            showMessage("🎁 +50 Clocoins récupérés !");
+            showMessage(
+                "🎁 +50 Clocoins récupérés !"
+            );
 
         } catch (error) {
 
-            console.error("Erreur récompense :", error);
+            console.error(
+                "Erreur récompense :",
+                error
+            );
 
             showMessage(
-                "❌ " + getErrorMessage(error)
+                "❌ " +
+                getErrorMessage(error)
             );
 
             button.disabled = false;
         }
     }
 
-    async function buyItem(id, name, price) {
+
+    async function buyItem(
+        id,
+        name,
+        price,
+        buttonId
+    ) {
 
         if (ownsItem(id)) {
-            showMessage("❌ Tu possèdes déjà cet article.");
+
+            showMessage(
+                "❌ Tu possèdes déjà cet article."
+            );
+
             return;
         }
 
@@ -709,55 +908,69 @@
         }
 
         const button =
-            document.getElementById("buy-pieds");
+            document.getElementById(buttonId);
 
         button.disabled = true;
 
         try {
 
-            const result = await supabaseClient.rpc(
-                "acheter_article",
-                {
-                    article_id_param: id,
-                    nom_article_param: name,
-                    prix_param: price
-                }
-            );
+            const result =
+                await supabaseClient.rpc(
+                    "acheter_article",
+                    {
+                        article_id_param: id,
+                        nom_article_param: name,
+                        prix_param: price
+                    }
+                );
 
             if (result.error) {
                 throw result.error;
             }
 
-            currentBalance = result.data;
+            currentBalance =
+                result.data;
 
             updateBalance();
 
             await loadInventory();
+
             updateShop();
 
             showMessage(
-                "✅ " + name + " acheté !"
+                "✅ " +
+                name +
+                " acheté !"
             );
 
         } catch (error) {
 
-            console.error("Erreur achat :", error);
+            console.error(
+                "Erreur achat :",
+                error
+            );
 
             showMessage(
-                "❌ " + getErrorMessage(error)
+                "❌ " +
+                getErrorMessage(error)
             );
 
             updateShop();
         }
     }
 
+
     async function redeemCode() {
 
         const input =
-            document.getElementById("code-input");
+            document.getElementById(
+                "code-input"
+            );
 
         const button =
-            document.getElementById("code-button");
+            document.getElementById(
+                "code-button"
+            );
 
         const code =
             input.value.trim();
@@ -775,22 +988,26 @@
 
         try {
 
-            const result = await supabaseClient.rpc(
-                "utiliser_code",
-                {
-                    code_param: code
-                }
-            );
+            const result =
+                await supabaseClient.rpc(
+                    "utiliser_code",
+                    {
+                        code_param: code
+                    }
+                );
 
             if (result.error) {
                 throw result.error;
             }
 
-            currentBalance = result.data;
+            currentBalance =
+                result.data;
 
             updateBalance();
 
             input.value = "";
+
+            updateShop();
 
             showMessage(
                 "🎉 Code accepté ! Ta récompense a été ajoutée."
@@ -804,7 +1021,8 @@
             );
 
             showMessage(
-                "❌ " + getErrorMessage(error)
+                "❌ " +
+                getErrorMessage(error)
             );
 
         } finally {
@@ -812,6 +1030,7 @@
             button.disabled = false;
         }
     }
+
 
     function getErrorMessage(error) {
 
@@ -823,49 +1042,73 @@
             error.message || "";
 
         if (
-            message.includes("Code invalide")
+            message.includes(
+                "Code invalide"
+            )
         ) {
             return "Code invalide.";
         }
 
         if (
-            message.includes("Code épuisé")
+            message.includes(
+                "Code épuisé"
+            )
         ) {
             return "Ce code a déjà atteint sa limite d'utilisation.";
         }
 
         if (
-            message.includes("Code déjà utilisé")
+            message.includes(
+                "Code déjà utilisé"
+            )
         ) {
             return "Tu as déjà utilisé ce code.";
         }
 
         if (
-            message.includes("Utilisateur non connecté")
+            message.includes(
+                "Utilisateur non connecté"
+            )
         ) {
             return "Tu dois être connecté.";
         }
 
-        return message || "Une erreur est survenue.";
+        return (
+            message ||
+            "Une erreur est survenue."
+        );
     }
+
 
     function showMessage(text) {
 
         const message =
-            document.getElementById("message");
+            document.getElementById(
+                "message"
+            );
 
-        message.textContent = text;
-        message.style.display = "block";
+        message.textContent =
+            text;
 
-        clearTimeout(showMessage.timeout);
+        message.style.display =
+            "block";
 
-        showMessage.timeout = setTimeout(
-            function() {
-                message.style.display = "none";
-            },
-            4000
+        clearTimeout(
+            showMessage.timeout
         );
+
+        showMessage.timeout =
+            setTimeout(
+                function() {
+
+                    message.style.display =
+                        "none";
+
+                },
+                4000
+            );
     }
+
 
     document
         .getElementById("code-input")
@@ -880,7 +1123,9 @@
             }
         );
 
+
     init();
+
 </script>
 
 </body>
