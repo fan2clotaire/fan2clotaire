@@ -7,10 +7,22 @@
     <title>Clocoins - Fan2Clotaire</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="theme.js"></script>
 
     <style>
         * {
             box-sizing: border-box;
+        }
+
+        :root {
+            --theme-background: #111827;
+            --theme-accent: #7c3aed;
+            --theme-secondary: #d1d5db;
+            --theme-card: rgba(255, 255, 255, 0.09);
+            --theme-border: rgba(255, 255, 255, 0.16);
+            --theme-button: #7c3aed;
+            --theme-text-secondary: #d1d5db;
+            --theme-metallic: none;
         }
 
         body {
@@ -18,9 +30,27 @@
             min-height: 100vh;
             font-family: Arial, sans-serif;
             color: white;
+
             background:
-                radial-gradient(circle at top, #4c1d95 0%, transparent 40%),
-                linear-gradient(135deg, #111827, #1e1b4b, #312e81);
+                radial-gradient(
+                    circle at top,
+                    color-mix(
+                        in srgb,
+                        var(--theme-accent) 45%,
+                        transparent
+                    ) 0%,
+                    transparent 40%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--theme-background),
+                    color-mix(
+                        in srgb,
+                        var(--theme-accent) 35%,
+                        #111827
+                    )
+                );
+
             padding: 25px 15px 50px;
         }
 
@@ -40,9 +70,15 @@
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.09);
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            background:
+                var(--theme-metallic),
+                var(--theme-card);
+
+            border: 1px solid var(--theme-border);
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.25);
+
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
         }
@@ -52,15 +88,20 @@
             border-radius: 14px;
             padding: 12px 18px;
             color: white;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            background:
+                var(--theme-metallic),
+                var(--theme-card);
+
+            border: 1px solid var(--theme-border);
+
             cursor: pointer;
             font-size: 14px;
             transition: 0.2s;
         }
 
         .top-button:hover {
-            background: rgba(255, 255, 255, 0.18);
+            filter: brightness(1.15);
             transform: translateY(-2px);
         }
 
@@ -78,6 +119,7 @@
 
         .subtitle {
             text-align: center;
+            color: var(--theme-secondary);
             opacity: 0.75;
             margin-bottom: 30px;
         }
@@ -87,15 +129,22 @@
             padding: 25px;
             border-radius: 20px;
             margin-bottom: 25px;
-            background: rgba(0, 0, 0, 0.18);
+
+            background:
+                var(--theme-metallic),
+                rgba(0, 0, 0, 0.18);
+
+            border: 1px solid var(--theme-border);
         }
 
         .balance-label {
+            color: var(--theme-secondary);
             opacity: 0.7;
             font-size: 14px;
         }
 
         .balance {
+            color: var(--theme-accent);
             font-size: 42px;
             font-weight: bold;
             margin-top: 8px;
@@ -116,14 +165,19 @@
         .item {
             padding: 20px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            background:
+                var(--theme-metallic),
+                var(--theme-card);
+
+            border: 1px solid var(--theme-border);
+
             transition: 0.2s;
         }
 
         .item:hover {
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.1);
+            filter: brightness(1.08);
         }
 
         .item h3 {
@@ -131,11 +185,13 @@
         }
 
         .item p {
+            color: var(--theme-secondary);
             opacity: 0.75;
             font-size: 14px;
         }
 
         .price {
+            color: var(--theme-accent);
             font-size: 20px;
             font-weight: bold;
             margin: 15px 0;
@@ -152,8 +208,13 @@
             border: none;
             border-radius: 12px;
             padding: 12px;
+
             color: white;
-            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+
+            background:
+                var(--theme-metallic),
+                var(--theme-button);
+
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
@@ -174,8 +235,13 @@
             margin-top: 25px;
             padding: 20px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            background:
+                var(--theme-metallic),
+                var(--theme-card);
+
+            border: 1px solid var(--theme-border);
+
             text-align: center;
         }
 
@@ -186,6 +252,7 @@
 
         .countdown {
             margin-top: 10px;
+            color: var(--theme-secondary);
             opacity: 0.75;
             font-size: 14px;
         }
@@ -194,8 +261,12 @@
             margin-top: 40px;
             padding: 22px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            background:
+                var(--theme-metallic),
+                var(--theme-card);
+
+            border: 1px solid var(--theme-border);
         }
 
         .code-section h2 {
@@ -203,6 +274,7 @@
         }
 
         .code-description {
+            color: var(--theme-secondary);
             opacity: 0.7;
             font-size: 14px;
             margin-bottom: 15px;
@@ -216,11 +288,14 @@
         .code-input {
             flex: 1;
             min-width: 0;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            border: 1px solid var(--theme-border);
             border-radius: 12px;
             padding: 13px;
+
             background: rgba(0, 0, 0, 0.2);
             color: white;
+
             outline: none;
             font-size: 15px;
         }
@@ -230,7 +305,7 @@
         }
 
         .code-input:focus {
-            border-color: rgba(167, 139, 250, 0.8);
+            border-color: var(--theme-accent);
         }
 
         .code-button {
@@ -245,17 +320,20 @@
             padding: 12px;
             border-radius: 12px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--theme-card);
+            border: 1px solid var(--theme-border);
         }
 
         .account {
             text-align: center;
+            color: var(--theme-secondary);
             opacity: 0.65;
             font-size: 13px;
             margin-top: 25px;
         }
 
         @media (max-width: 600px) {
+
             body {
                 padding: 15px 10px 40px;
             }
@@ -284,6 +362,8 @@
 </head>
 
 <body>
+
+    <script src="theme.js"></script>
 
 <div class="container">
 
@@ -334,8 +414,6 @@
 
         <div class="shop-grid">
 
-            <!-- PIEDS DE CLOTAIRE -->
-
             <div
                 class="item"
                 id="pieds-item"
@@ -372,9 +450,6 @@
                 </button>
 
             </div>
-
-
-            <!-- RÔLE SPÉCIAL DISCORD -->
 
             <div
                 class="item"
@@ -415,9 +490,6 @@
 
         </div>
 
-
-        <!-- RÉCOMPENSE QUOTIDIENNE -->
-
         <div class="daily">
 
             <h2>
@@ -443,9 +515,6 @@
             ></div>
 
         </div>
-
-
-        <!-- SYSTEME DE CODES -->
 
         <div class="code-section">
 
@@ -652,8 +721,6 @@
             document.getElementById("buy-role-special");
 
 
-        /* PIEDS DE CLOTAIRE */
-
         if (ownsItem("pieds-clotaire")) {
 
             piedsButton.textContent =
@@ -671,8 +738,6 @@
                 currentBalance < 100;
         }
 
-
-        /* RÔLE SPÉCIAL */
 
         if (ownsItem("role-special-discord")) {
 

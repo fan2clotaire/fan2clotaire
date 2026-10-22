@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Thèmes - Fan2Clotaire</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="theme.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        :root {
+
+            --theme-background: #111827;
+            --theme-accent: #7c3aed;
+            --theme-secondary: #d1d5db;
+
+            --theme-card:
+                rgba(255, 255, 255, 0.09);
+
+            --theme-border:
+                rgba(255, 255, 255, 0.16);
+
+            --theme-button: #7c3aed;
+
+            --theme-text-secondary:
+                #d1d5db;
+
+            --theme-metallic: none;
+
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            color: white;
+
+            background:
+
+                radial-gradient(
+                    circle at top left,
+                    color-mix(
+                        in srgb,
+                        var(--theme-accent) 35%,
+                        transparent
+                    ),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    color-mix(
+                        in srgb,
+                        var(--theme-secondary) 20%,
+                        transparent
+                    ),
+                    transparent 35%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    var(--theme-background),
+                    color-mix(
+                        in srgb,
+                        var(--theme-accent) 35%,
+                        #111827
+                    ),
+                    color-mix(
+                        in srgb,
+                        var(--theme-accent) 50%,
+                        #111827
+                    )
+                );
+
+            padding:
+                30px 20px 50px;
+
+        }
+
+
+        .page {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+        }
+
+
+        .topbar {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .topbar h1 {
+
+            margin: 0;
+
+            font-size: 32px;
+
+        }
+
+
+        .top-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+
+        .top-button {
+
+            border:
+                1px solid var(--theme-border);
+
+            background:
+
+                var(--theme-metallic),
+
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 20%,
+                    transparent
+                );
+
+            color: white;
+
+            padding:
+                11px 16px;
+
+            border-radius: 14px;
+
+            text-decoration: none;
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+
+            transition:
+                0.2s;
+
+        }
+
+
+        .top-button:hover {
+
+            background:
+
+                var(--theme-metallic),
+
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 35%,
+                    transparent
+                );
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .section-title {
+
+            margin:
+                35px 0 15px;
+
+            font-size: 23px;
+
+        }
+
+
+        .section-description {
+
+            color:
+                var(--theme-text-secondary);
+
+            margin-top: -5px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .themes-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 18px;
+
+        }
+
+
+        .theme-card {
+
+            padding: 20px;
+
+            border-radius: 22px;
+
+            background:
+
+                var(--theme-metallic),
+
+                var(--theme-card);
+
+            border:
+                1px solid var(--theme-border);
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(0, 0, 0, 0.18);
+
+            transition:
+                0.25s;
+
+        }
+
+
+        .theme-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            background:
+
+                var(--theme-metallic),
+
+                color-mix(
+                    in srgb,
+                    var(--theme-card) 85%,
+                    white 15%
+                );
+
+        }
+
+
+        .theme-preview {
+
+            height: 90px;
+
+            border-radius: 16px;
+
+            margin-bottom: 15px;
+
+            border:
+                1px solid var(--theme-border);
+
+        }
+
+
+        .theme-name {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .theme-description {
+
+            font-size: 14px;
+
+            color:
+                var(--theme-text-secondary);
+
+            min-height: 40px;
+
+        }
+
+
+        .theme-price {
+
+            margin-top: 15px;
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+        }
+
+
+        .theme-status {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            padding:
+                6px 10px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(34, 197, 94, 0.18);
+
+            color:
+                #86efac;
+
+            font-size: 13px;
+
+        }
+
+
+        .buy-button {
+
+            width: 100%;
+
+            margin-top: 15px;
+
+            padding: 11px;
+
+            border:
+                1px solid var(--theme-border);
+
+            border-radius: 12px;
+
+            background:
+
+                var(--theme-metallic),
+
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 25%,
+                    transparent
+                );
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                0.2s;
+
+        }
+
+
+        .buy-button:hover {
+
+            background:
+
+                var(--theme-metallic),
+
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 40%,
+                    transparent
+                );
+
+        }
+
+
+        .buy-button:disabled {
+
+            opacity: 0.6;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        .owned {
+
+            opacity: 0.9;
+
+        }
+
+
+        .secondary-color-container {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(0, 0, 0, 0.15);
+
+            border:
+                1px solid var(--theme-border);
+
+        }
+
+
+        .secondary-color-container.visible {
+
+            display: block;
+
+        }
+
+
+        .secondary-color-label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            color:
+                var(--theme-text-secondary);
+
+        }
+
+
+        .secondary-color-select {
+
+            width: 100%;
+
+            padding: 10px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid var(--theme-border);
+
+            background:
+                rgba(0, 0, 0, 0.25);
+
+            color: white;
+
+            outline: none;
+
+            cursor: pointer;
+
+        }
+
+
+        .secondary-color-select option {
+
+            background:
+                #111827;
+
+            color: white;
+
+        }
+
+
+        .loading {
+
+            text-align: center;
+
+            padding:
+                40px 20px;
+
+            color:
+                var(--theme-text-secondary);
+
+        }
+
+
+        .error {
+
+            text-align: center;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(239, 68, 68, 0.15);
+
+            border:
+                1px solid
+                rgba(239, 68, 68, 0.25);
+
+            color:
+                #fecaca;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding:
+                    20px 14px 40px;
+
+            }
+
+
+            .topbar {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .topbar h1 {
+
+                font-size:
+                    27px;
+
+            }
+
+
+            .top-buttons {
+
+                width: 100%;
+
+            }
+
+
+            .top-button {
+
+                flex: 1;
+
+                text-align:
+                    center;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <div class="topbar">
+
+        <h1>🎨 Thèmes</h1>
+
+        <div class="top-buttons">
+
+            <a
+                href="monnaie.html"
+                class="top-button"
+            >
+                🪙 Boutique
+            </a>
+
+            <a
+                href="index.html"
+                class="top-button"
+            >
+                ← Accueil
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <h2 class="section-title">
+        🎨 Thèmes de couleur
+    </h2>
+
+    <p class="section-description">
+        Personnalise l'apparence de Fan2Clotaire.
+    </p>
+
+    <div
+        id="themes-couleur"
+        class="themes-grid"
+    >
+
+        <div class="loading">
+            Chargement des thèmes...
+        </div>
+
+    </div>
+
+
+    <h2 class="section-title">
+        🎉 Thèmes événementiels
+    </h2>
+
+    <p class="section-description">
+        Des thèmes disponibles pendant les événements de Fan2Clotaire.
+    </p>
+
+    <div
+        id="themes-evenementiels"
+        class="themes-grid"
+    >
+
+        <div class="loading">
+            Chargement...
+        </div>
+
+    </div>
+
+
+    <h2 class="section-title">
+        ✨ Options
+    </h2>
+
+    <p class="section-description">
+        Améliore encore ton thème avec des effets spéciaux.
+    </p>
+
+    <div
+        id="theme-options"
+        class="themes-grid"
+    >
+
+        <div class="loading">
+            Chargement des options...
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://snnclgjspwninjxnimza.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   COULEURS
+   ========================================================= */
+
+const couleurs = {
+
+    clair:
+        "linear-gradient(135deg, #ffffff, #e5e7eb)",
+
+    sombre:
+        "linear-gradient(135deg, #000000, #171717)",
+
+    bleu:
+        "linear-gradient(135deg, #2563eb, #60a5fa)",
+
+    rouge:
+        "linear-gradient(135deg, #dc2626, #f87171)",
+
+    vert:
+        "linear-gradient(135deg, #16a34a, #4ade80)",
+
+    jaune:
+        "linear-gradient(135deg, #eab308, #fde047)",
+
+    rose:
+        "linear-gradient(135deg, #ec4899, #f9a8d4)",
+
+    violet:
+        "linear-gradient(135deg, #7c3aed, #c084fc)",
+
+    orange:
+        "linear-gradient(135deg, #ea580c, #fb923c)",
+
+    marron:
+        "linear-gradient(135deg, #78350f, #a16207)",
+
+    beige:
+        "linear-gradient(135deg, #d6c7a1, #f5ead3)",
+
+    multicolor:
+        "linear-gradient(135deg, #ef4444, #f59e0b, #22c55e, #3b82f6, #a855f7)",
+
+    gris:
+        "linear-gradient(135deg, #374151, #9ca3af)",
+
+    "couleur-perso":
+        "linear-gradient(135deg, #06b6d4, #8b5cf6)"
+
+};
+
+
+const couleursSimples = [
+
+    "clair",
+    "sombre",
+    "bleu",
+    "rouge",
+    "vert",
+    "jaune",
+    "rose",
+    "violet",
+    "orange",
+    "marron",
+    "beige",
+    "multicolor",
+    "gris",
+    "couleur-perso"
+
+];
+
+
+/* =========================================================
+   HALLOWEEN
+   ========================================================= */
+
+const halloweenBackground =
+    "radial-gradient(circle at 20% 20%, #f97316 0 8%, transparent 9%)," +
+    "radial-gradient(circle at 80% 30%, #7c3aed 0 7%, transparent 8%)," +
+    "linear-gradient(135deg, #111827, #3b0764)";
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let themesPossedes = [];
+
+let optionsPossedees = [];
+
+let themeActuel = null;
+
+
+/* =========================================================
+   PRIX
+   ========================================================= */
+
+function afficherPrix(prix) {
+
+    if (prix === 0) {
+        return "Gratuit";
+    }
+
+    return `${prix} 🪙`;
+
+}
+
+
+/* =========================================================
+   RAFRAÎCHIR LE THÈME VISUEL
+   ========================================================= */
+
+async function rafraichirThemeVisuel() {
+
+    if (
+        typeof window.rechargerTheme ===
+        "function"
+    ) {
+
+        await window.rechargerTheme();
+
+    } else {
+
+        console.error(
+            "theme.js n'a pas chargé rechargerTheme()."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ACHETER THÈME
+   ========================================================= */
+
+async function acheterTheme(
+    themeId,
+    bouton
+) {
+
+    bouton.disabled = true;
+
+    bouton.textContent =
+        "Achat...";
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "acheter_theme",
+        {
+            theme_id_param:
+                themeId
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Une erreur est survenue pendant l'achat."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Acheter";
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible d'acheter ce thème."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Acheter";
+
+        return;
+
+    }
+
+
+    alert(
+        `${data.message}\n\n` +
+        `Prix : ${data.prix} 🪙\n` +
+        `Nouveau solde : ${data.nouveau_solde} 🪙`
+    );
+
+
+    await chargerDonnees();
+
+}
+
+
+/* =========================================================
+   ACHETER OPTION
+   ========================================================= */
+
+async function acheterOption(
+    optionId,
+    bouton
+) {
+
+    bouton.disabled = true;
+
+    bouton.textContent =
+        "Achat...";
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "acheter_theme_option",
+        {
+            option_id_param:
+                optionId
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Une erreur est survenue pendant l'achat."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Acheter";
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible d'acheter cette option."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Acheter";
+
+        return;
+
+    }
+
+
+    alert(
+        `${data.message}\n\n` +
+        `Prix : ${data.prix} 🪙\n` +
+        `Nouveau solde : ${data.nouveau_solde} 🪙`
+    );
+
+
+    await chargerDonnees();
+
+}
+
+
+/* =========================================================
+   APPLIQUER THÈME
+   ========================================================= */
+
+async function appliquerThemeBoutique(
+    themeId,
+    bouton
+) {
+
+    bouton.disabled = true;
+
+    bouton.textContent =
+        "Application...";
+
+
+    let optionMetallique =
+        themeActuel?.option_metallique === true;
+
+
+    let optionDegrade =
+        themeActuel?.option_degrade === true;
+
+
+    let couleurSecondaire =
+        themeActuel?.couleur_secondaire ||
+        null;
+
+
+    let couleurPersonnalisee =
+        themeId === "couleur-perso"
+            ? (
+                themeActuel?.couleur_personnalisee ||
+                "#7c3aed"
+            )
+            : null;
+
+
+    if (
+        optionMetallique &&
+        !optionsPossedees.includes(
+            "metallique"
+        )
+    ) {
+
+        optionMetallique = false;
+
+    }
+
+
+    if (
+        optionDegrade &&
+        !optionsPossedees.includes(
+            "degrade"
+        )
+    ) {
+
+        optionDegrade = false;
+
+        couleurSecondaire =
+            null;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "appliquer_theme_utilisateur",
+        {
+
+            theme_id_param:
+                themeId,
+
+            option_metallique_param:
+                optionMetallique,
+
+            option_degrade_param:
+                optionDegrade,
+
+            couleur_secondaire_param:
+                couleurSecondaire,
+
+            couleur_personnalisee_param:
+                couleurPersonnalisee
+
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Une erreur est survenue."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Sélectionner";
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible d'appliquer ce thème."
+        );
+
+        bouton.disabled = false;
+
+        bouton.textContent =
+            "Sélectionner";
+
+        return;
+
+    }
+
+
+    /* IMPORTANT :
+       On recharge d'abord les données
+       puis le thème visuel */
+
+    await chargerDonnees();
+
+    await rafraichirThemeVisuel();
+
+
+    bouton.disabled = false;
+
+    bouton.textContent =
+        "Sélectionner";
+
+
+    alert(
+        "🎨 " + data.message
+    );
+
+}
+
+
+/* =========================================================
+   APPLIQUER OPTIONS
+   ========================================================= */
+
+async function appliquerOptions() {
+
+    if (!themeActuel) {
+
+        alert(
+            "Impossible de récupérer ton thème actuel."
+        );
+
+        return;
+
+    }
+
+
+    const resultat =
+        await supabaseClient.rpc(
+            "appliquer_theme_utilisateur",
+            {
+
+                theme_id_param:
+                    themeActuel.theme_id,
+
+                option_metallique_param:
+                    themeActuel.option_metallique === true,
+
+                option_degrade_param:
+                    themeActuel.option_degrade === true,
+
+                couleur_secondaire_param:
+                    themeActuel.couleur_secondaire,
+
+                couleur_personnalisee_param:
+                    themeActuel.couleur_personnalisee
+
+            }
+        );
+
+
+    if (resultat.error) {
+
+        console.error(
+            resultat.error
+        );
+
+        alert(
+            "Impossible d'appliquer les options."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !resultat.data ||
+        !resultat.data.success
+    ) {
+
+        alert(
+            resultat.data?.message ||
+            "Impossible d'appliquer les options."
+        );
+
+        return;
+
+    }
+
+
+    await chargerDonnees();
+
+    await rafraichirThemeVisuel();
+
+}
+
+
+/* =========================================================
+   MÉTALLIQUE
+   ========================================================= */
+
+async function toggleMetallique() {
+
+    if (
+        !optionsPossedees.includes(
+            "metallique"
+        )
+    ) {
+
+        alert(
+            "Tu ne possèdes pas encore cette option."
+        );
+
+        return;
+
+    }
+
+
+    const nouvelleValeur =
+        !(
+            themeActuel?.option_metallique === true
+        );
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "appliquer_theme_utilisateur",
+        {
+
+            theme_id_param:
+                themeActuel.theme_id,
+
+            option_metallique_param:
+                nouvelleValeur,
+
+            option_degrade_param:
+                themeActuel.option_degrade === true,
+
+            couleur_secondaire_param:
+                themeActuel.couleur_secondaire,
+
+            couleur_personnalisee_param:
+                themeActuel.couleur_personnalisee
+
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Impossible de modifier l'option métallique."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible de modifier l'option."
+        );
+
+        return;
+
+    }
+
+
+    await chargerDonnees();
+
+    await rafraichirThemeVisuel();
+
+}
+
+
+/* =========================================================
+   DÉGRADÉ
+   ========================================================= */
+
+async function toggleDegrade() {
+
+    if (
+        !optionsPossedees.includes(
+            "degrade"
+        )
+    ) {
+
+        alert(
+            "Tu ne possèdes pas encore cette option."
+        );
+
+        return;
+
+    }
+
+
+    const nouvelleValeur =
+        !(
+            themeActuel?.option_degrade === true
+        );
+
+
+    let couleurSecondaire =
+        themeActuel?.couleur_secondaire ||
+        null;
+
+
+    if (
+        nouvelleValeur &&
+        !couleurSecondaire
+    ) {
+
+        couleurSecondaire =
+            obtenirPremiereCouleurSecondaire();
+
+    }
+
+
+    if (
+        nouvelleValeur &&
+        !couleurSecondaire
+    ) {
+
+        alert(
+            "Tu dois posséder au moins une couleur supplémentaire pour utiliser le dégradé."
+        );
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "appliquer_theme_utilisateur",
+        {
+
+            theme_id_param:
+                themeActuel.theme_id,
+
+            option_metallique_param:
+                themeActuel.option_metallique === true,
+
+            option_degrade_param:
+                nouvelleValeur,
+
+            couleur_secondaire_param:
+                couleurSecondaire,
+
+            couleur_personnalisee_param:
+                themeActuel.couleur_personnalisee
+
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Impossible de modifier l'option dégradé."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible de modifier l'option."
+        );
+
+        return;
+
+    }
+
+
+    await chargerDonnees();
+
+    await rafraichirThemeVisuel();
+
+}
+
+
+/* =========================================================
+   PREMIÈRE COULEUR SECONDAIRE
+   ========================================================= */
+
+function obtenirPremiereCouleurSecondaire() {
+
+    const interdit =
+        themeActuel?.theme_id;
+
+
+    const couleur =
+        themesPossedes.find(
+            theme =>
+                theme.id !== interdit &&
+                couleursSimples.includes(
+                    theme.id
+                )
+        );
+
+
+    return couleur
+        ? couleur.id
+        : null;
+
+}
+
+
+/* =========================================================
+   CHANGER COULEUR SECONDAIRE
+   ========================================================= */
+
+async function changerCouleurSecondaire(
+    valeur
+) {
+
+    if (!valeur) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "appliquer_theme_utilisateur",
+        {
+
+            theme_id_param:
+                themeActuel.theme_id,
+
+            option_metallique_param:
+                themeActuel.option_metallique === true,
+
+            option_degrade_param:
+                true,
+
+            couleur_secondaire_param:
+                valeur,
+
+            couleur_personnalisee_param:
+                themeActuel.couleur_personnalisee
+
+        }
+    );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Impossible de modifier la couleur secondaire."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !data ||
+        !data.success
+    ) {
+
+        alert(
+            data?.message ||
+            "Impossible de modifier la couleur secondaire."
+        );
+
+        return;
+
+    }
+
+
+    await chargerDonnees();
+
+    await rafraichirThemeVisuel();
+
+}
+
+
+/* =========================================================
+   CRÉER CARTE THÈME
+   ========================================================= */
+
+function creerCarteTheme(theme) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "theme-card";
+
+
+    const preview =
+        document.createElement("div");
+
+    preview.className =
+        "theme-preview";
+
+
+    if (
+        theme.id === "halloween-2026"
+    ) {
+
+        preview.style.background =
+            halloweenBackground;
+
+    } else {
+
+        preview.style.background =
+            couleurs[theme.id] ||
+            "linear-gradient(135deg, #6366f1, #8b5cf6)";
+
+    }
+
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "theme-name";
+
+    name.textContent =
+        theme.nom;
+
+
+    const description =
+        document.createElement("div");
+
+    description.className =
+        "theme-description";
+
+    description.textContent =
+        theme.description || "";
+
+
+    const price =
+        document.createElement("div");
+
+    price.className =
+        "theme-price";
+
+    price.textContent =
+        afficherPrix(theme.prix);
+
+
+    card.appendChild(preview);
+
+    card.appendChild(name);
+
+    card.appendChild(description);
+
+    card.appendChild(price);
+
+
+    if (theme.possede) {
+
+        card.classList.add("owned");
+
+
+        const status =
+            document.createElement("div");
+
+        status.className =
+            "theme-status";
+
+        status.textContent =
+            "✓ Possédé";
+
+
+        card.appendChild(status);
+
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "buy-button";
+
+        button.textContent =
+            "Sélectionner";
+
+
+        button.addEventListener(
+            "click",
+            () =>
+                appliquerThemeBoutique(
+                    theme.id,
+                    button
+                )
+        );
+
+
+        card.appendChild(button);
+
+    } else {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "buy-button";
+
+        button.textContent =
+            "Acheter";
+
+
+        button.addEventListener(
+            "click",
+            () =>
+                acheterTheme(
+                    theme.id,
+                    button
+                )
+        );
+
+
+        card.appendChild(button);
+
+    }
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   CRÉER CARTE OPTION
+   ========================================================= */
+
+function creerCarteOption(option) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "theme-card";
+
+
+    const preview =
+        document.createElement("div");
+
+    preview.className =
+        "theme-preview";
+
+
+    if (
+        option.id === "metallique"
+    ) {
+
+        preview.style.background =
+            "linear-gradient(135deg, #9ca3af, #f3f4f6, #6b7280)";
+
+    } else {
+
+        preview.style.background =
+            "linear-gradient(135deg, #2563eb, #9333ea, #ec4899)";
+
+    }
+
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "theme-name";
+
+    name.textContent =
+        option.id === "metallique"
+            ? "✨ Métallique"
+            : "🌈 Dégradé";
+
+
+    const description =
+        document.createElement("div");
+
+    description.className =
+        "theme-description";
+
+    description.textContent =
+        option.description || "";
+
+
+    const price =
+        document.createElement("div");
+
+    price.className =
+        "theme-price";
+
+    price.textContent =
+        afficherPrix(option.prix);
+
+
+    card.appendChild(preview);
+
+    card.appendChild(name);
+
+    card.appendChild(description);
+
+    card.appendChild(price);
+
+
+    if (!option.possede) {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "buy-button";
+
+        button.textContent =
+            "Acheter";
+
+
+        button.addEventListener(
+            "click",
+            () =>
+                acheterOption(
+                    option.id,
+                    button
+                )
+        );
+
+
+        card.appendChild(button);
+
+        return card;
+
+    }
+
+
+    card.classList.add("owned");
+
+
+    const status =
+        document.createElement("div");
+
+    status.className =
+        "theme-status";
+
+    status.textContent =
+        "✓ Possédé";
+
+
+    card.appendChild(status);
+
+
+    if (
+        option.id === "degrade"
+    ) {
+
+        const secondaryContainer =
+            document.createElement("div");
+
+        secondaryContainer.className =
+            "secondary-color-container visible";
+
+
+        const label =
+            document.createElement("label");
+
+        label.className =
+            "secondary-color-label";
+
+        label.textContent =
+            "🎨 Couleur secondaire";
+
+
+        const select =
+            document.createElement("select");
+
+        select.className =
+            "secondary-color-select";
+
+
+        const couleursPossedees =
+            themesPossedes.filter(
+                theme =>
+                    couleursSimples.includes(
+                        theme.id
+                    )
+            );
+
+
+        if (
+            couleursPossedees.length === 0
+        ) {
+
+            const optionVide =
+                document.createElement("option");
+
+            optionVide.value =
+                "";
+
+            optionVide.textContent =
+                "Aucune couleur possédée";
+
+            select.appendChild(
+                optionVide
+            );
+
+        } else {
+
+            couleursPossedees.forEach(
+                theme => {
+
+                    const optionElement =
+                        document.createElement(
+                            "option"
+                        );
+
+                    optionElement.value =
+                        theme.id;
+
+                    optionElement.textContent =
+                        theme.nom || theme.id;
+
+
+                    if (
+                        themeActuel?.couleur_secondaire ===
+                        theme.id
+                    ) {
+
+                        optionElement.selected =
+                            true;
+
+                    }
+
+
+                    select.appendChild(
+                        optionElement
+                    );
+
+                }
+            );
+
+        }
+
+
+        select.addEventListener(
+            "change",
+            () =>
+                changerCouleurSecondaire(
+                    select.value
+                )
+        );
+
+
+        secondaryContainer.appendChild(
+            label
+        );
+
+        secondaryContainer.appendChild(
+            select
+        );
+
+        card.appendChild(
+            secondaryContainer
+        );
+
+    }
+
+
+    const button =
+        document.createElement("button");
+
+    button.className =
+        "buy-button";
+
+
+    if (
+        option.id === "metallique"
+    ) {
+
+        button.textContent =
+            themeActuel?.option_metallique === true
+                ? "Désactiver"
+                : "Activer";
+
+
+        button.addEventListener(
+            "click",
+            toggleMetallique
+        );
+
+    } else {
+
+        button.textContent =
+            themeActuel?.option_degrade === true
+                ? "Désactiver"
+                : "Activer";
+
+
+        button.addEventListener(
+            "click",
+            toggleDegrade
+        );
+
+    }
+
+
+    card.appendChild(button);
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   CHARGER DONNÉES
+   ========================================================= */
+
+async function chargerDonnees() {
+
+    await Promise.all([
+
+        chargerThemeActuel(),
+
+        chargerThemesPossedes(),
+
+        chargerOptionsPossedees()
+
+    ]);
+
+
+    await chargerThemes();
+
+    await chargerOptions();
+
+}
+
+
+/* =========================================================
+   THÈME ACTUEL
+   ========================================================= */
+
+async function chargerThemeActuel() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "obtenir_theme_utilisateur"
+    );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur thème actuel :",
+            error
+        );
+
+        return;
+
+    }
+
+
+    if (
+        data &&
+        data.success
+    ) {
+
+        themeActuel =
+            data;
+
+    }
+
+}
+
+
+/* =========================================================
+   THÈMES POSSÉDÉS
+   ========================================================= */
+
+async function chargerThemesPossedes() {
+
+    const {
+        data: userData
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    const user =
+        userData?.user;
+
+
+    if (!user) {
+
+        themesPossedes = [];
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("themes_possedes")
+        .select("theme_id")
+        .eq(
+            "user_id",
+            user.id
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur thèmes possédés :",
+            error
+        );
+
+        themesPossedes = [];
+
+        return;
+
+    }
+
+
+    themesPossedes =
+        (data || [])
+            .map(
+                item => ({
+                    id: item.theme_id
+                })
+            );
+
+}
+
+
+/* =========================================================
+   OPTIONS POSSÉDÉES
+   ========================================================= */
+
+async function chargerOptionsPossedees() {
+
+    const {
+        data: userData
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    const user =
+        userData?.user;
+
+
+    if (!user) {
+
+        optionsPossedees = [];
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("theme_options_possedes")
+        .select("option_id")
+        .eq(
+            "user_id",
+            user.id
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur options possédées :",
+            error
+        );
+
+        optionsPossedees = [];
+
+        return;
+
+    }
+
+
+    optionsPossedees =
+        (data || [])
+            .map(
+                item =>
+                    item.option_id
+            );
+
+}
+
+
+/* =========================================================
+   CHARGER THÈMES
+   ========================================================= */
+
+async function chargerThemes() {
+
+    const couleurContainer =
+        document.getElementById(
+            "themes-couleur"
+        );
+
+    const evenementContainer =
+        document.getElementById(
+            "themes-evenementiels"
+        );
+
+
+    couleurContainer.innerHTML =
+        `
+        <div class="loading">
+            Chargement des thèmes...
+        </div>
+        `;
+
+
+    evenementContainer.innerHTML =
+        `
+        <div class="loading">
+            Chargement...
+        </div>
+        `;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "lister_themes_boutique"
+    );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur thèmes :",
+            error
+        );
+
+
+        couleurContainer.innerHTML =
+            `
+            <div class="error">
+                Impossible de charger les thèmes.
+            </div>
+            `;
+
+
+        evenementContainer.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    couleurContainer.innerHTML =
+        "";
+
+    evenementContainer.innerHTML =
+        "";
+
+
+    let nombreCouleurs =
+        0;
+
+    let nombreEvenementiels =
+        0;
+
+
+    (data || []).forEach(
+        theme => {
+
+            const carte =
+                creerCarteTheme(theme);
+
+
+            if (
+                theme.categorie ===
+                "couleur"
+            ) {
+
+                couleurContainer.appendChild(
+                    carte
+                );
+
+                nombreCouleurs++;
+
+            }
+
+
+            if (
+                theme.categorie ===
+                "evenementiel"
+            ) {
+
+                evenementContainer.appendChild(
+                    carte
+                );
+
+                nombreEvenementiels++;
+
+            }
+
+        }
+    );
+
+
+    if (
+        nombreCouleurs === 0
+    ) {
+
+        couleurContainer.innerHTML =
+            `
+            <div class="loading">
+                Aucun thème de couleur disponible.
+            </div>
+            `;
+
+    }
+
+
+    if (
+        nombreEvenementiels === 0
+    ) {
+
+        evenementContainer.innerHTML =
+            `
+            <div class="loading">
+                Aucun thème événementiel disponible.
+            </div>
+            `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CHARGER OPTIONS
+   ========================================================= */
+
+async function chargerOptions() {
+
+    const container =
+        document.getElementById(
+            "theme-options"
+        );
+
+
+    container.innerHTML =
+        `
+        <div class="loading">
+            Chargement des options...
+        </div>
+        `;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "lister_theme_options"
+    );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur options :",
+            error
+        );
+
+
+        container.innerHTML =
+            `
+            <div class="error">
+                Impossible de charger les options.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        container.innerHTML =
+            `
+            <div class="loading">
+                Aucune option disponible.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    data.forEach(
+        option => {
+
+            container.appendChild(
+                creerCarteOption(option)
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   VÉRIFIER CONNEXION
+   ========================================================= */
+
+async function verifierConnexion() {
+
+    const {
+        data: {
+            session
+        }
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "connexion.html";
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+
+async function initialiser() {
+
+    const connecte =
+        await verifierConnexion();
+
+
+    if (!connecte) {
+        return;
+    }
+
+
+    await chargerDonnees();
+
+
+    await rafraichirThemeVisuel();
+
+}
+
+
+initialiser();
+
+</script>
+
+</body>
+
+</html>

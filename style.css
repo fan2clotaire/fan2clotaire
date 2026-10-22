@@ -849,3 +849,59 @@ h1 {
 
     transform: translateX(-4px);
 }
+
+/* ==========================================
+   FAN2CLOTAIRE 3.0 — VARIABLES DE THÈME
+   ========================================== */
+
+body {
+    background-color: var(--theme-background, #111827);
+    color: var(--theme-text, white);
+}
+
+.card,
+.stat,
+.biographie,
+.liens-personnes {
+    background:
+        var(--theme-metallic, none),
+        var(--theme-card, rgba(255, 255, 255, 0.08));
+    
+    border-color: var(
+        --theme-border,
+        rgba(255, 255, 255, 0.15)
+    );
+}
+
+p,
+.username,
+.description {
+    color: var(
+        --theme-text-secondary,
+        #d1d5db
+    );
+}
+
+.exclusive-button,
+.personne-bouton {
+    border-color: var(
+        --theme-accent,
+        #ff6600
+    );
+}
+
+.exclusive-button {
+    background: color-mix(
+        in srgb,
+        var(--theme-accent, #ff6600) 25%,
+        transparent
+    );
+}
+
+.personne-bouton {
+    background: color-mix(
+        in srgb,
+        var(--theme-accent, #ff6600) 20%,
+        transparent
+    );
+}

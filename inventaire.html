@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Inventaire - Fan2Clotaire</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="theme.js"></script>
 
 <style>
     * {
         box-sizing: border-box;
+    }
+
+    :root {
+        --theme-background: #111827;
+        --theme-accent: #7c3aed;
+        --theme-secondary: #d1d5db;
+        --theme-card: rgba(255, 255, 255, 0.10);
+        --theme-border: rgba(255, 255, 255, 0.18);
+        --theme-button: #7c3aed;
+        --theme-text-secondary: #d1d5db;
+        --theme-metallic: none;
     }
 
     body {
@@ -19,9 +28,32 @@
         min-height: 100vh;
         font-family: Arial, sans-serif;
         color: white;
+
         background:
-            radial-gradient(circle at top, #4c1d95 0%, transparent 40%),
-            linear-gradient(135deg, #111827, #1e1b4b, #312e81);
+            radial-gradient(
+                circle at top,
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 35%,
+                    transparent
+                ) 0%,
+                transparent 40%
+            ),
+            linear-gradient(
+                135deg,
+                var(--theme-background),
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 35%,
+                    #111827
+                ),
+                color-mix(
+                    in srgb,
+                    var(--theme-accent) 50%,
+                    #111827
+                )
+            );
+
         padding: 30px 15px;
     }
 
@@ -48,17 +80,34 @@
         display: inline-block;
         padding: 11px 18px;
         border-radius: 14px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        background:
+            var(--theme-metallic),
+            color-mix(
+                in srgb,
+                var(--theme-accent) 25%,
+                transparent
+            );
+
+        border: 1px solid var(--theme-border);
         color: white;
         text-decoration: none;
         font-weight: bold;
+
         backdrop-filter: blur(12px);
+
         transition: 0.2s;
     }
 
     .back-button:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background:
+            var(--theme-metallic),
+            color-mix(
+                in srgb,
+                var(--theme-accent) 40%,
+                transparent
+            );
+
         transform: translateY(-2px);
     }
 
@@ -67,9 +116,15 @@
         padding: 14px;
         margin-bottom: 20px;
         border-radius: 14px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+
+        background:
+            var(--theme-metallic),
+            var(--theme-card);
+
+        border: 1px solid var(--theme-border);
+
         backdrop-filter: blur(12px);
+
         text-align: center;
     }
 
@@ -81,10 +136,23 @@
     .item-card {
         padding: 22px;
         border-radius: 22px;
-        background: rgba(255, 255, 255, 0.10);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+
+        background:
+            var(--theme-metallic),
+            var(--theme-card);
+
+        border: 1px solid var(--theme-border);
+
         backdrop-filter: blur(16px);
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+
+        box-shadow:
+            0 10px 35px rgba(0, 0, 0, 0.2);
+
+        transition: 0.2s;
+    }
+
+    .item-card:hover {
+        transform: translateY(-2px);
     }
 
     .item-name {
@@ -94,7 +162,7 @@
     }
 
     .item-description {
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--theme-text-secondary);
         margin-bottom: 15px;
         line-height: 1.5;
     }
@@ -113,19 +181,36 @@
     }
 
     .item-card button {
-        border: none;
+        border: 1px solid var(--theme-border);
+
         padding: 11px 18px;
         border-radius: 12px;
-        background: rgba(255, 255, 255, 0.16);
+
+        background:
+            color-mix(
+                in srgb,
+                var(--theme-accent) 25%,
+                transparent
+            );
+
         color: white;
+
         font-size: 1rem;
         font-weight: bold;
+
         cursor: pointer;
+
         transition: 0.2s;
     }
 
     .item-card button:hover {
-        background: rgba(255, 255, 255, 0.25);
+        background:
+            color-mix(
+                in srgb,
+                var(--theme-accent) 40%,
+                transparent
+            );
+
         transform: translateY(-2px);
     }
 
@@ -141,33 +226,59 @@
 
     .download {
         display: inline-block;
+
         margin-top: 12px;
         padding: 12px 18px;
+
         border-radius: 12px;
+
         color: white;
         text-decoration: none;
         font-weight: bold;
-        background: rgba(124, 58, 237, 0.8);
+
+        background:
+            color-mix(
+                in srgb,
+                var(--theme-accent) 80%,
+                transparent
+            );
+
+        border: 1px solid var(--theme-border);
+
         transition: 0.2s;
     }
 
     .download:hover {
-        background: rgba(139, 92, 246, 1);
+        background:
+            color-mix(
+                in srgb,
+                var(--theme-accent) 95%,
+                transparent
+            );
+
         transform: translateY(-2px);
     }
 
     .validate-button {
         display: inline-block;
+
         margin-top: 12px;
         margin-left: 8px;
+
         padding: 12px 20px;
+
         border-radius: 12px;
+
         color: white;
         text-decoration: none;
+
         font-size: 1rem;
         font-weight: bold;
+
         background: #5865F2;
+
         cursor: pointer;
+
         transition: 0.2s;
     }
 
@@ -180,10 +291,18 @@
         text-align: center;
         padding: 30px;
         border-radius: 20px;
-        background: rgba(255, 255, 255, 0.08);
+
+        background:
+            var(--theme-metallic),
+            var(--theme-card);
+
+        border: 1px solid var(--theme-border);
+
+        backdrop-filter: blur(16px);
     }
 
     @media (max-width: 600px) {
+
         .top {
             flex-direction: column;
             align-items: stretch;
@@ -208,14 +327,21 @@
 
 <body>
 
+    <script src="theme.js"></script>
+
 <div class="container">
 
 <div class="top">
+
     <h1>🎒 Mon Inventaire</h1>
 
-    <a href="monnaie.html" class="back-button">
+    <a
+        href="monnaie.html"
+        class="back-button"
+    >
         ← Retour à la boutique
     </a>
+
 </div>
 
 <div id="message"></div>
@@ -224,433 +350,6 @@
 
 </div>
 
-<script>
+<script> const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co"; const SUPABASE_KEY = "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2"; const supabaseClient = supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); let currentUser = null; /* ========================= ARTICLES ========================= */ const articles = { "pieds-clotaire": { name: "Pieds de Clotaire", description: "Les célèbres Pieds de Clotaire.", image: "./pieds-clotaire.jpg", downloadPrice: 200 }, "role-special-discord": { name: "Rôle Spécial (Discord)", description: "Une invitation spéciale permettant d'obtenir un rôle spécial sur le serveur Discord.", discordInvite: "https://discord.gg/G8zzFEc4qB" } }; /* ========================= MESSAGE ========================= */ function showMessage(message) { const box = document.getElementById("message"); box.textContent = message; box.style.display = "block"; setTimeout(() => { box.style.display = "none"; }, 4000); } /* ========================= AUTH ========================= */ async function checkUser() { const { data, error } = await supabaseClient.auth.getUser(); if (error || !data.user) { window.location.href = "connexion.html"; return false; } currentUser = data.user; return true; } /* ========================= CHARGER INVENTAIRE ========================= */ async function loadInventory() { const inventory = document.getElementById("inventory"); inventory.innerHTML = ""; const result = await supabaseClient .from("inventaire") .select("*") .eq( "user_id", currentUser.id ); if (result.error) { console.error(result.error); showMessage( "❌ Impossible de charger l'inventaire." ); return; } const items = result.data || []; if (items.length === 0) { inventory.innerHTML = ` <div class="empty"> 🎒 Ton inventaire est vide. </div> `; return; } items.forEach(renderItem); } /* ========================= AFFICHER ARTICLE ========================= */ function renderItem(item) { const article = articles[item.article_id]; if (!article) return; const card = document.createElement("div"); card.className = "item-card"; /* NOM */ const name = document.createElement("div"); name.className = "item-name"; name.textContent = article.name; /* DESCRIPTION */ const description = document.createElement("div"); description.className = "item-description"; description.textContent = article.description; /* STATUT */ const status = document.createElement("div"); status.className = "status"; /* BOUTON ACTIVATION */ const button = document.createElement("button"); card.appendChild(name); card.appendChild(description); /* ========================= ARTICLE ACTIF ========================= */ if (item.active === true) { status.textContent = "🟢 Activé"; status.classList.add( "active" ); button.textContent = "Désactiver"; /* IMAGE PIEDS */ if (article.image) { const image = document.createElement("img"); image.src = article.image; image.alt = article.name; image.className = "item-image"; card.appendChild(image); } } else { status.textContent = "🔴 Désactivé"; status.classList.add( "inactive" ); button.textContent = "Activer"; } card.appendChild(status); /* ========================= ACTIVER / DESACTIVER ========================= */ button.onclick = async () => { await toggleItem( item.article_id, item.active !== true ); }; card.appendChild(button); /* ========================= TELECHARGEMENT PIEDS ========================= */ if ( item.active === true && article.downloadPrice ) { const download = document.createElement("a"); download.href = "#"; download.className = "download"; download.textContent = `⬇️ Télécharger — ${article.downloadPrice} Clocoins`; download.onclick = async (event) => { event.preventDefault(); await downloadPieds(); }; card.appendChild(download); } /* ========================= VALIDATION DISCORD ========================= */ if ( item.active === true && article.discordInvite ) { const validateButton = document.createElement("a"); validateButton.href = article.discordInvite; validateButton.target = "_blank"; validateButton.rel = "noopener noreferrer"; validateButton.className = "validate-button"; validateButton.textContent = "✅ Valider"; card.appendChild( validateButton ); } document .getElementById("inventory") .appendChild(card); } /* ========================= ACTIVATION ARTICLE ========================= */ async function toggleItem( articleId, newState ) { const result = await supabaseClient .from("inventaire") .update({ active: newState }) .eq( "user_id", currentUser.id ) .eq( "article_id", articleId ) .select("*"); if (result.error) { console.error( result.error ); showMessage( "❌ Impossible de modifier l'article." ); return; } showMessage( newState ? "✅ Article activé !" : "🔴 Article désactivé." ); await loadInventory(); } /* ========================= TELECHARGER PIEDS ========================= */ async function downloadPieds() { const result = await supabaseClient.rpc( "telecharger_pieds_clotaire" ); if (result.error) { console.error( result.error ); showMessage( "❌ " + result.error.message ); return; } const link = document.createElement("a"); link.href = "./pieds-clotaire.jpg"; link.download = "pieds-clotaire.jpg"; document.body.appendChild(link); link.click(); link.remove(); showMessage( "✅ Téléchargement effectué !" ); } /* ========================= DEMARRAGE ========================= */ async function start() { const logged = await checkUser(); if (!logged) return; await loadInventory(); } start(); </script>
 
-const SUPABASE_URL = "https://snnclgjspwninjxnimza.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-let currentUser = null;
-
-
-/* =========================
-   ARTICLES
-========================= */
-
-const articles = {
-
-    "pieds-clotaire": {
-        name: "Pieds de Clotaire",
-        description: "Les célèbres Pieds de Clotaire.",
-        image: "./pieds-clotaire.jpg",
-        downloadPrice: 200
-    },
-
-    "role-special-discord": {
-        name: "Rôle Spécial (Discord)",
-        description: "Une invitation spéciale permettant d'obtenir un rôle spécial sur le serveur Discord.",
-        discordInvite: "https://discord.gg/G8zzFEc4qB"
-    }
-
-};
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-function showMessage(message) {
-
-    const box = document.getElementById("message");
-
-    box.textContent = message;
-    box.style.display = "block";
-
-    setTimeout(() => {
-        box.style.display = "none";
-    }, 4000);
-}
-
-
-/* =========================
-   AUTH
-========================= */
-
-async function checkUser() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getUser();
-
-    if (error || !data.user) {
-
-        window.location.href = "connexion.html";
-
-        return false;
-    }
-
-    currentUser = data.user;
-
-    return true;
-}
-
-
-/* =========================
-   CHARGER INVENTAIRE
-========================= */
-
-async function loadInventory() {
-
-    const inventory =
-        document.getElementById("inventory");
-
-    inventory.innerHTML = "";
-
-    const result =
-        await supabaseClient
-            .from("inventaire")
-            .select("*")
-            .eq("user_id", currentUser.id);
-
-    if (result.error) {
-
-        console.error(result.error);
-
-        showMessage(
-            "❌ Impossible de charger l'inventaire."
-        );
-
-        return;
-    }
-
-    const items = result.data || [];
-
-    if (items.length === 0) {
-
-        inventory.innerHTML = `
-            <div class="empty">
-                🎒 Ton inventaire est vide.
-            </div>
-        `;
-
-        return;
-    }
-
-    items.forEach(renderItem);
-}
-
-
-/* =========================
-   AFFICHER ARTICLE
-========================= */
-
-function renderItem(item) {
-
-    const article =
-        articles[item.article_id];
-
-    if (!article) return;
-
-
-    const card =
-        document.createElement("div");
-
-    card.className = "item-card";
-
-
-    /* NOM */
-
-    const name =
-        document.createElement("div");
-
-    name.className = "item-name";
-    name.textContent = article.name;
-
-
-    /* DESCRIPTION */
-
-    const description =
-        document.createElement("div");
-
-    description.className =
-        "item-description";
-
-    description.textContent =
-        article.description;
-
-
-    /* STATUT */
-
-    const status =
-        document.createElement("div");
-
-    status.className = "status";
-
-
-    /* BOUTON ACTIVATION */
-
-    const button =
-        document.createElement("button");
-
-
-    card.appendChild(name);
-    card.appendChild(description);
-
-
-    /* =========================
-       ARTICLE ACTIF
-    ========================= */
-
-    if (item.active === true) {
-
-        status.textContent =
-            "🟢 Activé";
-
-        status.classList.add("active");
-
-        button.textContent =
-            "Désactiver";
-
-
-        /* IMAGE PIEDS */
-
-        if (article.image) {
-
-            const image =
-                document.createElement("img");
-
-            image.src =
-                article.image;
-
-            image.alt =
-                article.name;
-
-            image.className =
-                "item-image";
-
-            card.appendChild(image);
-        }
-
-
-    } else {
-
-        status.textContent =
-            "🔴 Désactivé";
-
-        status.classList.add("inactive");
-
-        button.textContent =
-            "Activer";
-    }
-
-
-    card.appendChild(status);
-
-
-    /* =========================
-       ACTIVER / DESACTIVER
-    ========================= */
-
-    button.onclick = async () => {
-
-        await toggleItem(
-            item.article_id,
-            item.active !== true
-        );
-
-    };
-
-
-    card.appendChild(button);
-
-
-    /* =========================
-       TELECHARGEMENT PIEDS
-    ========================= */
-
-    if (
-        item.active === true &&
-        article.downloadPrice
-    ) {
-
-        const download =
-            document.createElement("a");
-
-        download.href = "#";
-
-        download.className =
-            "download";
-
-        download.textContent =
-            `⬇️ Télécharger — ${article.downloadPrice} Clocoins`;
-
-
-        download.onclick =
-            async (event) => {
-
-                event.preventDefault();
-
-                await downloadPieds();
-
-            };
-
-
-        card.appendChild(download);
-    }
-
-
-    /* =========================
-       VALIDATION DISCORD
-    ========================= */
-
-    if (
-        item.active === true &&
-        article.discordInvite
-    ) {
-
-        const validateButton =
-            document.createElement("a");
-
-        validateButton.href =
-            article.discordInvite;
-
-        validateButton.target =
-            "_blank";
-
-        validateButton.rel =
-            "noopener noreferrer";
-
-        validateButton.className =
-            "validate-button";
-
-        validateButton.textContent =
-            "✅ Valider";
-
-        card.appendChild(validateButton);
-    }
-
-
-    document
-        .getElementById("inventory")
-        .appendChild(card);
-}
-
-
-/* =========================
-   ACTIVATION ARTICLE
-========================= */
-
-async function toggleItem(
-    articleId,
-    newState
-) {
-
-    const result =
-        await supabaseClient
-            .from("inventaire")
-            .update({
-                active: newState
-            })
-            .eq("user_id", currentUser.id)
-            .eq("article_id", articleId)
-            .select("*");
-
-
-    if (result.error) {
-
-        console.error(result.error);
-
-        showMessage(
-            "❌ Impossible de modifier l'article."
-        );
-
-        return;
-    }
-
-
-    showMessage(
-        newState
-            ? "✅ Article activé !"
-            : "🔴 Article désactivé."
-    );
-
-
-    await loadInventory();
-}
-
-
-/* =========================
-   TELECHARGER PIEDS
-========================= */
-
-async function downloadPieds() {
-
-    const result =
-        await supabaseClient.rpc(
-            "telecharger_pieds_clotaire"
-        );
-
-
-    if (result.error) {
-
-        console.error(result.error);
-
-        showMessage(
-            "❌ " + result.error.message
-        );
-
-        return;
-    }
-
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        "./pieds-clotaire.jpg";
-
-    link.download =
-        "pieds-clotaire.jpg";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-
-    showMessage(
-        "✅ Téléchargement effectué !"
-    );
-}
-
-
-/* =========================
-   DEMARRAGE
-========================= */
-
-async function start() {
-
-    const logged =
-        await checkUser();
-
-    if (!logged) return;
-
-    await loadInventory();
-}
-
-
-start();
-
-</script>
-
-</body>
-</html>
+</body> </html>
