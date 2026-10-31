@@ -1,584 +1,1094 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Page d'Accueil</title>
+    <meta name="theme-color" content="#111827">
+    <meta name="description" content="Retrouve Fan2Clotaire sur ses différents réseaux sociaux.">
+
+    <title>Fan2Clotaire — Accueil</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="theme.js"></script>
+
+    <style>
+        /* =====================================
+           FAN2CLOTAIRE 3.0 — NOUVELLE IDENTITÉ
+           ===================================== */
+
+        :root {
+            --fc-accent: var(--theme-accent, #6366f1);
+            --fc-secondary: var(--theme-secondary, #8b5cf6);
+            --fc-card: var(--theme-card, rgba(255,255,255,0.07));
+            --fc-border: var(--theme-border, rgba(255,255,255,0.12));
+            --fc-text: var(--theme-text, #ffffff);
+            --fc-muted: var(--theme-text-secondary, #a1a1aa);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0 !important;
+            min-height: 100vh;
+            font-family: 'Inter', Arial, sans-serif;
+            color: var(--fc-text);
+            background-color: var(--theme-background, #111827);
+            background-image: none;
+            text-align: left;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(99,102,241,0.18), transparent 35%),
+                radial-gradient(circle at 90% 80%, rgba(139,92,246,0.15), transparent 35%);
+        }
+
+        a, button {
+            font-family: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--fc-accent);
+            outline-offset: 4px;
+        }
+
+        .page-container {
+            width: min(1100px, 92%);
+            margin: auto;
+            padding: 65px 0 100px;
+        }
+
+        /* =====================================
+           HERO / PROFIL
+           ===================================== */
+
+        .hero-card {
+            position: relative;
+            overflow: hidden;
+            padding: 55px 30px;
+            text-align: center;
+            background: var(--fc-card);
+            border: 1px solid var(--fc-border);
+            border-radius: 30px;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.2);
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            top: -130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            height: 250px;
+            background: var(--fc-accent);
+            opacity: 0.16;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-avatar {
+            width: 135px;
+            height: 135px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.85);
+            box-shadow: 0 0 35px color-mix(in srgb, var(--fc-accent) 50%, transparent);
+        }
+
+        .profile-content h1 {
+            margin: 22px 0 8px;
+            font-family: 'Inter', Arial, sans-serif;
+            font-size: clamp(30px, 5vw, 43px);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            text-shadow: none;
+        }
+
+        .profile-username {
+            margin: 0;
+            color: var(--fc-muted);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .profile-description {
+            margin: 20px 0 0;
+            color: var(--fc-muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 9px 16px;
+            border: 1px solid var(--fc-border);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.06);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--fc-muted);
+        }
+
+        .profile-badge i {
+            color: var(--fc-accent);
+        }
+
+        /* =====================================
+           TITRES DE SECTIONS
+           ===================================== */
+
+        .section-heading {
+            margin: 65px 0 25px;
+            text-align: center;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .section-heading p {
+            margin-top: 10px;
+            color: var(--fc-muted);
+            font-size: 14px;
+        }
+
+        /* =====================================
+           STATISTIQUES
+           ===================================== */
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 28px 15px;
+            background: var(--fc-card);
+            border: 1px solid var(--fc-border);
+            border-radius: 22px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--fc-accent);
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: color-mix(in srgb, var(--fc-accent) 18%, transparent);
+            color: var(--fc-accent);
+            font-size: 22px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            color: var(--fc-muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* =====================================
+           RÉSEAUX SOCIAUX
+           ===================================== */
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 19px 22px;
+            color: white !important;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 17px;
+            transition: transform 0.25s, filter 0.25s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-4px);
+            filter: brightness(1.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .social-link i {
+            width: 28px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .social-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .social-name {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .social-handle {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .instagram {
+            background: linear-gradient(120deg, #f9ce34, #ee2a7b, #6228d7) !important;
+        }
+
+        .tiktok {
+            background: #080808 !important;
+        }
+
+        .youtube {
+            background: #e62117 !important;
+        }
+
+        .twitch {
+            background: #6441a5 !important;
+        }
+
+        .discord {
+            background: #5865f2 !important;
+        }
+
+        /* =====================================
+           CARTES DE CONTENU
+           ===================================== */
+
+        .content-card {
+            padding: 32px;
+            background: var(--fc-card);
+            border: 1px solid var(--fc-border);
+            border-radius: 24px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            transition: border-color 0.25s, transform 0.25s;
+        }
+
+        .content-card:hover {
+            border-color: var(--fc-accent);
+            transform: translateY(-3px);
+        }
+
+        .content-card h2 {
+            margin: 0 0 20px;
+            font-family: 'Inter', Arial, sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .biography-text {
+            margin: 0;
+            color: var(--fc-muted);
+            font-size: 14px;
+            line-height: 1.9;
+            white-space: pre-line;
+        }
+
+        /* =====================================
+           PERSONNES
+           ===================================== */
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 17px;
+        }
+
+        .person-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 13px;
+            padding: 25px 15px;
+            color: var(--fc-text);
+            text-decoration: none;
+            text-align: center;
+            background: var(--fc-card);
+            border: 1px solid var(--fc-border);
+            border-radius: 20px;
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--fc-accent);
+        }
+
+        .person-card img {
+            width: 85px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--fc-accent);
+        }
+
+        .person-name {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .person-status {
+            color: var(--fc-muted);
+            font-size: 11px;
+        }
+
+        /* =====================================
+           MENU RAPIDE
+           ===================================== */
+
+        .menu-rapide {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            z-index: 9999;
+        }
+
+        .menu-rapide-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 62px;
+            height: 62px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            background: var(--fc-accent);
+            color: white;
+            font-size: 23px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s, filter 0.3s;
+        }
+
+        .menu-rapide-toggle:hover {
+            filter: brightness(1.15);
+            transform: scale(1.06);
+        }
+
+        .menu-rapide.ouvert .menu-rapide-toggle {
+            transform: rotate(90deg);
+        }
+
+        .menu-rapide-options {
+            position: absolute;
+            right: 0;
+            bottom: 76px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 205px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(12px);
+            transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+        }
+
+        .menu-rapide.ouvert .menu-rapide-options {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .menu-rapide-options button,
+        .menu-rapide-options a {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            width: 100%;
+            min-height: 49px;
+            margin: 0;
+            padding: 0 16px;
+            border: 1px solid var(--fc-border);
+            border-radius: 13px;
+            background: #1e293b;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .menu-rapide-options button:hover,
+        .menu-rapide-options a:hover {
+            background: #334155;
+            transform: translateX(-4px);
+        }
+
+        /* =====================================
+           RESPONSIVE
+           ===================================== */
+
+        @media (max-width: 650px) {
+
+            .page-container {
+                width: 91%;
+                padding-top: 25px;
+                padding-bottom: 110px;
+            }
+
+            .hero-card {
+                padding: 40px 18px;
+                border-radius: 24px;
+            }
+
+            .profile-avatar {
+                width: 115px;
+                height: 115px;
+            }
+
+            .profile-description {
+                font-size: 14px;
+            }
+
+            .section-heading {
+                margin-top: 45px;
+            }
+
+            .section-heading h2 {
+                font-size: 23px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-link {
+                padding: 17px;
+            }
+
+            .content-card {
+                padding: 23px 19px;
+            }
+
+            .people-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .menu-rapide {
+                right: 17px;
+                bottom: 17px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- ========================= -->
-<!-- DÉCORATIONS HALLOWEEN -->
-<!-- ========================= -->
+    <!-- =====================================
+         SUPABASE / COMPTE
+         ===================================== -->
 
-<div class="toiles-halloween" aria-hidden="true">
+    <script>
+        const SUPABASE_URL =
+            "https://snnclgjspwninjxnimza.supabase.co";
 
-    <div class="toile toile-gauche">🕸️</div>
-    <div class="toile toile-droite">🕸️</div>
+        const SUPABASE_KEY =
+            "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
 
-</div>
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
 
-<div class="lune-halloween" aria-hidden="true">
-    🌙
-</div>
+        async function verifierCompte() {
+            try {
+                const {
+                    data: { user },
+                    error
+                } = await supabaseClient.auth.getUser();
 
-<div class="chauves-souris" aria-hidden="true">
+                if (error) throw error;
 
-    <span>🦇</span>
-    <span>🦇</span>
-    <span>🦇</span>
+                if (user) {
+                    document.getElementById(
+                        "compte-bouton"
+                    ).href = "compte.html";
+                }
+            } catch (error) {
+                console.error("Erreur vérification compte :", error);
+            }
+        }
+    </script>
 
-</div>
+    <main class="page-container">
 
-<!-- ========================= -->
-<!-- SUPABASE -->
-<!-- ========================= -->
+        <!-- =====================================
+             PROFIL
+             ===================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="theme.js"></script>
+        <section class="hero-card">
 
-<script>
+            <div class="profile-content">
 
-const SUPABASE_URL =
-    "https://snnclgjspwninjxnimza.supabase.co";
+                <img
+                    src="image.jpg"
+                    alt="Photo de profil Fan2Clotaire"
+                    class="profile-avatar"
+                >
 
-const SUPABASE_KEY =
-    "sb_publishable_9lcVcbpeH8b64j2jD9w7Xw_xzfshZk2";
+                <h1>Fan2Clotaire</h1>
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+                <p class="profile-username">
+                    @fan2clotaire
+                </p>
 
-async function verifierCompte() {
+                <p class="profile-description">
+                    Bienvenue sur mon site officiel !
+                    <br>
+                    Retrouve-moi sur mes différents réseaux sociaux.
+                </p>
 
-    const { data: { user } } =
-        await supabaseClient.auth.getUser();
-
-    if (user) {
-
-        document.getElementById(
-            "compte-bouton"
-        ).href = "compte.html";
-
-    }
-
-}
-
-verifierCompte();
-
-</script>
-
-<!-- ========================= -->
-<!-- INTRO HALLOWEEN -->
-<!-- ========================= -->
-
-<div id="halloween-intro">
-
-    <div class="intro-pumpkin">
-        🎃
-    </div>
-
-    <div class="intro-text">
-        Bienvenue...
-    </div>
-
-</div>
-
-<!-- ========================= -->
-<!-- CARTE PRINCIPALE -->
-<!-- ========================= -->
-
-<div class="card">
-
-    <!-- PROFIL -->
-
-    <div class="profile">
-
-        <img src="image.jpg"
-            alt="Photo de profil">
-
-        <h1>Fan2Clotaire</h1>
-
-        <p class="username">
-            @fan2clotaire
-        </p>
-
-        <p class="description">
-            Retrouve-moi sur mes différents réseaux 👇
-        </p>
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- STATISTIQUES -->
-    <!-- ========================= -->
-
-    <section class="stats">
-
-        <h2>
-            Mes statistiques
-        </h2>
-
-        <div class="stats-container">
-
-            <div class="stat visits-stat">
-
-                <i class="fa-solid fa-eye"></i>
-
-                <span id="site-visits"
-                    class="stat-number">
-                    ---
-                </span>
-
-                <span class="stat-label">
-                    Visites du site
-                </span>
+                <div class="profile-badge">
+                    <i class="fa-solid fa-circle-check"></i>
+                    Retrouvez tous mes réseaux ici
+                </div>
 
             </div>
 
+        </section>
+
+        <!-- =====================================
+             STATISTIQUES
+             ===================================== -->
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Mes statistiques</h2>
+                <p>Quelques chiffres concernant mon site.</p>
+            </div>
+
+            <div class="stats-container">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <span id="site-visits" class="stat-number">
+                        ---
+                    </span>
+
+                    <span class="stat-label">
+                        Visites du site
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             RÉSEAUX SOCIAUX
+             ===================================== -->
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Mes réseaux sociaux</h2>
+                <p>Retrouve-moi partout sur Internet.</p>
+            </div>
+
+            <div class="social-grid">
+
+                <a class="social-link instagram"
+                    href="https://www.instagram.com/fan2clotaire/"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    <i class="fa-brands fa-instagram"></i>
+
+                    <span class="social-info">
+                        <span class="social-name">Instagram</span>
+                        <span class="social-handle">@fan2clotaire</span>
+                    </span>
+
+                </a>
+
+                <a class="social-link tiktok"
+                    href="https://www.tiktok.com/@fan2clotaire"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    <i class="fa-brands fa-tiktok"></i>
+
+                    <span class="social-info">
+                        <span class="social-name">TikTok</span>
+                        <span class="social-handle">@fan2clotaire</span>
+                    </span>
+
+                </a>
+
+                <a class="social-link youtube"
+                    href="https://www.youtube.com/@fan2clotaire"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    <i class="fa-brands fa-youtube"></i>
+
+                    <span class="social-info">
+                        <span class="social-name">YouTube</span>
+                        <span class="social-handle">@fan2clotaire</span>
+                    </span>
+
+                </a>
+
+                <a class="social-link twitch"
+                    href="https://www.twitch.tv/fan2clotaire"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    <i class="fa-brands fa-twitch"></i>
+
+                    <span class="social-info">
+                        <span class="social-name">Twitch</span>
+                        <span class="social-handle">@fan2clotaire</span>
+                    </span>
+
+                </a>
+
+                <a class="social-link discord"
+                    href="https://discord.gg/8y5YcgWTj4"
+                    target="_blank"
+                    rel="noopener noreferrer">
+
+                    <i class="fa-brands fa-discord"></i>
+
+                    <span class="social-info">
+                        <span class="social-name">Discord</span>
+                        <span class="social-handle">Rejoindre le serveur</span>
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             BIOGRAPHIE
+             ===================================== -->
+
+        <section>
+
+            <div class="section-heading">
+                <h2>À propos</h2>
+                <p>Découvre l'histoire derrière Fan2Clotaire.</p>
+            </div>
+
+            <div class="content-card">
+
+                <h2>
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    Biographie
+                </h2>
+
+                <p class="biography-text">
+                    Clotaire LAROCHE (Clotûre pour les intimes)
+                    s'est notamment fait connaître en septembre 2026
+                    grâce à sa toute première battle d'aura contre Lenny.
+
+                    Depuis, il a gagné en popularité grâce au lancement
+                    d'un compte fan : Fan2Clotaire, présent sur plusieurs
+                    réseaux sociaux.
+
+                    Connu pour son charisme et son univers particulier,
+                    Clotaire est au cœur de cette aventure !
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             PERSONNES
+             ===================================== -->
+
+        <section>
+
+            <div class="section-heading">
+                <h2>Les personnes</h2>
+                <p>Découvre les pages consacrées à différentes personnes.</p>
+            </div>
+
+            <div class="people-grid">
+
+                <a href="clotaire.html" class="person-card">
+
+                    <img src="clotaire.jpg" alt="Clotaire">
+
+                    <span class="person-name">Clotaire</span>
+                    <span class="person-status">En développement</span>
+
+                </a>
+
+                <a href="lenny.html" class="person-card">
+
+                    <img src="lenny.jpg" alt="Lenny">
+
+                    <span class="person-name">Lenny</span>
+                    <span class="person-status">En développement</span>
+
+                </a>
+
+                <a href="gabriel.html" class="person-card">
+
+                    <img src="gaby.jpg" alt="Gabriel">
+
+                    <span class="person-name">Gabriel</span>
+                    <span class="person-status">Page disponible</span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================
+         MENU RAPIDE
+         ===================================== -->
+
+    <div class="menu-rapide">
+
+        <button
+            id="menu-rapide-toggle"
+            class="menu-rapide-toggle"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-expanded="false"
+            aria-controls="menu-rapide-options">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div
+            class="menu-rapide-options"
+            id="menu-rapide-options">
+
+            <button id="music-toggle" type="button">
+                <i class="fa-solid fa-music"></i>
+                Musique : ON
+            </button>
+
+            <a href="connexion.html"
+                class="compte-bouton"
+                id="compte-bouton">
+
+                <i class="fa-solid fa-user"></i>
+                Mon compte
+
+            </a>
+
+            <a href="forum.html">
+                <i class="fa-solid fa-comments"></i>
+                Forum
+            </a>
+
+            <a href="jeux.html">
+                <i class="fa-solid fa-gamepad"></i>
+                Jeux
+            </a>
+
+            <a href="monnaie.html">
+                <i class="fa-solid fa-coins"></i>
+                Monnaie
+            </a>
+
+            <button type="button" class="assistance-bouton">
+                <i class="fa-solid fa-life-ring"></i>
+                Assistance
+            </button>
+
         </div>
 
-    </section>
-
-    <!-- CITROUILLES -->
-
-    <div class="citrouilles-halloween"
-        aria-hidden="true">
-
-        <span>🎃</span>
-        <span>🎃</span>
-        <span>🎃</span>
-
     </div>
 
-    <!-- ========================= -->
-    <!-- RÉSEAUX -->
-    <!-- ========================= -->
-
-    <div class="links">
-
-        <a class="instagram"
-            href="https://www.instagram.com/fan2clotaire/"
-            target="_blank">
-
-            <i class="fa-brands fa-instagram"></i>
-            Instagram
-
-        </a>
-
-        <a class="tiktok"
-            href="https://www.tiktok.com/@fan2clotaire"
-            target="_blank">
-
-            <i class="fa-brands fa-tiktok"></i>
-            TikTok
-
-        </a>
-
-        <a class="youtube"
-            href="https://www.youtube.com/@fan2clotaire"
-            target="_blank">
-
-            <i class="fa-brands fa-youtube"></i>
-            YouTube
-
-        </a>
-
-        <a class="twitch"
-            href="https://www.twitch.tv/fan2clotaire"
-            target="_blank">
-
-            <i class="fa-brands fa-twitch"></i>
-            Twitch
-
-        </a>
-
-        <a class="discord"
-            href="https://discord.gg/8y5YcgWTj4"
-            target="_blank">
-
-            <i class="fa-brands fa-discord"></i>
-            Discord
-
-        </a>
-
-        <a href="exclusif.html"
-            class="exclusive-button">
-
-            🎃 OnlyFans
-
-        </a>
-
-    </div>
-
-</div>
-
-<!-- ========================= -->
-<!-- MENU RAPIDE -->
-<!-- ========================= -->
-
-<div class="menu-rapide">
-
-    <button id="menu-rapide-toggle"
-        class="menu-rapide-toggle">
-
-        ☰
-
-    </button>
-
-    <div class="menu-rapide-options">
-
-        <!-- MUSIQUE -->
-
-        <button id="music-toggle"
-            class="music-toggle">
-
-            🎵 Musique : ON
-
-        </button>
-
-        <!-- COMPTE -->
-
-        <a href="connexion.html"
-            class="compte-bouton"
-            id="compte-bouton">
-
-            👤 Mon compte
-
-        </a>
-
-        <!-- FORUM -->
-
-        <a href="forum.html"
-            class="forum-bouton">
-
-            💬 Forum
-
-        </a>
-
-        <!-- JEUX -->
-
-        <a href="jeux.html"
-            class="jeux-bouton">
-
-            🎮 Jeux
-
-        </a>
-
-        <!-- MONNAIE -->
-
-        <a href="monnaie.html"
-            class="monnaie-bouton">
-
-            🪙 Monnaie
-
-        </a>
-
-        <!-- ASSISTANCE -->
-
-        <button class="assistance-bouton">
-
-            🆘 Assistance
-
-        </button>
-
-    </div>
-
-</div>
-
-<!-- ========================= -->
-<!-- GOATCOUNTER -->
-<!-- ========================= -->
-
-<script
-    data-goatcounter="https://fan2clotaire.goatcounter.com/count"
-    async
-    src="//gc.zgo.at/count.js">
-</script>
-
-<!-- ========================= -->
-<!-- COMPTEUR DE VISITES -->
-<!-- ========================= -->
-
-<script>
-
-async function updateSiteVisits() {
-
-    try {
-
-        const alreadyCounted =
-            sessionStorage.getItem(
-                "fan2clotaire_visit"
-            );
-
-        const url =
-            "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=visits" +
-            (
-                alreadyCounted
-                    ? "&count=false"
-                    : "&count=true"
-            );
-
-        const response =
-            await fetch(url);
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Erreur HTTP " +
-                response.status
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        document.getElementById(
-            "site-visits"
-        ).textContent = data.visits;
-
-        sessionStorage.setItem(
-            "fan2clotaire_visit",
-            "1"
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erreur compteur de visites :",
-            error
-        );
-
-        document.getElementById(
-            "site-visits"
-        ).textContent = "Erreur";
-
-    }
-
-}
-
-updateSiteVisits();
-
-</script>
-
-<!-- ========================= -->
-<!-- MUSIQUE -->
-<!-- ========================= -->
-
-<script>
-
-const musiques = [
-
-    "Ghostbusters.mp4",
-    "Ghostbusters.mp4",
-    "Ghostbusters.mp4",
-    "Ghostbusters.mp4"
-
-];
-
-const musiqueAleatoire =
-    musiques[
-        Math.floor(
-            Math.random() *
-            musiques.length
-        )
-    ];
-
-const audioAleatoire =
-    new Audio(musiqueAleatoire);
-
-audioAleatoire.loop = true;
-
-const boutonMusique =
-    document.getElementById(
-        "music-toggle"
-    );
-
-audioAleatoire.play().catch(() => {
-
-    console.log(
-        "Lecture automatique bloquée par le navigateur."
-    );
-
-});
-
-boutonMusique.addEventListener(
-    "click",
-    async () => {
-
-        if (audioAleatoire.paused) {
+    <!-- =====================================
+         GOATCOUNTER
+         ===================================== -->
+
+    <script
+        data-goatcounter="https://fan2clotaire.goatcounter.com/count"
+        async
+        src="//gc.zgo.at/count.js">
+    </script>
+
+    <!-- =====================================
+         COMPTEUR DE VISITES CLOUDFLARE
+         ===================================== -->
+
+    <script>
+
+        async function updateSiteVisits() {
 
             try {
 
-                await audioAleatoire.play();
+                const alreadyCounted =
+                    sessionStorage.getItem(
+                        "fan2clotaire_visit"
+                    );
 
-                boutonMusique.textContent =
-                    "🎵 Musique : ON";
+                const url =
+                    "https://fan2clotaire-stats.g-dubois89210.workers.dev/?platform=visits" +
+                    (
+                        alreadyCounted
+                            ? "&count=false"
+                            : "&count=true"
+                    );
 
-            }
+                const response = await fetch(url);
 
-            catch (error) {
+                if (!response.ok) {
+                    throw new Error("Erreur HTTP " + response.status);
+                }
+
+                const data = await response.json();
+
+                document.getElementById(
+                    "site-visits"
+                ).textContent = data.visits;
+
+                sessionStorage.setItem(
+                    "fan2clotaire_visit",
+                    "1"
+                );
+
+            } catch (error) {
 
                 console.error(
-                    "Erreur lecture musique :",
+                    "Erreur compteur de visites :",
                     error
                 );
 
+                document.getElementById(
+                    "site-visits"
+                ).textContent = "Erreur";
+
             }
 
         }
 
-        else {
+        updateSiteVisits();
 
-            audioAleatoire.pause();
+    </script>
 
-            boutonMusique.textContent =
-                "🔇 Musique : OFF";
+    <!-- =====================================
+         MUSIQUE
+         ===================================== -->
 
-        }
+    <script>
 
-    }
-);
+        const musiques = [
+            "Ghostbusters.mp4",
+            "Ghostbusters.mp4",
+            "Ghostbusters.mp4",
+            "Ghostbusters.mp4"
+        ];
 
-</script>
+        const musiqueAleatoire =
+            musiques[
+                Math.floor(Math.random() * musiques.length)
+            ];
 
-<!-- ========================= -->
-<!-- MENU RAPIDE -->
-<!-- ========================= -->
+        const audioAleatoire =
+            new Audio(musiqueAleatoire);
 
-<script>
+        audioAleatoire.loop = true;
 
-const menuRapide =
-    document.querySelector(
-        ".menu-rapide"
-    );
+        const boutonMusique =
+            document.getElementById("music-toggle");
 
-const boutonMenu =
-    document.getElementById(
-        "menu-rapide-toggle"
-    );
+        audioAleatoire.play().catch(() => {
 
-boutonMenu.addEventListener(
-    "click",
-    () => {
+            console.log(
+                "Lecture automatique bloquée par le navigateur."
+            );
 
-        menuRapide.classList.toggle(
-            "ouvert"
-        );
+        });
 
-    }
-);
+        boutonMusique.addEventListener("click", async () => {
 
-</script>
+            if (audioAleatoire.paused) {
 
-<!-- ========================= -->
-<!-- BIOGRAPHIE -->
-<!-- ========================= -->
+                try {
 
-<section class="biographie">
+                    await audioAleatoire.play();
 
-    <h2>
-        Biographie
-    </h2>
+                    boutonMusique.innerHTML =
+                        '<i class="fa-solid fa-music"></i> Musique : ON';
 
-    <p>
+                } catch (error) {
 
-        Clotaire LAROCHE (Clotûre pour les intimes)
-        est principalement devenu connu localement
-        le 17 Septembre 2026 à 17h03 en gagnant sa
-        toute première battle d'aura contre Lenny
-        devant une bonne partie du lycée Chevalier
-        d'Eon à Tonnerre, dans l'Yonne, en
-        Bourgogne-Franche-Comté, en France, en Europe,
-        sur Terre.
+                    console.error(
+                        "Erreur lecture musique :",
+                        error
+                    );
 
-        Il ensuite commencé à devenir très populaire
-        sur les réseaux sociaux suite au lancement
-        d'un compte fan : Fan2Clotaire
-        (sur tous les réseaux sociaux).
+                }
 
-        C'est un jeune homme très beau, charismatique
-        et aimé de tous.
+            } else {
 
-        Il est aussi en classe de 2nde4 au lycée
-        Chevalier d'Eon de Tonnerre.
+                audioAleatoire.pause();
 
-    </p>
+                boutonMusique.innerHTML =
+                    '<i class="fa-solid fa-volume-xmark"></i> Musique : OFF';
 
-</section>
+            }
 
-<!-- ========================= -->
-<!-- PERSONNES -->
-<!-- ========================= -->
+        });
 
-<section class="liens-personnes">
+    </script>
 
-    <h2>
-        Les personnes
-    </h2>
+    <!-- =====================================
+         MENU RAPIDE
+         ===================================== -->
 
-    <div class="personnes-container">
+    <script>
 
-        <a href="clotaire.html"
-            class="personne-bouton">
+        const menuRapide =
+            document.querySelector(".menu-rapide");
 
-            <img src="clotaire.jpg"
-                alt="Clotaire">
+        const boutonMenu =
+            document.getElementById("menu-rapide-toggle");
 
-            <span>
-                EN DEV
-            </span>
+        boutonMenu.addEventListener("click", () => {
 
-        </a>
+            const ouvert =
+                menuRapide.classList.toggle("ouvert");
 
-        <a href="lenny.html"
-            class="personne-bouton">
+            boutonMenu.setAttribute(
+                "aria-expanded",
+                String(ouvert)
+            );
 
-            <img src="lenny.jpg"
-                alt="Lenny">
+            boutonMenu.setAttribute(
+                "aria-label",
+                ouvert ? "Fermer le menu" : "Ouvrir le menu"
+            );
 
-            <span>
-                EN DEV
-            </span>
+            boutonMenu.innerHTML = ouvert
+                ? '<i class="fa-solid fa-xmark"></i>'
+                : '<i class="fa-solid fa-bars"></i>';
 
-        </a>
+        });
 
-        <a href="gabriel.html"
-            class="personne-bouton">
+        document.addEventListener("click", (event) => {
 
-            <img src="gaby.jpg"
-                alt="Gabriel">
+            if (!menuRapide.contains(event.target)) {
 
-            <span>
-                Page de Gaby
-            </span>
+                menuRapide.classList.remove("ouvert");
 
-        </a>
+                boutonMenu.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
-    </div>
+                boutonMenu.setAttribute(
+                    "aria-label",
+                    "Ouvrir le menu"
+                );
 
-</section>
+                boutonMenu.innerHTML =
+                    '<i class="fa-solid fa-bars"></i>';
+
+            }
+
+        });
+
+        verifierCompte();
+
+    </script>
 
 </body>
 </html>
